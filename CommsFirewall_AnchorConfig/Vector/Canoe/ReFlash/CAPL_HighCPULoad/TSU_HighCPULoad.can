@@ -1,0 +1,111 @@
+/*@!Encoding:1252*/
+includes
+{ 
+  #include "Lib\Diag_Req_Resp.cin"
+  #include "Lib\DiagUtilities_New.cin"
+  #include "Lib\InvalidFrame.cin"
+  #include "Lib\PowerFluctuation.cin"
+  #include "Lib\BruteForceAttack.cin"
+  #include "Lib\CPUHighLoad.cin"
+}
+
+variables
+{ 
+  
+  //const byte Bosch = 0x61;
+  Char LogfileName[1000];
+  Char TestcaseName[1000];
+  Char ECU_qualifier[1000] = "DiagAnchor6";
+  Char Pos_F192[1000] = "62 F1 92 46 30 30 35 56 30 33 34 35 33 30 30"; // F005V0345300 (Modify the value in corresponds build package).
+  Char Pos_F195[1000] = "62 F1 95 02 06 00 05 06 00 05"; // Modify the value in corresponds build version. //62 F1 95 02 06 00 04 06 00 04
+  message Anchor1Nm Anchr1;
+  message Anchor2Nm Anchr2;
+  message Anchor3Nm Anchr3;
+  message Anchor4Nm Anchr4;
+  message Anchor5Nm Anchr5;
+  message Anchor6Nm Anchr6;
+  message Anchor7Nm Anchr7;
+  message Anchor8Nm Anchr8;
+  message Anchor9Nm Anchr9;
+  int BruteForceAttackTimes; // Times we will make Brute Force Attack
+}
+
+
+
+
+//Wake up Can
+NM_Wakeup()
+{
+    output(Anchr1);
+    output(Anchr2);
+    output(Anchr3);
+    output(Anchr4);
+    output(Anchr5);
+    output(Anchr6);
+    output(Anchr7);
+    output(Anchr8);
+    output(Anchr9);
+    testwaitfortimeout(200);  
+}
+
+
+PreCondition()
+{
+    testCaseComment("Precondition");
+    Teststep("1","Start tester present");
+    diagStartTesterPresent(ECU_qualifier);
+    TestStep("2","Send request 10 01 to enter Diagnostic Default Session ");
+    SendDiag_Request_Verify_Response_Step(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+}
+
+PostCondition()
+{
+    testCaseComment("PostCondition");
+    TestStep("1","Send request 10 01 to enter Diagnostic Default Session");
+    SendDiag_Request_Verify_Response_Step(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Stop tester present");
+    diagStopTesterPresent(ECU_qualifier);
+    testwaitfortimeout(500);
+}
+
+
+StartLogging_Anchor(Char UseCaseName[])
+{
+    Strncat(LogfileName, "Logs/", 6);
+    Strncat(LogfileName, UseCaseName, elcount(TestcaseName));
+    Strncat(LogfileName, ".asc", elcount(TestcaseName));
+    setLogFileName(LogfileName);
+    StartLogging();
+}
+
+////////////////////////////////////////////////
+testcase TCS_PK_HGT_COMFW_CPUHighLoad()
+{
+    @sysvar::HighCPULoad::InjectLoad::Times = 0;
+
+    testCaseDescription("Verify CPU HighLoad.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_CPUHighLoad");
+    PreCondition();  
+    testCaseComment("Actions");
+    TestStep("1","Request Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4"); 
+    TestStep("2,3","Verify requested Bosch Security");  
+    Security_Seed_Key_Access(Anch6,Physical,Bosch);
+    TestStep("4","Read FE1A");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE 1A","62 FE 1A");
+    TestStep("5","High CPU Load");
+    Function_CPU_High_Load();
+    testWaitForTimeout(6000);
+    TestStep("6","Read FE1A");
+    Stop_Fuction_CPU_High_Load();
+
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE 1A","62 FE 1A");
+ 
+
+//    TestStep("4","Verify requested security level is still locked by reading DID FE14");  
+//    testWaitForTimeout(2000);
+//    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 14","7F 22 33");
+    
+    PostCondition();
+    stopLogging();
+}

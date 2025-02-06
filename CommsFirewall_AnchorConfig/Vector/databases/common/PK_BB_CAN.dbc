@@ -1,0 +1,2358 @@
+VERSION ""
+
+
+NS_ :
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: AnchorF Anchor9 Anchor8 Tester Anchor7 Anchor6 Anchor5 Anchor4 Anchor3 Anchor2 Anchor1 MasterMcu
+VAL_TABLE_ PMMode 4 "Invalid" 3 "Standby" 2 "Localising" 1 "Searching" 0 "Stopped" ;
+VAL_TABLE_ Day 7 "Sunday" 6 "Saturday" 5 "Friday" 4 "Thursday" 3 "Wednesday" 2 "Tuesday" 1 "Monday" 0 "Init" ;
+VAL_TABLE_ Month 12 "December" 11 "November" 10 "October" 9 "September" 8 "August" 7 "July" 6 "June" 5 "May" 4 "April" 3 "March" 2 "February" 1 "January" 0 "Init" ;
+VAL_TABLE_ FePriority 7 "Tag7 FE Priority" 6 "Tag6 FE Priority" 5 "Tag5 FE Priority" 4 "Tag4 FE Priority" 3 "Tag3 FE Priority" 2 "Tag2 FE Priority" 1 "Tag1 FE Priority" 0 "Tag0 FE Priority" ;
+VAL_TABLE_ UwbStatus 2 "Uwb Radio On" 1 "Uwb Radio Turning On" 0 "Uwb Radio Off" ;
+VAL_TABLE_ BLEScanningRate 3 "TagIgnore" 2 "Slowcalising" 1 "FastScan" 0 "Unknown/Off" ;
+VAL_TABLE_ TagNumber 8 "Tag8" 7 "Tag7" 6 "Tag6" 5 "Tag5" 4 "Tag4" 3 "Tag3" 2 "Tag2" 1 "Tag1" 0 "NoTagConnected" ;
+VAL_TABLE_ UWB_SlotType 2 "TWR" 1 "Sync" 0 "Empty" ;
+VAL_TABLE_ UWBnodes 17 "Master" 16 "Tag8" 15 "Tag7" 14 "Tag6" 13 "Tag5" 12 "Tag4" 11 "Tag3" 10 "Tag2" 9 "Tag1" 8 "Anchor8" 7 "Anchor7" 6 "Anchor6" 5 "Anchor5" 4 "Anchor4" 3 "Anchor3" 2 "Anchor2" 1 "Anchor1" 0 "Empty" ;
+VAL_TABLE_ FreshRSSstat 1 "Fresh" 0 "Stale" ;
+VAL_TABLE_ TagConnectStat 1 "Connected" 0 "Not Connected" ;
+
+
+BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
+ SG_ UserByte0_Anchor4 : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ ScSync_Anchor9 : 0|4@1- (1,0) [0|15] "" Vector__XXX
+ SG_ Anchor9Uwb_A2M : 0|16@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_A2M : 0|16@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_A2M : 0|16@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_A2M : 0|16@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_A2M : 0|16@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_A2M : 0|16@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_A2M : 0|16@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_A2M : 0|16@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1344 UwbResult_M2T: 64 MasterMcu
+ SG_ UwbResult_PduID : 7|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbLocalisationReport_TagIdx : 15|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_RangingBlock : 23|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_UwbSessionID : 39|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_KeyID : 71|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_CartesianX : 79|16@0- (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_CartesianY : 95|16@0- (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_CartesianZ : 111|16@0- (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_ValidityFlag : 127|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_PolarDistance : 135|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_PolarAngle : 151|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_ZoneRaw : 167|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_ZoneDebounce : 183|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_RangingSessionState : 199|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_DistanceToMaster : 207|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_NodeConsideredBitmask : 223|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_LocUwbNodeTimeDelta : 239|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbResult_UwbCoordNodeTimeDelta : 271|32@0+ (1,0) [0|0] "" Vector__XXX
+
+
+BO_ 857 Anchor9Status_A2M: 64 Anchor9
+ SG_ Anchor9Status_UwbPwrMode : 15|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor9Status_PwrModeDbg : 11|44@0+ (1,0) [0|0] "Min"  MasterMcu
+ SG_ Anchor9Status_MAC : 183|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor9Status_Health : 71|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor9Status_D_ES : 56|1@0+ (1,0) [0|1] "Min"  MasterMcu
+ SG_ Anchor9Status_AncPwrMode : 3|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor9Status_AncIntPwrMode : 7|4@0+ (1,0) [0|15] "Min"  MasterMcu
+
+BO_ 856 Anchor8Status_A2M: 64 Anchor8
+ SG_ Anchor8Status_UwbPwrMode : 15|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor8Status_PwrModeDbg : 11|44@0+ (1,0) [0|0] "Min"  MasterMcu
+ SG_ Anchor8Status_MAC : 183|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor8Status_Health : 71|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor8Status_D_ES : 56|1@0+ (1,0) [0|1] "Min"  MasterMcu
+ SG_ Anchor8Status_AncPwrMode : 3|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor8Status_AncIntPwrMode : 7|4@0+ (1,0) [0|15] "Min"  MasterMcu
+
+BO_ 855 Anchor7Status_A2M: 64 Anchor7
+ SG_ Anchor7Status_UwbPwrMode : 15|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor7Status_PwrModeDbg : 11|44@0+ (1,0) [0|0] "Min"  MasterMcu
+ SG_ Anchor7Status_MAC : 183|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor7Status_Health : 71|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor7Status_D_ES : 56|1@0+ (1,0) [0|1] "Min"  MasterMcu
+ SG_ Anchor7Status_AncPwrMode : 3|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor7Status_AncIntPwrMode : 7|4@0+ (1,0) [0|15] "Min"  MasterMcu
+
+BO_ 854 Anchor6Status_A2M: 64 Anchor6
+ SG_ Anchor6Status_UwbPwrMode : 15|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor6Status_PwrModeDbg : 11|44@0+ (1,0) [0|0] "Min"  MasterMcu
+ SG_ Anchor6Status_MAC : 183|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor6Status_Health : 71|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor6Status_D_ES : 56|1@0+ (1,0) [0|1] "Min"  MasterMcu
+ SG_ Anchor6Status_AncPwrMode : 3|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor6Status_AncIntPwrMode : 7|4@0+ (1,0) [0|15] "Min"  MasterMcu
+
+BO_ 853 Anchor5Status_A2M: 64 Anchor5
+ SG_ Anchor5Status_UwbPwrMode : 15|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor5Status_PwrModeDbg : 11|44@0+ (1,0) [0|0] "Min"  MasterMcu
+ SG_ Anchor5Status_MAC : 183|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor5Status_Health : 71|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor5Status_D_ES : 56|1@0+ (1,0) [0|1] "Min"  MasterMcu
+ SG_ Anchor5Status_AncPwrMode : 3|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor5Status_AncIntPwrMode : 7|4@0+ (1,0) [0|15] "Min"  MasterMcu
+
+BO_ 852 Anchor4Status_A2M: 64 Anchor4
+ SG_ Anchor4Status_MAC : 183|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor4Status_UwbPwrMode : 15|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor4Status_PwrModeDbg : 11|44@0+ (1,0) [0|0] "Min"  MasterMcu
+ SG_ Anchor4Status_Health : 71|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor4Status_D_ES : 56|1@0+ (1,0) [0|1] "Min"  MasterMcu
+ SG_ Anchor4Status_AncPwrMode : 3|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor4Status_AncIntPwrMode : 7|4@0+ (1,0) [0|15] "Min"  MasterMcu
+
+BO_ 851 Anchor3Status_A2M: 64 Anchor3
+ SG_ Anchor3Status_UwbPwrMode : 15|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor3Status_PwrModeDbg : 11|44@0+ (1,0) [0|0] "Min"  MasterMcu
+ SG_ Anchor3Status_MAC : 183|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor3Status_Health : 71|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor3Status_D_ES : 56|1@0+ (1,0) [0|1] "Min"  MasterMcu
+ SG_ Anchor3Status_AncPwrMode : 3|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor3Status_AncIntPwrMode : 7|4@0+ (1,0) [0|15] "Min"  MasterMcu
+
+BO_ 850 Anchor2Status_A2M: 64 Anchor2
+ SG_ Anchor2Status_UwbPwrMode : 15|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor2Status_PwrModeDbg : 11|44@0+ (1,0) [0|0] "Min"  MasterMcu
+ SG_ Anchor2Status_MAC : 183|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor2Status_Health : 71|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor2Status_D_ES : 56|1@0+ (1,0) [0|1] "Min"  MasterMcu
+ SG_ Anchor2Status_AncPwrMode : 3|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor2Status_AncIntPwrMode : 7|4@0+ (1,0) [0|15] "Min"  MasterMcu
+
+BO_ 849 Anchor1Status_A2M: 64 Anchor1
+ SG_ Anchor1Status_UwbPwrMode : 15|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor1Status_PwrModeDbg : 11|44@0+ (1,0) [0|0] "Min"  MasterMcu
+ SG_ Anchor1Status_MAC : 183|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor1Status_Health : 71|32@0+ (1,0) [0|4294967295] "Min"  MasterMcu
+ SG_ Anchor1Status_D_ES : 56|1@0+ (1,0) [0|1] "Min"  MasterMcu
+ SG_ Anchor1Status_AncPwrMode : 3|4@0+ (1,0) [0|15] "Min"  MasterMcu
+ SG_ Anchor1Status_AncIntPwrMode : 7|4@0+ (1,0) [0|15] "Min"  MasterMcu
+
+BO_ 848 SysCtrl_M2A: 64 MasterMcu
+ SG_ AuthenticatorUwb : 231|24@0+ (1,0) [0|16777215] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ MAC : 399|32@0+ (1,0) [0|4294967295] "Min"  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ Authenticator : 127|24@0+ (1,0) [0|16777215] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ ResetCounter : 103|24@0+ (1,0) [0|16777215] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ TripCounter : 79|24@0+ (1,0) [0|16777215] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ PwrModeDbg : 151|80@0+ (1,0) [0|0] "Min"  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ AncPwrMode : 15|64@0+ (1,0) [0|0] "Min"  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ SysPwrMode : 3|4@0+ (1,0) [0|15] "Min"  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+
+BO_ 105 TimeSync_Anchor9: 8 Anchor9
+ SG_ SyncTimeSec_Anchor9 : 32|32@1+ (1,0) [0|4294967295] ""  MasterMcu
+ SG_ UserByte0_Anchor9 : 24|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ ScSync_Anchor8 : 20|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ TimeDomain_Sync_Anchor9 : 16|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ CrcSync_Anchor9 : 8|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ Type_Sync_Anchor9 : 0|8@1+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 104 TimeSync_Anchor8: 8 Anchor8
+ SG_ SyncTimeSec_Anchor8 : 32|32@1+ (1,0) [0|4294967295] ""  MasterMcu
+ SG_ UserByte0_Anchor8 : 24|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ ScSync_Anchor8 : 20|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ TimeDomain_Sync_Anchor8 : 16|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ CrcSync_Anchor8 : 8|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ Type_Sync_Anchor8 : 0|8@1+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 103 TimeSync_Anchor7: 8 Anchor7
+ SG_ SyncTimeSec_Anchor7 : 32|32@1+ (1,0) [0|4294967295] ""  MasterMcu
+ SG_ UserByte0_Anchor7 : 24|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ ScSync_anchor7 : 20|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ TimeDomain_Sync_Anchor7 : 16|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ CrcSync_Anchor7 : 8|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ Type_Sync_Anchor7 : 0|8@1+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 102 TimeSync_Anchor6: 8 Anchor6
+ SG_ SyncTimeSec_Anchor6 : 32|32@1+ (1,0) [0|4294967295] ""  MasterMcu
+ SG_ UserByte0_anchor6 : 24|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ ScSync_Anchor6 : 20|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ TimeDomain_Sync_Anchor6 : 16|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ CrcSync_Anchor6 : 8|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ Type_Sync_Anchor6 : 0|8@1+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 101 TimeSync_Anchor5: 8 Anchor5
+ SG_ SyncTimeSec_Anchor5 : 32|32@1+ (1,0) [0|4294967295] ""  MasterMcu
+ SG_ UserByte0_Anchor5 : 24|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ ScSync_Anchor5 : 20|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ TimeDomain_Sync_Anchor5 : 16|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ CrcSync_Anchor5 : 8|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ Type_Sync_Anchor5 : 0|8@1+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 100 TimeSync_Anchor4: 8 Anchor4
+ SG_ SyncTimeSec_Anchor4 : 32|32@1+ (1,0) [0|4294967295] ""  MasterMcu
+ SG_ UserByte0_Anchor4 : 24|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ ScSync_Anchor4 : 20|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ TimeDomain_Sync_Anchor4 : 16|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ CrcSync_Anchor4 : 8|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ Type_Sync_Anchor4 : 0|8@1+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 99 TimeSync_Anchor3: 8 Anchor3
+ SG_ SyncTimeSec_Anchor3 : 32|32@1+ (1,0) [0|4294967295] ""  MasterMcu
+ SG_ UserByte0_Anchor3 : 24|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ ScSync_Anchor3 : 20|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ TimeDomain_Sync_Anchor3 : 16|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ CrcSync_Anchor3 : 8|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ Type_Sync_Anchor3 : 0|8@1+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 98 TimeSync_Anchor2: 8 Anchor2
+ SG_ SyncTimeSec_Anchor2 : 32|32@1+ (1,0) [0|4294967295] ""  MasterMcu
+ SG_ UserByte0_Anchor2 : 24|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ ScSync_Anchor2 : 20|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ TimeDomain_Sync_Anchor2 : 16|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ CrcSync_Anchor2 : 8|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ Type_Sync_Anchor2 : 0|8@1+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 97 TimeSync_Anchor1: 8 Anchor1
+ SG_ SyncTimeSec_Anchor1 : 32|32@1+ (1,0) [0|4294967295] ""  MasterMcu
+ SG_ UserByte0_Anchor1 : 24|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ TimeDomain_Sync_Anchor1 : 16|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ ScSync_Anchor1 : 20|4@1+ (1,0) [0|15] ""  MasterMcu
+ SG_ CrcSync_Anchor1 : 8|8@1+ (1,0) [0|255] ""  MasterMcu
+ SG_ Type_Sync_Anchor1 : 0|8@1+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 1647 AnchorFUwbXcpResponse: 8 AnchorF
+ SG_ AnchorFUwbXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1615 AnchorFUwbXcpRequest: 8 Tester
+ SG_ AnchorFUwbXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  AnchorF
+
+BO_ 1583 AnchorFBleXcpResponse: 8 AnchorF
+ SG_ AnchorFBleXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1551 AnchorFBleXcpRequest: 8 Tester
+ SG_ AnchorFBleXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  AnchorF
+
+BO_ 1872 TesterFunctional_Req_PK: 8 MasterMcu
+ SG_ TesterFunctional_Req : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1641 Anchor9UwbXcpResponse: 8 Anchor9
+ SG_ Anchor9UwbXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1640 Anchor8UwbXcpResponse: 8 Anchor8
+ SG_ Anchor8UwbXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1639 Anchor7UwbXcpResponse: 8 Anchor7
+ SG_ Anchor7UwbXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1638 Anchor6UwbXcpResponse: 8 Anchor6
+ SG_ Anchor6UwbXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1637 Anchor5UwbXcpResponse: 8 Anchor5
+ SG_ Anchor5UwbXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1636 Anchor4UwbXcpResponse: 8 Anchor4
+ SG_ Anchor4UwbXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1635 Anchor3UwbXcpResponse: 8 Anchor3
+ SG_ Anchor3UwbXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1634 Anchor2UwbXcpResponse: 8 Anchor2
+ SG_ Anchor2UwbXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1633 Anchor1UwbXcpResponse: 8 Anchor1
+ SG_ Anchor1UwbXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1609 Anchor9UwbXcpRequest: 8 Tester
+ SG_ Anchor9UwbXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor9
+
+BO_ 1608 Anchor8UwbXcpRequest: 8 Tester
+ SG_ Anchor8UwbXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor8
+
+BO_ 1607 Anchor7UwbXcpRequest: 8 Tester
+ SG_ Anchor7UwbXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor7
+
+BO_ 1606 Anchor6UwbXcpRequest: 8 Tester
+ SG_ Anchor6UwbXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor6
+
+BO_ 1605 Anchor5UwbXcpRequest: 8 Tester
+ SG_ Anchor5UwbXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor5
+
+BO_ 1604 Anchor4UwbXcpRequest: 8 Tester
+ SG_ Anchor4UwbXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor4
+
+BO_ 1603 Anchor3UwbXcpRequest: 8 Tester
+ SG_ Anchor3UwbXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor3
+
+BO_ 1602 Anchor2UwbXcpRequest: 8 Tester
+ SG_ Anchor2UwbXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor2
+
+BO_ 1601 Anchor1UwbXcpRequest: 8 Tester
+ SG_ Anchor1UwbXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor1
+
+BO_ 1129 Anchor9TpUwb_A2M: 64 Anchor9
+ SG_ Anchor9Uwb_PCI_A2M : 7|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_PduId_A2M M : 23|8@0+ (1,0) [0|0] ""  MasterMcu
+ SG_ Anchor9Uwb_EncryptFlag_A2M : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_RangingBlock_A2M m130 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_UwbSessionId_A2M m130 : 55|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_Distance_A2M m130 : 87|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_QualitiFactor_A2M m130 : 103|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_HopFlag_A2M m130 : 119|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_DeviceRef_A2M m130 : 127|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_CenterFrequencyDiff_A m130 : 135|8@0- (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_CurrentRoundIdx_A2M m130 : 143|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_NextRoundIdx_A2M m130 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_UwbTagState_A2M m130 : 175|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_RangingBlockStartTime m130 : 183|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_PrePollRxError_A2M m130 : 247|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_PollRxError_A2M m130 : 263|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_ResponseTxError_A2M m130 : 279|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_FinalRxError_A2M m130 : 287|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Uwb_FinalDataRxError_A2M m130 : 303|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9KeyFob_KeyfobId_A2M m133 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9KeyFob_BlockId_A2M m133 : 55|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9KeyFob_Distance_A2M m133 : 71|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Keyfob_UwbTagState_A2M m133 : 87|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Keyfob_RangingBlockStartT m133 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Keyfob_PrePollRxError_A2M m133 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Keyfob_PollRxError_A2M m133 : 175|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Keyfob_ResponseTxError_A2 m133 : 191|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Keyfob_FinalRxError_A2M m133 : 199|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor9Keyfob_FinalDataRxError_A m133 : 215|16@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1128 Anchor8TpUwb_A2M: 64 Anchor8
+ SG_ Anchor8Uwb_PCI_A2M : 7|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_PduId_A2M M : 23|8@0+ (1,0) [0|0] ""  MasterMcu
+ SG_ Anchor8Uwb_EncryptFlag_A2M : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_RangingBlock_A2M m130 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_UwbSessionId_A2M m130 : 55|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_Distance_A2M m130 : 87|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_QualitiFactor_A2M m130 : 103|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_HopFlag_A2M m130 : 119|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_DeviceRef_A2M m130 : 127|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_CenterFrequencyDiff_A m130 : 135|8@0- (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_CurrentRoundIdx_A2M m130 : 143|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_NextRoundIdx_A2M m130 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_UwbTagState_A2M m130 : 175|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_RangingBlockStartTime m130 : 183|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_PrePollRxError_A2M m130 : 247|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_PollRxError_A2M m130 : 263|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_ResponseTxError_A2M m130 : 279|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_FinalRxError_A2M m130 : 287|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Uwb_FinalDataRxError_A2M m130 : 303|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8KeyFob_KeyfobId_A2M m133 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8KeyFob_BlockId_A2M m133 : 55|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8KeyFob_Distance_A2M m133 : 71|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Keyfob_UwbTagState_A2M m133 : 87|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Keyfob_RangingBlockStartT m133 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Keyfob_PrePollRxError_A2M m133 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Keyfob_PollRxError_A2M m133 : 175|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Keyfob_ResponseTxError_A2 m133 : 191|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Keyfob_FinalRxError_A2M m133 : 199|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor8Keyfob_FinalDataRxError_A m133 : 215|16@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1127 Anchor7TpUwb_A2M: 64 Anchor7
+ SG_ Anchor7Uwb_PCI_A2M : 7|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_PduId_A2M M : 23|8@0+ (1,0) [0|0] ""  MasterMcu
+ SG_ Anchor7Uwb_EncryptFlag_A2M : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_RangingBlock_A2M m130 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_UwbSessionId_A2M m130 : 55|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_Distance_A2M m130 : 87|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_QualitiFactor_A2M m130 : 103|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_HopFlag_A2M m130 : 119|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_DeviceRef_A2M m130 : 127|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_CenterFrequencyDiff_A m130 : 135|8@0- (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_CurrentRoundIdx_A2M m130 : 143|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_NextRoundIdx_A2M m130 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_UwbTagState_A2M m130 : 175|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_RangingBlockStartTime m130 : 183|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_PrePollRxError_A2M m130 : 247|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_PollRxError_A2M m130 : 263|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_ResponseTxError_A2M m130 : 279|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_FinalRxError_A2M m130 : 287|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Uwb_FinalDataRxError_A2M m130 : 303|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7KeyFob_KeyfobId_A2M m133 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7KeyFob_BlockId_A2M m133 : 55|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7KeyFob_Distance_A2M m133 : 71|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Keyfob_UwbTagState_A2M m133 : 87|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Keyfob_RangingBlockStartT m133 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Keyfob_PrePollRxError_A2M m133 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Keyfob_PollRxError_A2M m133 : 175|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Keyfob_ResponseTxError_A2 m133 : 191|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Keyfob_FinalRxError_A2M m133 : 199|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor7Keyfob_FinalDataRxError_A m133 : 215|16@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1126 Anchor6TpUwb_A2M: 64 Anchor6
+ SG_ Anchor6Uwb_PCI_A2M : 7|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_PduId_A2M M : 23|8@0+ (1,0) [0|0] ""  MasterMcu
+ SG_ Anchor6Uwb_EncryptFlag_A2M : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_RangingBlock_A2M m130 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_UwbSessionId_A2M m130 : 55|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_Distance_A2M m130 : 87|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_QualitiFactor_A2M m130 : 103|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_HopFlag_A2M m130 : 119|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_DeviceRef_A2M m130 : 127|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_CenterFrequencyDiff_A m130 : 135|8@0- (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_CurrentRoundIdx_A2M m130 : 143|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_NextRoundIdx_A2M m130 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_UwbTagState_A2M m130 : 175|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_RangingBlockStartTime m130 : 183|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_PrePollRxError_A2M m130 : 247|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_PollRxError_A2M m130 : 263|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_ResponseTxError_A2M m130 : 279|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_FinalRxError_A2M m130 : 287|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Uwb_FinalDataRxError_A2M m130 : 303|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6KeyFob_KeyfobId_A2M m133 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6KeyFob_BlockId_A2M m133 : 55|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6KeyFob_Distance_A2M m133 : 71|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Keyfob_UwbTagState_A2M m133 : 87|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Keyfob_RangingBlockStartT m133 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Keyfob_PrePollRxError_A2M m133 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Keyfob_PollRxError_A2M m133 : 175|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Keyfob_ResponseTxError_A2 m133 : 191|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Keyfob_FinalRxError_A2M m133 : 199|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor6Keyfob_FinalDataRxError_A m133 : 215|16@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1125 Anchor5TpUwb_A2M: 64 Anchor5
+ SG_ Anchor5Uwb_PCI_A2M : 7|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_PduId_A2M M : 23|8@0+ (1,0) [0|0] ""  MasterMcu
+ SG_ Anchor5Uwb_EncryptFlag_A2M : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_RangingBlock_A2M m130 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_UwbSessionId_A2M m130 : 55|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_Distance_A2M m130 : 87|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_QualitiFactor_A2M m130 : 103|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_HopFlag_A2M m130 : 119|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_DeviceRef_A2M m130 : 127|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_CenterFrequencyDiff_A m130 : 135|8@0- (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_CurrentRoundIdx_A2M m130 : 143|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_NextRoundIdx_A2M m130 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_UwbTagState_A2M m130 : 175|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_RangingBlockStartTime m130 : 183|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_PrePollRxError_A2M m130 : 247|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_PollRxError_A2M m130 : 263|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_ResponseTxError_A2M m130 : 279|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_FinalRxError_A2M m130 : 287|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Uwb_FinalDataRxError_A2M m130 : 303|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5KeyFob_KeyfobId_A2M m133 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5KeyFob_BlockId_A2M m133 : 55|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5KeyFob_Distance_A2M m133 : 71|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Keyfob_UwbTagState_A2M m133 : 87|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Keyfob_RangingBlockStartT m133 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Keyfob_PrePollRxError_A2M m133 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Keyfob_PollRxError_A2M m133 : 175|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Keyfob_ResponseTxError_A2 m133 : 191|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Keyfob_FinalRxError_A2M m133 : 199|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor5Keyfob_FinalDataRxError_A m133 : 215|16@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1124 Anchor4TpUwb_A2M: 64 Anchor4
+ SG_ Anchor4Uwb_PCI_A2M : 7|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_PduId_A2M M : 23|8@0+ (1,0) [0|0] ""  MasterMcu
+ SG_ Anchor4Uwb_EncryptFlag_A2M : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_RangingBlock_A2M m130 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_UwbSessionId_A2M m130 : 55|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_Distance_A2M m130 : 87|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_QualitiFactor_A2M m130 : 103|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_HopFlag_A2M m130 : 119|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_DeviceRef_A2M m130 : 127|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_CenterFrequencyDiff_A m130 : 135|8@0- (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_CurrentRoundIdx_A2M m130 : 143|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_NextRoundIdx_A2M m130 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_UwbTagState_A2M m130 : 175|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_RangingBlockStartTime m130 : 183|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_PrePollRxError_A2M m130 : 247|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_PollRxError_A2M m130 : 263|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_ResponseTxError_A2M m130 : 279|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_FinalRxError_A2M m130 : 287|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Uwb_FinalDataRxError_A2M m130 : 303|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4KeyFob_KeyfobId_A2M m133 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4KeyFob_BlockId_A2M m133 : 55|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4KeyFob_Distance_A2M m133 : 71|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Keyfob_UwbTagState_A2M m133 : 87|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Keyfob_RangingBlockStartT m133 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Keyfob_PrePollRxError_A2M m133 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Keyfob_PollRxError_A2M m133 : 175|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Keyfob_ResponseTxError_A2 m133 : 191|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Keyfob_FinalRxError_A2M m133 : 199|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor4Keyfob_FinalDataRxError_A m133 : 215|16@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1123 Anchor3TpUwb_A2M: 64 Anchor3
+ SG_ Anchor3Uwb_PCI_A2M : 7|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_PduId_A2M M : 23|8@0+ (1,0) [0|0] ""  MasterMcu
+ SG_ Anchor3Uwb_EncryptFlag_A2M : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_RangingBlock_A2M m130 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_UwbSessionId_A2M m130 : 55|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_Distance_A2M m130 : 87|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_QualitiFactor_A2M m130 : 103|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_HopFlag_A2M m130 : 119|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_DeviceRef_A2M m130 : 127|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_CenterFrequencyDiff_A m130 : 135|8@0- (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_CurrentRoundIdx_A2M m130 : 143|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_NextRoundIdx_A2M m130 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_UwbTagState_A2M m130 : 175|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_RangingBlockStartTime m130 : 183|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_PrePollRxError_A2M m130 : 247|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_PollRxError_A2M m130 : 263|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_ResponseTxError_A2M m130 : 279|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_FinalRxError_A2M m130 : 287|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Uwb_FinalDataRxError_A2M m130 : 303|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3KeyFob_KeyfobId_A2M m133 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3KeyFob_BlockId_A2M m133 : 55|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3KeyFob_Distance_A2M m133 : 71|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Keyfob_UwbTagState_A2M m133 : 87|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Keyfob_RangingBlockStartT m133 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Keyfob_PrePollRxError_A2M m133 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Keyfob_PollRxError_A2M m133 : 175|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Keyfob_ResponseTxError_A2 m133 : 191|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Keyfob_FinalRxError_A2M m133 : 199|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor3Keyfob_FinalDataRxError_A m133 : 215|16@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1122 Anchor2TpUwb_A2M: 64 Anchor2
+ SG_ Anchor2Uwb_PCI_A2M : 7|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_PduId_A2M M : 23|8@0+ (1,0) [0|0] ""  MasterMcu
+ SG_ Anchor2Uwb_EncryptFlag_A2M : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_RangingBlock_A2M m130 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_UwbSessionId_A2M m130 : 55|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_Distance_A2M m130 : 87|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_QualitiFactor_A2M m130 : 103|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_HopFlag_A2M m130 : 119|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_DeviceRef_A2M m130 : 127|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_CenterFrequencyDiff_A m130 : 135|8@0- (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_CurrentRoundIdx_A2M m130 : 143|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_NextRoundIdx_A2M m130 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_UwbTagState_A2M m130 : 175|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_RangingBlockStartTime m130 : 183|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_PrePollRxError_A2M m130 : 247|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_PollRxError_A2M m130 : 263|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_ResponseTxError_A2M m130 : 279|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_FinalRxError_A2M m130 : 287|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Uwb_FinalDataRxError_A2M m130 : 303|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2KeyFob_KeyfobId_A2M m133 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2KeyFob_BlockId_A2M m133 : 55|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2KeyFob_Distance_A2M m133 : 71|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Keyfob_UwbTagState_A2M m133 : 87|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Keyfob_RangingBlockStartT m133 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Keyfob_PrePollRxError_A2M m133 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Keyfob_PollRxError_A2M m133 : 175|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Keyfob_ResponseTxError_A2 m133 : 191|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Keyfob_FinalRxError_A2M m133 : 199|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor2Keyfob_FinalDataRxError_A m133 : 215|16@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1121 Anchor1TpUwb_A2M: 64 Anchor1
+ SG_ Anchor1Uwb_PCI_A2M : 7|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_PduId_A2M M : 23|8@0+ (1,0) [0|0] ""  MasterMcu
+ SG_ Anchor1Uwb_EncryptFlag_A2M : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_RangingBlock_A2M m130 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_UwbSessionId_A2M m130 : 55|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_Distance_A2M m130 : 87|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_QualitiFactor_A2M m130 : 103|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_HopFlag_A2M m130 : 119|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_DeviceRef_A2M m130 : 127|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_CenterFrequencyDiff_A m130 : 135|8@0- (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_CurrentRoundIdx_A2M m130 : 143|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_NextRoundIdx_A2M m130 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_UwbTagState_A2M m130 : 175|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_RangingBlockStartTime m130 : 183|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_PrePollRxError_A2M m130 : 247|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_PollRxError_A2M m130 : 263|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_ResponseTxError_A2M m130 : 279|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_FinalRxError_A2M m130 : 287|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Uwb_FinalDataRxError_A2M m130 : 303|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1KeyFob_KeyfobId_A2M m133 : 39|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1KeyFob_BlockId_A2M m133 : 55|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1KeyFob_Distance_A2M m133 : 71|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Keyfob_UwbTagState_A2M m133 : 87|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Keyfob_RangingBlockStartT m133 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Keyfob_PrePollRxError_A2M m133 : 159|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Keyfob_PollRxError_A2M m133 : 175|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Keyfob_ResponseTxError_A2 m133 : 191|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Keyfob_FinalRxError_A2M m133 : 199|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ Anchor1Keyfob_FinalDataRxError_A m133 : 215|16@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1097 Anchor9TpUwb_M2A: 64 MasterMcu
+ SG_ Anchor9Uwb_M2A : 0|16@1+ (1,0) [0|0] ""  Anchor9
+
+BO_ 1096 Anchor8TpUwb_M2A: 64 MasterMcu
+ SG_ Anchor8Uwb_M2A : 0|16@1+ (1,0) [0|0] ""  Anchor8
+
+BO_ 1095 Anchor7TpUwb_M2A: 64 MasterMcu
+ SG_ Anchor7Uwb_M2A : 0|16@1+ (1,0) [0|0] ""  Anchor7
+
+BO_ 1094 Anchor6TpUwb_M2A: 64 MasterMcu
+ SG_ Anchor6Uwb_M2A : 0|16@1+ (1,0) [0|0] ""  Anchor6
+
+BO_ 1093 Anchor5TpUwb_M2A: 64 MasterMcu
+ SG_ Anchor5Uwb_M2A : 0|16@1+ (1,0) [0|0] ""  Anchor5
+
+BO_ 1092 Anchor4TpUwb_M2A: 64 MasterMcu
+ SG_ Anchor4Uwb_M2A : 0|16@1+ (1,0) [0|0] ""  Anchor4
+
+BO_ 1091 Anchor3TpUwb_M2A: 64 MasterMcu
+ SG_ Anchor3Uwb_M2A : 0|16@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1090 Anchor2TpUwb_M2A: 64 MasterMcu
+ SG_ Anchor2Uwb_M2A : 0|16@1+ (1,0) [0|0] ""  Anchor2
+
+BO_ 1089 Anchor1TpUwb_M2A: 64 MasterMcu
+ SG_ Anchor1Uwb_M2A : 0|16@1+ (1,0) [0|0] ""  Anchor1
+
+BO_ 1577 Anchor9BleXcpResponse: 8 Anchor9
+ SG_ Anchor9BleXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1576 Anchor8BleXcpResponse: 8 Anchor8
+ SG_ Anchor8BleXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1575 Anchor7BleXcpResponse: 8 Anchor7
+ SG_ Anchor7BleXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1574 Anchor6BleXcpResponse: 8 Anchor6
+ SG_ Anchor6BleXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1573 Anchor5BleXcpResponse: 8 Anchor5
+ SG_ Anchor5BleXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1572 Anchor4BleXcpResponse: 8 Anchor4
+ SG_ Anchor4BleXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1571 Anchor3BleXcpResponse: 8 Anchor3
+ SG_ Anchor3BleXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1570 Anchor2BleXcpResponse: 8 Anchor2
+ SG_ Anchor2BleXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1569 Anchor1BleXcpResponse: 8 Anchor1
+ SG_ Anchor1BleXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1545 Anchor9BleXcpRequest: 8 Tester
+ SG_ Anchor9BleXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor9
+
+BO_ 1544 Anchor8BleXcpRequest: 8 Tester
+ SG_ Anchor8BleXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor8
+
+BO_ 1543 Anchor7BleXcpRequest: 8 Tester
+ SG_ Anchor7BleXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor7
+
+BO_ 1542 Anchor6BleXcpRequest: 8 Tester
+ SG_ Anchor6BleXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor6
+
+BO_ 1541 Anchor5BleXcpRequest: 8 Tester
+ SG_ Anchor5BleXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor5
+
+BO_ 1540 Anchor4BleXcpRequest: 8 Tester
+ SG_ Anchor4BleXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor4
+
+BO_ 1539 Anchor3BleXcpRequest: 8 Tester
+ SG_ Anchor3BleXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor3
+
+BO_ 1538 Anchor2BleXcpRequest: 8 Tester
+ SG_ Anchor2BleXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor2
+
+BO_ 1537 Anchor1BleXcpRequest: 8 Tester
+ SG_ Anchor1BleXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor1
+
+BO_ 1632 MasterUwbXcpResponse: 8 MasterMcu
+ SG_ MasterUwbXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1568 MasterBleXcpResponse: 8 MasterMcu
+ SG_ MasterBleXcpResponse : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1600 MasterUwbXcpRequest: 8 Tester
+ SG_ MasterUwbXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1536 MasterBleXcpRequest: 8 Tester
+ SG_ MasterBleXcpRequest : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1824 TesterPhysical_Res_PK_MasterBle: 64 MasterMcu
+ SG_ TesterPhysicalResMasterBle : 7|64@0+ (1,0) [0|1.8446744] ""  Tester
+
+BO_ 1792 TesterPhysical_Req_PK_MasterBle: 64 Tester
+ SG_ TesterPhysicalReqMasterBle : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1833 TesterPhysical_Res_PK_Anchor9: 64 Anchor9
+ SG_ TesterPhysicalResAnchor9 : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1832 TesterPhysical_Res_PK_Anchor8: 64 Anchor8
+ SG_ TesterPhysicalResAnchor8 : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1801 TesterPhysical_Req_PK_Anchor9: 64 MasterMcu
+ SG_ TesterPhysicalReqAnchor9 : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor9
+
+BO_ 1800 TesterPhysical_Req_PK_Anchor8: 64 MasterMcu
+ SG_ TesterPhysicalReqAnchor8 : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor8
+
+BO_ 1793 TesterPhysical_Req_PK_Anchor1: 64 MasterMcu
+ SG_ TesterPhysicalReqAnchor1 : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor1
+
+BO_ 2483042313 Anchor9Nm: 8 Anchor9
+ SG_ Anchor9Nm_NodeID : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ AutosarNMControlAnchor9 : 15|8@0+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 2483042312 Anchor8Nm: 8 Anchor8
+ SG_ Anchor8Nm_NodeID : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ AutosarNMControlAnchor8 : 15|8@0+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 1033 Anchor9TpBle_M2A: 64 MasterMcu
+ SG_ Anchor9Ble_M2A : 0|16@1- (1,0) [0|0] ""  Anchor9
+
+BO_ 1032 Anchor8TpBle_M2A: 64 MasterMcu
+ SG_ Anchor8Ble_M2A : 0|16@1- (1,0) [0|0] ""  Anchor8
+
+BO_ 361 Anchor9Hi_A2M: 64 Anchor9
+ SG_ Anchor9Hi_A2M_Payload : 0|16@1- (1,0) [0|0] ""  MasterMcu
+
+BO_ 359 Anchor7Hi_A2M: 64 Anchor7
+ SG_ Anchor7Hi_A2M_Payload : 0|16@1- (1,0) [0|0] ""  MasterMcu
+
+BO_ 360 Anchor8Hi_A2M: 64 Anchor8
+ SG_ Anchor8Hi_A2M_Payload : 0|16@1- (1,0) [0|0] ""  MasterMcu
+
+BO_ 358 Anchor6Hi_A2M: 64 Anchor6
+ SG_ Anchor6Hi_A2M_Payload : 0|16@1- (1,0) [0|0] ""  MasterMcu
+
+BO_ 357 Anchor5Hi_A2M: 64 Anchor5
+ SG_ Anchor5Hi_A2M_Payload : 0|16@1- (1,0) [0|0] ""  MasterMcu
+
+BO_ 356 Anchor4Hi_A2M: 64 Anchor4
+ SG_ Anchor4Hi_A2M_Payload : 0|16@1- (1,0) [0|0] ""  MasterMcu
+
+BO_ 355 Anchor3Hi_A2M: 64 Anchor3
+ SG_ Anchor3Hi_A2M_Payload : 0|16@1- (1,0) [0|0] ""  MasterMcu
+
+BO_ 354 Anchor2Hi_A2M: 64 Anchor2
+ SG_ Anchor2Hi_A2M_Payload : 0|16@1- (1,0) [0|0] ""  MasterMcu
+
+BO_ 353 Anchor1Hi_A2M: 64 Anchor1
+ SG_ Anchor1Hi_A2M_Payload : 0|16@1- (1,0) [0|0] ""  MasterMcu
+
+BO_ 368 MasterHi_M2A: 64 MasterMcu
+ SG_ MasterHi_M2A_PCI : 7|16@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ Mux_MasterHi_M2A_PDUID M : 23|8@0+ (1,0) [0|255] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ MasterHi_M2A_EncryptionFlag : 31|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ RanCoordination_Tries m5 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ RanCoordination_AckBitmask m5 : 47|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ RanCoordination_UwbSessionId m5 : 63|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ RanCoordination_NumResponders m5 : 95|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ RanCoordination_RangingBlock m5 : 111|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ RanCoordination_LastBlockTIme m5 : 127|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ RanCoordination_NextRoundIDx m5 : 191|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ KeyFobRANParams_Tries m23 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ KeyFobRANParams_AckBitMask m23 : 47|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ KeyFobRANParams_KeyfobID m23 : 63|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ KeyFobRANParams_STSKey_part1 m23 : 79|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ KeyFobRANParams_STSKey_part2 m23 : 143|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ KeyFobRANParams_STSHash_part1 m23 : 207|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ KeyFobRANParams_STSHash_part2 m23 : 271|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ KeyFobRANParams_STSIndex0 m23 : 335|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ KeyFobRANParams_UwbChannel m23 : 367|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ KeyFobRANParams_UwbTime0 m23 : 375|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ KeyFobRANParams_RangingInterval m23 : 391|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_Tries m22 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_ExpAckBitMask m22 : 47|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_UwbSessionId_1 m22 : 63|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_RangingBlock_1 m22 : 95|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_RangingBlock_2 m22 : 143|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_RangingBlock_3 m22 : 191|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_RangingBlock_4 m22 : 239|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_RangingBlock_5 m22 : 287|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_RangingBlock_6 m22 : 335|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_RangingBlock_7 m22 : 383|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_RangingBlock_8 m22 : 431|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_UwbSessionId_2 m22 : 111|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_UwbSessionId_3 m22 : 159|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_UwbSessionId_4 m22 : 207|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_UwbSessionId_5 m22 : 255|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_UwbSessionId_6 m22 : 303|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_UwbSessionId_7 m22 : 351|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UWBToffMeanCtrl_UwbSessionId_8 m22 : 399|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_Tries m7 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_AckBitMask m7 : 47|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_UwbSe_0006 m7 : 63|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_Priority_1 m7 : 95|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_UwbSe_0005 m7 : 103|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_Priority_2 m7 : 135|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_UwbSe_0004 m7 : 143|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_Priority_3 m7 : 175|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_UwbSe_0003 m7 : 183|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_Priority_4 m7 : 215|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_UwbSe_0001 m7 : 223|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_Priority_5 m7 : 255|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_UwbSe_0002 m7 : 263|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_Priority_6 m7 : 295|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_UwbSession m7 : 343|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_UwbSe_0000 m7 : 303|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_Priority_7 m7 : 335|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ ResourceConflictCoord_Priority_8 m7 : 375|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRangeStop_Tries m20 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRangeStop_ExpAckBitMask m20 : 47|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRangeStop_UwbSessionId m20 : 63|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRangeStop_StopRanging m20 : 95|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMTimeSync_Tries m16 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMTimeSync_ExpAckBitMask m16 : 47|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMTimeSync_UwbSessionId m16 : 63|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMTimeSync_ClockOffSet m16 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMTimeSync_RxMargin_U0 m16 : 144|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMTimeSync_RxTimeOut_U0 m16 : 160|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMTimeSync_RxMargin_U1 m16 : 191|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMTimeSync_RxTimeOut_U1 m16 : 207|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMTimeSync_RR_Retry_Thr m16 : 223|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMTimeSync_MaxTimeExtSync m16 : 231|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_Tries m19 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_ExpAckBitMask m19 : 47|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_UwbSessionId m19 : 63|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_UwbProtocolVersion m19 : 95|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_UwbConfigId m19 : 111|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_SyncCodeIdx m19 : 143|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_ChIdx m19 : 151|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_PulseShapeCombo m19 : 159|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_RANMultiplier m19 : 167|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_NumChapsPerSlot m19 : 175|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_NumResponders m19 : 183|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_NumSlotPerRound m19 : 191|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_UwbTime0 m19 : 199|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_HopModeKey m19 : 263|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_HoppingCfgBitMask m19 : 295|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_STSIndex0 m19 : 303|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMRANParams_KeyRef m19 : 335|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys2_Tries m18 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys2_ExpAckBitMask m18 : 47|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys2_UwbSessionId m18 : 63|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys2_SaltedHash_part1 m18 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys2_SaltedHash_part2 m18 : 159|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys2_mUPSK1_part1 m18 : 223|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys2_mUPSK1_part2 m18 : 287|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys2_SourceShortAddress m18 : 351|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys2_SourcePANId m18 : 367|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys2_DestinateShortAddress m18 : 383|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys2_UADReserved m18 : 399|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys1_Tries m17 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys1_ExpAckBitMask m17 : 47|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys1_UwbSessionId m17 : 63|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys1_mURSK_Part1 m17 : 95|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys1_mURSK_Part2 m17 : 159|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys1_mURSK_Part3 m17 : 223|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys1_mURSK_Part4 m17 : 287|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMKeys1_SourceLongAddress m17 : 351|64@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMSetInitiator_Tries m21 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMSetInitiator_ExpAckBitMask m21 : 47|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMSetInitiator_UwbSessionId m21 : 63|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ UwbMSetInitiator_RangingCycles m21 : 95|8@0+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 1065 Anchor9TpBle_A2M: 64 Anchor9
+ SG_ Anchor9Ble_A2M : 0|16@1- (1,0) [0|0] ""  MasterMcu
+
+BO_ 1064 Anchor8TpBle_A2M: 64 Anchor8
+ SG_ Anchor8Ble_A2M : 0|16@1- (1,0) [0|0] ""  MasterMcu
+
+BO_ 80 TimeSync_Master: 16 MasterMcu
+ SG_ MAC_Sync : 64|32@1+ (1,0) [0|16777215] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ SyncTimeSec_Master : 32|32@1+ (1,0) [0|4294967295] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ UserByte0_Master : 24|8@1+ (1,0) [0|255] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ ScSync_Master : 16|4@1+ (1,0) [0|15] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ TimeDomain_Sync_Master : 20|4@1+ (1,0) [0|15] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ UserByte1_Master : 8|8@1+ (1,0) [0|255] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+ SG_ Type_Sync_Master : 0|8@1+ (1,0) [0|255] ""  Anchor9,Anchor8,Anchor7,Anchor6,Anchor5,Anchor4,Anchor3,Anchor2,Anchor1
+
+BO_ 2483042311 Anchor7Nm: 8 Anchor7
+ SG_ Anchor7Nm_NodeID : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ AutosarNMControlAnchor7 : 15|8@0+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 2483042310 Anchor6Nm: 8 Anchor6
+ SG_ Anchor6Nm_NodeID : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ AutosarNMControlAnchor6 : 15|8@0+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 2483042309 Anchor5Nm: 8 Anchor5
+ SG_ Anchor5Nm_NodeID : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ AutosarNMControlAnchor5 : 15|8@0+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 2483042308 Anchor4Nm: 8 Anchor4
+ SG_ Anchor4Nm_NodeID : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ AutosarNMControlAnchor4 : 15|8@0+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 2483042307 Anchor3Nm: 8 Anchor3
+ SG_ Anchor3Nm_NodeID : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ AutosarNMControlAnchor3 : 15|8@0+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 2483042306 Anchor2Nm: 8 Anchor2
+ SG_ Anchor2Nm_NodeID : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ AutosarNMControlAnchor2 : 15|8@0+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 2483042305 Anchor1Nm: 8 Anchor1
+ SG_ Anchor1Nm_NodeID : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ AutosarNMControlAnchor1 : 15|8@0+ (1,0) [0|255] ""  MasterMcu
+
+BO_ 2483042304 MasterNm: 8 MasterMcu
+ SG_ MasterNm_NodeId : 7|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ AutosarNMControl : 15|8@0+ (1,0) [0|255] ""  Anchor9,Anchor8,Anchor3,Anchor4,Anchor5,Anchor6,Anchor7,Anchor2,Anchor1
+
+BO_ 1025 Anchor1TpBle_M2A: 64 MasterMcu
+ SG_ Anchor1Ble_M2A : 16|16@1+ (1,0) [0|0] ""  Anchor1
+
+BO_ 1026 Anchor2TpBle_M2A: 64 MasterMcu
+ SG_ Anchor2Ble_M2A : 16|16@1+ (1,0) [0|0] ""  Anchor2
+
+BO_ 1027 Anchor3TpBle_M2A: 64 MasterMcu
+ SG_ Anchor3Ble_M2A : 16|16@1+ (1,0) [0|0] ""  Anchor3
+
+BO_ 1028 Anchor4TpBle_M2A: 64 MasterMcu
+ SG_ Anchor4Ble_M2A : 16|16@1+ (1,0) [0|0] ""  Anchor4
+
+BO_ 1029 Anchor5TpBle_M2A: 64 MasterMcu
+ SG_ Anchor5Ble_M2A : 16|16@1+ (1,0) [0|0] ""  Anchor5
+
+BO_ 1030 Anchor6TpBle_M2A: 64 MasterMcu
+ SG_ Anchor6Ble_M2A : 16|16@1+ (1,0) [0|0] ""  Anchor6
+
+BO_ 1031 Anchor7TpBle_M2A: 64 MasterMcu
+ SG_ Anchor7Ble_M2A : 16|16@1+ (1,0) [0|0] ""  Anchor7
+
+BO_ 1057 Anchor1TpBle_A2M: 64 Anchor1
+ SG_ Anchor1Ble_A2M : 16|16@1+ (1,0) [0|0] ""  MasterMcu
+
+BO_ 1058 Anchor2TpBle_A2M: 64 Anchor2
+ SG_ Anchor2Ble_A2M : 16|16@1+ (1,0) [0|0] ""  MasterMcu
+
+BO_ 1059 Anchor3TpBle_A2M: 64 Anchor3
+ SG_ Anchor3Ble_A2M : 16|16@1+ (1,0) [0|0] ""  MasterMcu
+
+BO_ 1060 Anchor4TpBle_A2M: 64 Anchor4
+ SG_ Anchor4Ble_A2M : 16|16@1+ (1,0) [0|0] ""  MasterMcu
+
+BO_ 1061 Anchor5TpBle_A2M: 64 Anchor5
+ SG_ Anchor5Ble_A2M : 16|16@1+ (1,0) [0|0] ""  MasterMcu
+
+BO_ 1062 Anchor6TpBle_A2M: 64 Anchor6
+ SG_ Anchor6Ble_A2M : 16|16@1+ (1,0) [0|0] ""  MasterMcu
+
+BO_ 1063 Anchor7TpBle_A2M: 64 Anchor7
+ SG_ Anchor7Ble_A2M : 16|16@1+ (1,0) [0|0] ""  MasterMcu
+
+BO_ 1831 TesterPhysical_Res_PK_Anchor7: 64 Anchor7
+ SG_ TesterPhysicalResAnchor7 : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1830 TesterPhysical_Res_PK_Anchor6: 64 Anchor6
+ SG_ TesterPhysicalResAnchor6 : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1829 TesterPhysical_Res_PK_Anchor5: 64 Anchor5
+ SG_ TesterPhysicalResAnchor5 : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1828 TesterPhysical_Res_PK_Anchor4: 64 Anchor4
+ SG_ TesterPhysicalResAnchor4 : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1827 TesterPhysical_Res_PK_Anchor3: 64 Anchor3
+ SG_ TesterPhysicalResAnchor3 : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1826 TesterPhysical_Res_PK_Anchor2: 64 Anchor2
+ SG_ TesterPhysicalResAnchor2 : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1825 TesterPhysical_Res_PK_Anchor1: 64 Anchor1
+ SG_ TesterPhysicalResAnchor1 : 7|64@0+ (1,0) [0|1.8446744] ""  MasterMcu
+
+BO_ 1799 TesterPhysical_Req_PK_Anchor7: 64 MasterMcu
+ SG_ TesterPhysicalReqAnchor7 : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor7
+
+BO_ 1798 TesterPhysical_Req_PK_Anchor6: 64 MasterMcu
+ SG_ TesterPhysicalReqAnchor6 : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor6
+
+BO_ 1797 TesterPhysical_Req_PK_Anchor5: 64 MasterMcu
+ SG_ TesterPhysicalReqAnchor5 : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor5
+
+BO_ 1796 TesterPhysical_Req_PK_Anchor4: 64 MasterMcu
+ SG_ TesterPhysicalReqAnchor4 : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor4
+
+BO_ 1795 TesterPhysical_Req_PK_Anchor3: 64 MasterMcu
+ SG_ TesterPhysicalReqAnchor3 : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor3
+
+BO_ 1794 TesterPhysical_Req_PK_Anchor2: 64 MasterMcu
+ SG_ TesterPhysicalReqAnchor2 : 7|64@0+ (1,0) [0|1.8446744] ""  Anchor2
+
+
+
+CM_ BO_ 3221225472 "This is a message for not used signals, created by Vector CANdb++ DBC OLE DB Provider.";
+CM_ BO_ 1344 "SysST_5814, SysST_3105";
+CM_ SG_ 1344 UwbResult_DistanceToMaster "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_PduID "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_UwbCoordNodeTimeDelta "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_LocUwbNodeTimeDelta "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_NodeConsideredBitmask "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_RangingSessionState "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_ZoneDebounce "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_ZoneRaw "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_PolarAngle "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_PolarDistance "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_ValidityFlag "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_CartesianZ "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_CartesianY "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_CartesianX "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_KeyID "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_UwbSessionID "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbResult_RangingBlock "SysST_5826, SysST_1442";
+CM_ SG_ 1344 UwbLocalisationReport_TagIdx "SysST_5826, SysST_1442";
+CM_ SG_ 1129 Anchor9Uwb_PduId_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_RangingBlock_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_UwbSessionId_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_Distance_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_QualitiFactor_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_HopFlag_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_DeviceRef_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_CenterFrequencyDiff_A "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_CurrentRoundIdx_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_NextRoundIdx_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_UwbTagState_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_RangingBlockStartTime "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_PrePollRxError_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_PollRxError_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_ResponseTxError_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_FinalRxError_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9Uwb_FinalDataRxError_A2M "SysST_987";
+CM_ SG_ 1129 Anchor9KeyFob_KeyfobId_A2M "SysST_4983";
+CM_ SG_ 1129 Anchor9KeyFob_BlockId_A2M "SysST_4983";
+CM_ SG_ 1129 Anchor9KeyFob_Distance_A2M "SysST_4983";
+CM_ SG_ 1129 Anchor9Keyfob_UwbTagState_A2M "SysST_4983";
+CM_ SG_ 1129 Anchor9Keyfob_RangingBlockStartT "SysST_4983";
+CM_ SG_ 1129 Anchor9Keyfob_PrePollRxError_A2M "SysST_4983";
+CM_ SG_ 1129 Anchor9Keyfob_PollRxError_A2M "SysST_4983";
+CM_ SG_ 1129 Anchor9Keyfob_ResponseTxError_A2 "SysST_4983";
+CM_ SG_ 1129 Anchor9Keyfob_FinalRxError_A2M "SysST_4983";
+CM_ SG_ 1129 Anchor9Keyfob_FinalDataRxError_A "SysST_4983";
+CM_ SG_ 1128 Anchor8Uwb_PduId_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_RangingBlock_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_UwbSessionId_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_Distance_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_QualitiFactor_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_HopFlag_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_DeviceRef_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_CenterFrequencyDiff_A "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_CurrentRoundIdx_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_NextRoundIdx_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_UwbTagState_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_RangingBlockStartTime "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_PrePollRxError_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_PollRxError_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_ResponseTxError_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_FinalRxError_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8Uwb_FinalDataRxError_A2M "SysST_987";
+CM_ SG_ 1128 Anchor8KeyFob_KeyfobId_A2M "SysST_4983";
+CM_ SG_ 1128 Anchor8KeyFob_BlockId_A2M "SysST_4983";
+CM_ SG_ 1128 Anchor8KeyFob_Distance_A2M "SysST_4983";
+CM_ SG_ 1128 Anchor8Keyfob_UwbTagState_A2M "SysST_4983";
+CM_ SG_ 1128 Anchor8Keyfob_RangingBlockStartT "SysST_4983";
+CM_ SG_ 1128 Anchor8Keyfob_PrePollRxError_A2M "SysST_4983";
+CM_ SG_ 1128 Anchor8Keyfob_PollRxError_A2M "SysST_4983";
+CM_ SG_ 1128 Anchor8Keyfob_ResponseTxError_A2 "SysST_4983";
+CM_ SG_ 1128 Anchor8Keyfob_FinalRxError_A2M "SysST_4983";
+CM_ SG_ 1128 Anchor8Keyfob_FinalDataRxError_A "SysST_4983";
+CM_ SG_ 1127 Anchor7Uwb_PduId_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_RangingBlock_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_UwbSessionId_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_Distance_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_QualitiFactor_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_HopFlag_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_DeviceRef_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_CenterFrequencyDiff_A "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_CurrentRoundIdx_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_NextRoundIdx_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_UwbTagState_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_RangingBlockStartTime "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_PrePollRxError_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_PollRxError_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_ResponseTxError_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_FinalRxError_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7Uwb_FinalDataRxError_A2M "SysST_987";
+CM_ SG_ 1127 Anchor7KeyFob_KeyfobId_A2M "SysST_4983";
+CM_ SG_ 1127 Anchor7KeyFob_BlockId_A2M "SysST_4983";
+CM_ SG_ 1127 Anchor7KeyFob_Distance_A2M "SysST_4983";
+CM_ SG_ 1127 Anchor7Keyfob_UwbTagState_A2M "SysST_4983";
+CM_ SG_ 1127 Anchor7Keyfob_RangingBlockStartT "SysST_4983";
+CM_ SG_ 1127 Anchor7Keyfob_PrePollRxError_A2M "SysST_4983";
+CM_ SG_ 1127 Anchor7Keyfob_PollRxError_A2M "SysST_4983";
+CM_ SG_ 1127 Anchor7Keyfob_ResponseTxError_A2 "SysST_4983";
+CM_ SG_ 1127 Anchor7Keyfob_FinalRxError_A2M "SysST_4983";
+CM_ SG_ 1127 Anchor7Keyfob_FinalDataRxError_A "SysST_4983";
+CM_ SG_ 1126 Anchor6Uwb_PduId_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_RangingBlock_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_UwbSessionId_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_Distance_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_QualitiFactor_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_HopFlag_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_DeviceRef_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_CenterFrequencyDiff_A "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_CurrentRoundIdx_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_NextRoundIdx_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_UwbTagState_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_RangingBlockStartTime "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_PrePollRxError_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_PollRxError_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_ResponseTxError_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_FinalRxError_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6Uwb_FinalDataRxError_A2M "SysST_987";
+CM_ SG_ 1126 Anchor6KeyFob_KeyfobId_A2M "SysST_4983";
+CM_ SG_ 1126 Anchor6KeyFob_BlockId_A2M "SysST_4983";
+CM_ SG_ 1126 Anchor6KeyFob_Distance_A2M "SysST_4983";
+CM_ SG_ 1126 Anchor6Keyfob_UwbTagState_A2M "SysST_4983";
+CM_ SG_ 1126 Anchor6Keyfob_RangingBlockStartT "SysST_4983";
+CM_ SG_ 1126 Anchor6Keyfob_PrePollRxError_A2M "SysST_4983";
+CM_ SG_ 1126 Anchor6Keyfob_PollRxError_A2M "SysST_4983";
+CM_ SG_ 1126 Anchor6Keyfob_ResponseTxError_A2 "SysST_4983";
+CM_ SG_ 1126 Anchor6Keyfob_FinalRxError_A2M "SysST_4983";
+CM_ SG_ 1126 Anchor6Keyfob_FinalDataRxError_A "SysST_4983";
+CM_ SG_ 1125 Anchor5Uwb_PduId_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_RangingBlock_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_UwbSessionId_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_Distance_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_QualitiFactor_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_HopFlag_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_DeviceRef_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_CenterFrequencyDiff_A "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_CurrentRoundIdx_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_NextRoundIdx_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_UwbTagState_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_RangingBlockStartTime "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_PrePollRxError_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_PollRxError_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_ResponseTxError_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_FinalRxError_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5Uwb_FinalDataRxError_A2M "SysST_987";
+CM_ SG_ 1125 Anchor5KeyFob_KeyfobId_A2M "SysST_4983";
+CM_ SG_ 1125 Anchor5KeyFob_BlockId_A2M "SysST_4983";
+CM_ SG_ 1125 Anchor5KeyFob_Distance_A2M "SysST_4983";
+CM_ SG_ 1125 Anchor5Keyfob_UwbTagState_A2M "SysST_4983";
+CM_ SG_ 1125 Anchor5Keyfob_RangingBlockStartT "SysST_4983";
+CM_ SG_ 1125 Anchor5Keyfob_PrePollRxError_A2M "SysST_4983";
+CM_ SG_ 1125 Anchor5Keyfob_PollRxError_A2M "SysST_4983";
+CM_ SG_ 1125 Anchor5Keyfob_ResponseTxError_A2 "SysST_4983";
+CM_ SG_ 1125 Anchor5Keyfob_FinalRxError_A2M "SysST_4983";
+CM_ SG_ 1125 Anchor5Keyfob_FinalDataRxError_A "SysST_4983";
+CM_ SG_ 1124 Anchor4Uwb_PduId_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_RangingBlock_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_UwbSessionId_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_Distance_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_QualitiFactor_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_HopFlag_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_DeviceRef_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_CenterFrequencyDiff_A "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_CurrentRoundIdx_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_NextRoundIdx_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_UwbTagState_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_RangingBlockStartTime "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_PrePollRxError_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_PollRxError_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_ResponseTxError_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_FinalRxError_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4Uwb_FinalDataRxError_A2M "SysST_987";
+CM_ SG_ 1124 Anchor4KeyFob_KeyfobId_A2M "SysST_4983";
+CM_ SG_ 1124 Anchor4KeyFob_BlockId_A2M "SysST_4983";
+CM_ SG_ 1124 Anchor4KeyFob_Distance_A2M "SysST_4983";
+CM_ SG_ 1124 Anchor4Keyfob_UwbTagState_A2M "SysST_4983";
+CM_ SG_ 1124 Anchor4Keyfob_RangingBlockStartT "SysST_4983";
+CM_ SG_ 1124 Anchor4Keyfob_PrePollRxError_A2M "SysST_4983";
+CM_ SG_ 1124 Anchor4Keyfob_PollRxError_A2M "SysST_4983";
+CM_ SG_ 1124 Anchor4Keyfob_ResponseTxError_A2 "SysST_4983";
+CM_ SG_ 1124 Anchor4Keyfob_FinalRxError_A2M "SysST_4983";
+CM_ SG_ 1124 Anchor4Keyfob_FinalDataRxError_A "SysST_4983";
+CM_ SG_ 1123 Anchor3Uwb_PduId_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_RangingBlock_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_UwbSessionId_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_Distance_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_QualitiFactor_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_HopFlag_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_DeviceRef_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_CenterFrequencyDiff_A "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_CurrentRoundIdx_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_NextRoundIdx_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_UwbTagState_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_RangingBlockStartTime "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_PrePollRxError_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_PollRxError_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_ResponseTxError_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_FinalRxError_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3Uwb_FinalDataRxError_A2M "SysST_987";
+CM_ SG_ 1123 Anchor3KeyFob_KeyfobId_A2M "SysST_4983";
+CM_ SG_ 1123 Anchor3KeyFob_BlockId_A2M "SysST_4983";
+CM_ SG_ 1123 Anchor3KeyFob_Distance_A2M "SysST_4983";
+CM_ SG_ 1123 Anchor3Keyfob_UwbTagState_A2M "SysST_4983";
+CM_ SG_ 1123 Anchor3Keyfob_RangingBlockStartT "SysST_4983";
+CM_ SG_ 1123 Anchor3Keyfob_PrePollRxError_A2M "SysST_4983";
+CM_ SG_ 1123 Anchor3Keyfob_PollRxError_A2M "SysST_4983";
+CM_ SG_ 1123 Anchor3Keyfob_ResponseTxError_A2 "SysST_4983";
+CM_ SG_ 1123 Anchor3Keyfob_FinalRxError_A2M "SysST_4983";
+CM_ SG_ 1123 Anchor3Keyfob_FinalDataRxError_A "SysST_4983";
+CM_ SG_ 1122 Anchor2Uwb_PduId_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_RangingBlock_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_UwbSessionId_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_Distance_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_QualitiFactor_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_HopFlag_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_DeviceRef_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_CenterFrequencyDiff_A "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_CurrentRoundIdx_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_NextRoundIdx_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_UwbTagState_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_RangingBlockStartTime "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_PrePollRxError_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_PollRxError_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_ResponseTxError_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_FinalRxError_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2Uwb_FinalDataRxError_A2M "SysST_987";
+CM_ SG_ 1122 Anchor2KeyFob_KeyfobId_A2M "SysST_4983";
+CM_ SG_ 1122 Anchor2KeyFob_BlockId_A2M "SysST_4983";
+CM_ SG_ 1122 Anchor2KeyFob_Distance_A2M "SysST_4983";
+CM_ SG_ 1122 Anchor2Keyfob_UwbTagState_A2M "SysST_4983";
+CM_ SG_ 1122 Anchor2Keyfob_RangingBlockStartT "SysST_4983";
+CM_ SG_ 1122 Anchor2Keyfob_PrePollRxError_A2M "SysST_4983";
+CM_ SG_ 1122 Anchor2Keyfob_PollRxError_A2M "SysST_4983";
+CM_ SG_ 1122 Anchor2Keyfob_ResponseTxError_A2 "SysST_4983";
+CM_ SG_ 1122 Anchor2Keyfob_FinalRxError_A2M "SysST_4983";
+CM_ SG_ 1122 Anchor2Keyfob_FinalDataRxError_A "SysST_4983";
+CM_ SG_ 1121 Anchor1Uwb_PduId_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_RangingBlock_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_UwbSessionId_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_Distance_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_QualitiFactor_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_HopFlag_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_DeviceRef_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_CenterFrequencyDiff_A "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_CurrentRoundIdx_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_NextRoundIdx_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_UwbTagState_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_RangingBlockStartTime "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_PrePollRxError_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_PollRxError_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_ResponseTxError_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_FinalRxError_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1Uwb_FinalDataRxError_A2M "SysST_987";
+CM_ SG_ 1121 Anchor1KeyFob_KeyfobId_A2M "SysST_4983";
+CM_ SG_ 1121 Anchor1KeyFob_BlockId_A2M "SysST_4983";
+CM_ SG_ 1121 Anchor1KeyFob_Distance_A2M "SysST_4983";
+CM_ SG_ 1121 Anchor1Keyfob_UwbTagState_A2M "SysST_4983";
+CM_ SG_ 1121 Anchor1Keyfob_RangingBlockStartT "SysST_4983";
+CM_ SG_ 1121 Anchor1Keyfob_PrePollRxError_A2M "SysST_4983";
+CM_ SG_ 1121 Anchor1Keyfob_PollRxError_A2M "SysST_4983";
+CM_ SG_ 1121 Anchor1Keyfob_ResponseTxError_A2 "SysST_4983";
+CM_ SG_ 1121 Anchor1Keyfob_FinalRxError_A2M "SysST_4983";
+CM_ SG_ 1121 Anchor1Keyfob_FinalDataRxError_A "SysST_4983";
+CM_ SG_ 2483042313 Anchor9Nm_NodeID "CanNm_tx_format_1";
+CM_ SG_ 2483042313 AutosarNMControlAnchor9 "CanNm_tx_format_1";
+CM_ SG_ 2483042312 Anchor8Nm_NodeID "CanNm_tx_format_1";
+CM_ SG_ 2483042312 AutosarNMControlAnchor8 "CanNm_tx_format_1";
+CM_ SG_ 368 RanCoordination_AckBitmask "SysST_3740";
+CM_ SG_ 368 RanCoordination_Tries "SysST_3740";
+CM_ SG_ 368 KeyFobRANParams_RangingInterval "SysST_4926";
+CM_ SG_ 368 KeyFobRANParams_UwbTime0 "SysST_4926";
+CM_ SG_ 368 KeyFobRANParams_UwbChannel "SysST_4926";
+CM_ SG_ 368 KeyFobRANParams_STSIndex0 "SysST_4926";
+CM_ SG_ 368 KeyFobRANParams_STSHash_part2 "SysST_4926";
+CM_ SG_ 368 KeyFobRANParams_STSHash_part1 "SysST_4926";
+CM_ SG_ 368 KeyFobRANParams_STSKey_part2 "SysST_4926";
+CM_ SG_ 368 KeyFobRANParams_STSKey_part1 "SysST_4926";
+CM_ SG_ 368 KeyFobRANParams_KeyfobID "SysST_4926";
+CM_ SG_ 368 KeyFobRANParams_AckBitMask "SysST_4926";
+CM_ SG_ 368 KeyFobRANParams_Tries "SysST_4926";
+CM_ SG_ 368 UWBToffMeanCtrl_UwbSessionId_8 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_UwbSessionId_7 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_UwbSessionId_6 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_UwbSessionId_5 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_UwbSessionId_4 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_UwbSessionId_3 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_UwbSessionId_2 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_RangingBlock_8 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_RangingBlock_7 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_RangingBlock_6 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_RangingBlock_5 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_RangingBlock_4 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_RangingBlock_3 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_RangingBlock_2 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_RangingBlock_1 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_UwbSessionId_1 "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_ExpAckBitMask "SysST_4975";
+CM_ SG_ 368 UWBToffMeanCtrl_Tries "SysST_4975";
+CM_ SG_ 368 ResourceConflictCoord_UwbSession "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_UwbSe_0000 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_UwbSe_0001 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_UwbSe_0002 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_UwbSe_0003 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_UwbSe_0004 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_UwbSe_0005 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_Priority_6 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_Priority_4 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_Priority_5 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_Priority_7 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_UwbSe_0006 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_Priority_3 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_Priority_8 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_Priority_1 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_Priority_2 "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_AckBitMask "SysST_4656";
+CM_ SG_ 368 ResourceConflictCoord_Tries "SysST_4656";
+CM_ SG_ 368 UwbMTimeSync_MaxTimeExtSync "SysST_983";
+CM_ SG_ 368 UwbMTimeSync_RR_Retry_Thr "SysST_983";
+CM_ SG_ 368 UwbMTimeSync_RxTimeOut_U1 "SysST_983";
+CM_ SG_ 368 UwbMTimeSync_RxMargin_U1 "SysST_983";
+CM_ SG_ 368 UwbMTimeSync_RxTimeOut_U0 "SysST_983";
+CM_ SG_ 368 UwbMTimeSync_RxMargin_U0 "SysST_983";
+CM_ SG_ 368 UwbMTimeSync_ClockOffSet "SysST_983";
+CM_ SG_ 368 UwbMTimeSync_UwbSessionId "SysST_983";
+CM_ SG_ 368 UwbMTimeSync_ExpAckBitMask "SysST_983";
+CM_ SG_ 368 UwbMTimeSync_Tries "SysST_983";
+CM_ SG_ 368 UwbMRangeStop_StopRanging " SysST_1392";
+CM_ SG_ 368 UwbMRangeStop_UwbSessionId " SysST_1392";
+CM_ SG_ 368 UwbMRangeStop_ExpAckBitMask " SysST_1392";
+CM_ SG_ 368 UwbMRangeStop_Tries " SysST_1392";
+CM_ SG_ 368 UwbMRANParams_KeyRef "SysST_986";
+CM_ SG_ 368 UwbMRANParams_STSIndex0 "SysST_986";
+CM_ SG_ 368 UwbMRANParams_HoppingCfgBitMask "SysST_986";
+CM_ SG_ 368 UwbMRANParams_HopModeKey "SysST_986";
+CM_ SG_ 368 UwbMRANParams_UwbTime0 "SysST_986";
+CM_ SG_ 368 UwbMRANParams_NumSlotPerRound "SysST_986";
+CM_ SG_ 368 UwbMRANParams_NumResponders "SysST_986";
+CM_ SG_ 368 UwbMRANParams_NumChapsPerSlot "SysST_986";
+CM_ SG_ 368 UwbMRANParams_RANMultiplier "SysST_986";
+CM_ SG_ 368 UwbMRANParams_PulseShapeCombo "SysST_986";
+CM_ SG_ 368 UwbMRANParams_ChIdx "SysST_986";
+CM_ SG_ 368 UwbMRANParams_SyncCodeIdx "SysST_986";
+CM_ SG_ 368 UwbMRANParams_UwbConfigId "SysST_986";
+CM_ SG_ 368 UwbMRANParams_UwbProtocolVersion "SysST_986";
+CM_ SG_ 368 UwbMRANParams_UwbSessionId "SysST_986";
+CM_ SG_ 368 UwbMRANParams_ExpAckBitMask "SysST_986";
+CM_ SG_ 368 UwbMRANParams_Tries "SysST_986";
+CM_ SG_ 368 UwbMKeys2_UADReserved "SysST_1339";
+CM_ SG_ 368 UwbMKeys2_DestinateShortAddress "SysST_1339";
+CM_ SG_ 368 UwbMKeys2_SourcePANId "SysST_1339";
+CM_ SG_ 368 UwbMKeys2_SourceShortAddress "SysST_1339";
+CM_ SG_ 368 UwbMKeys2_mUPSK1_part2 "SysST_1339";
+CM_ SG_ 368 UwbMKeys2_mUPSK1_part1 "SysST_1339";
+CM_ SG_ 368 UwbMKeys2_SaltedHash_part2 "SysST_1339";
+CM_ SG_ 368 UwbMKeys2_SaltedHash_part1 "SysST_1339";
+CM_ SG_ 368 UwbMKeys2_UwbSessionId "SysST_1339";
+CM_ SG_ 368 UwbMKeys2_ExpAckBitMask "SysST_1339";
+CM_ SG_ 368 UwbMKeys2_Tries "SysST_1339";
+CM_ SG_ 368 UwbMKeys1_SourceLongAddress "SysST_985";
+CM_ SG_ 368 UwbMKeys1_mURSK_Part4 "SysST_985";
+CM_ SG_ 368 UwbMKeys1_mURSK_Part3 "SysST_985";
+CM_ SG_ 368 UwbMKeys1_mURSK_Part2 "SysST_985";
+CM_ SG_ 368 UwbMKeys1_mURSK_Part1 "SysST_985";
+CM_ SG_ 368 UwbMKeys1_UwbSessionId "SysST_985";
+CM_ SG_ 368 UwbMKeys1_ExpAckBitMask "SysST_985";
+CM_ SG_ 368 UwbMKeys1_Tries "SysST_985";
+CM_ SG_ 368 UwbMSetInitiator_RangingCycles "SysST_2441";
+CM_ SG_ 368 UwbMSetInitiator_UwbSessionId "SysST_2441";
+CM_ SG_ 368 UwbMSetInitiator_ExpAckBitMask "SysST_2441";
+CM_ SG_ 368 UwbMSetInitiator_Tries "SysST_2441";
+CM_ SG_ 368 RanCoordination_NextRoundIDx "SysST_3740";
+CM_ SG_ 368 RanCoordination_LastBlockTIme "SysST_3740";
+CM_ SG_ 368 RanCoordination_RangingBlock "SysST_3740";
+CM_ SG_ 368 RanCoordination_NumResponders "SysST_3740";
+CM_ SG_ 368 RanCoordination_UwbSessionId "SysST_3740";
+CM_ SG_ 80 MAC_Sync "SysST_1458";
+CM_ SG_ 80 SyncTimeSec_Master "SysST_1455";
+CM_ SG_ 80 UserByte0_Master "SysST_1454";
+CM_ SG_ 80 ScSync_Master "SysST_1453";
+CM_ SG_ 80 TimeDomain_Sync_Master "SysST_1452";
+CM_ SG_ 80 UserByte1_Master "SysST_1451";
+CM_ SG_ 80 Type_Sync_Master "SysST_1450";
+CM_ SG_ 2483042311 Anchor7Nm_NodeID "CanNm_tx_format_1";
+CM_ SG_ 2483042311 AutosarNMControlAnchor7 "CanNm_tx_format_1";
+CM_ SG_ 2483042310 Anchor6Nm_NodeID "CanNm_tx_format_1";
+CM_ SG_ 2483042310 AutosarNMControlAnchor6 "CanNm_tx_format_1";
+CM_ SG_ 2483042309 Anchor5Nm_NodeID "CanNm_tx_format_1";
+CM_ SG_ 2483042309 AutosarNMControlAnchor5 "CanNm_tx_format_1";
+CM_ SG_ 2483042308 Anchor4Nm_NodeID "CanNm_tx_format_1";
+CM_ SG_ 2483042308 AutosarNMControlAnchor4 "CanNm_tx_format_1";
+CM_ SG_ 2483042307 Anchor3Nm_NodeID "CanNm_tx_format_1";
+CM_ SG_ 2483042307 AutosarNMControlAnchor3 "CanNm_tx_format_1";
+CM_ SG_ 2483042306 Anchor2Nm_NodeID "CanNm_tx_format_1";
+CM_ SG_ 2483042306 AutosarNMControlAnchor2 "CanNm_tx_format_1";
+CM_ SG_ 2483042305 Anchor1Nm_NodeID "CanNm_tx_format_1";
+CM_ SG_ 2483042305 AutosarNMControlAnchor1 "CanNm_tx_format_1";
+CM_ SG_ 2483042304 AutosarNMControl "CanNm_tx_format_1";
+BA_DEF_ BO_  "MsgType" ENUM  "Application","NM","ISO-TP";
+BA_DEF_  "NmMessageCount" INT 1 255;
+BA_DEF_ BO_  "GenMsgSendType" ENUM  "Cyclic","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","IfActive","NoMsgSendType";
+BA_DEF_ BO_  "DiagRequest" ENUM  "No","Yes";
+BA_DEF_ BO_  "DiagResponse" ENUM  "No","Yes";
+BA_DEF_ SG_  "NWM_WakeupAllowed" ENUM  "No","Yes";
+BA_DEF_ SG_  "GenSigInactiveValue" INT 0 100000;
+BA_DEF_ SG_  "GenSigSendType" ENUM  "Cyclic","OnWrite","OnWriteWithRepetition","OnChange","OnChangeWithRepetition","IfActive","IfActiveWithRepetition","NoSigSendType";
+BA_DEF_ SG_  "GenSigStartValue" FLOAT 0 100000000000;
+BA_DEF_ BO_  "NmMessage" ENUM  "no","yes";
+BA_DEF_ BO_  "GenMsgCycleTimeFast" INT 2 50000;
+BA_DEF_ BO_  "GenMsgCycleTime" INT 2 50000;
+BA_DEF_ BO_  "GenMsgDelayTime" INT 0 1000;
+BA_DEF_ BO_  "GenMsgNrOfRepetition" INT 0 999999;
+BA_DEF_ BO_  "GenMsgFastOnStart" INT 0 100000;
+BA_DEF_ BO_  "GenMsgILSupport" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgStartDelayTime" INT 0 100000;
+BA_DEF_ BU_  "GenNodSleepTime" INT 0 1000000;
+BA_DEF_ BU_  "NmNode" ENUM  "no","yes";
+BA_DEF_ BU_  "NmStationAddress" INT 0 63;
+BA_DEF_ BU_  "NodeLayerModules" STRING ;
+BA_DEF_ BU_  "ILUsed" ENUM  "No","Yes";
+BA_DEF_  "GenNWMSleepTime" INT 0 1000000;
+BA_DEF_  "NmBaseAddress" HEX 1280 1407;
+BA_DEF_  "VersionNumber" INT 1 999;
+BA_DEF_  "Manufacturer" STRING ;
+BA_DEF_ BO_  "CANFD_BRS" ENUM  "0","1";
+BA_DEF_  "DBName" STRING ;
+BA_DEF_  "BusType" STRING ;
+BA_DEF_ BU_  "ECU" STRING ;
+BA_DEF_ BU_  "CANoeJitterMax" INT 0 0;
+BA_DEF_ BU_  "CANoeJitterMin" INT 0 0;
+BA_DEF_ BU_  "CANoeDrift" INT 0 0;
+BA_DEF_ BU_  "CANoeStartDelay" INT 0 0;
+BA_DEF_ BO_  "VFrameFormat" ENUM  "StandardCAN","ExtendedCAN","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","StandardCAN_FD","ExtendedCAN_FD";
+BA_DEF_ SG_  "SystemSignalLongSymbol" STRING ;
+BA_DEF_DEF_  "MsgType" "Application";
+BA_DEF_DEF_  "NmMessageCount" 128;
+BA_DEF_DEF_  "GenMsgSendType" "Cyclic";
+BA_DEF_DEF_  "DiagRequest" "No";
+BA_DEF_DEF_  "DiagResponse" "No";
+BA_DEF_DEF_  "NWM_WakeupAllowed" "";
+BA_DEF_DEF_  "GenSigInactiveValue" 0;
+BA_DEF_DEF_  "GenSigSendType" "Cyclic";
+BA_DEF_DEF_  "GenSigStartValue" 0;
+BA_DEF_DEF_  "NmMessage" "no";
+BA_DEF_DEF_  "GenMsgCycleTimeFast" 100;
+BA_DEF_DEF_  "GenMsgCycleTime" 100;
+BA_DEF_DEF_  "GenMsgDelayTime" 0;
+BA_DEF_DEF_  "GenMsgNrOfRepetition" 0;
+BA_DEF_DEF_  "GenMsgFastOnStart" 0;
+BA_DEF_DEF_  "GenMsgILSupport" "Yes";
+BA_DEF_DEF_  "GenMsgStartDelayTime" 0;
+BA_DEF_DEF_  "GenNodSleepTime" 0;
+BA_DEF_DEF_  "NmNode" "no";
+BA_DEF_DEF_  "NmStationAddress" 0;
+BA_DEF_DEF_  "NodeLayerModules" "dmoseknm.dll, CANoeILNLVector.dll";
+BA_DEF_DEF_  "ILUsed" "Yes";
+BA_DEF_DEF_  "GenNWMSleepTime" 0;
+BA_DEF_DEF_  "NmBaseAddress" 1280;
+BA_DEF_DEF_  "VersionNumber" 1;
+BA_DEF_DEF_  "Manufacturer" "Bosch";
+BA_DEF_DEF_  "CANFD_BRS" "1";
+BA_DEF_DEF_  "DBName" "";
+BA_DEF_DEF_  "BusType" "CAN FD";
+BA_DEF_DEF_  "ECU" "";
+BA_DEF_DEF_  "CANoeJitterMax" 0;
+BA_DEF_DEF_  "CANoeJitterMin" 0;
+BA_DEF_DEF_  "CANoeDrift" 0;
+BA_DEF_DEF_  "CANoeStartDelay" 0;
+BA_DEF_DEF_  "VFrameFormat" "StandardCAN_FD";
+BA_DEF_DEF_  "SystemSignalLongSymbol" "";
+BA_ "BusType" "CAN FD";
+BA_ "VersionNumber" 3;
+BA_ "DBName" "PK_BB_CAN";
+BA_ "NmStationAddress" BU_ AnchorF 15;
+BA_ "NmStationAddress" BU_ Anchor9 9;
+BA_ "NmStationAddress" BU_ Anchor8 8;
+BA_ "NmStationAddress" BU_ Anchor7 7;
+BA_ "NmStationAddress" BU_ Anchor6 6;
+BA_ "NmStationAddress" BU_ Anchor5 5;
+BA_ "NmStationAddress" BU_ Anchor4 4;
+BA_ "NmStationAddress" BU_ Anchor3 3;
+BA_ "NmStationAddress" BU_ Anchor2 2;
+BA_ "NmStationAddress" BU_ Anchor1 1;
+BA_ "GenMsgSendType" BO_ 1344 8;
+BA_ "VFrameFormat" BO_ 1344 14;
+BA_ "GenMsgDelayTime" BO_ 857 20;
+BA_ "GenMsgCycleTime" BO_ 857 1000;
+BA_ "VFrameFormat" BO_ 857 14;
+BA_ "GenMsgDelayTime" BO_ 856 20;
+BA_ "GenMsgCycleTime" BO_ 856 1000;
+BA_ "VFrameFormat" BO_ 856 14;
+BA_ "GenMsgDelayTime" BO_ 855 20;
+BA_ "GenMsgCycleTime" BO_ 855 1000;
+BA_ "VFrameFormat" BO_ 855 14;
+BA_ "GenMsgDelayTime" BO_ 854 20;
+BA_ "GenMsgCycleTime" BO_ 854 1000;
+BA_ "VFrameFormat" BO_ 854 14;
+BA_ "GenMsgDelayTime" BO_ 853 20;
+BA_ "GenMsgCycleTime" BO_ 853 1000;
+BA_ "VFrameFormat" BO_ 853 14;
+BA_ "GenMsgDelayTime" BO_ 852 20;
+BA_ "GenMsgCycleTime" BO_ 852 1000;
+BA_ "VFrameFormat" BO_ 852 14;
+BA_ "GenMsgDelayTime" BO_ 851 20;
+BA_ "GenMsgCycleTime" BO_ 851 1000;
+BA_ "VFrameFormat" BO_ 851 14;
+BA_ "GenMsgDelayTime" BO_ 850 20;
+BA_ "GenMsgCycleTime" BO_ 850 1000;
+BA_ "VFrameFormat" BO_ 850 14;
+BA_ "GenMsgDelayTime" BO_ 849 20;
+BA_ "GenMsgCycleTime" BO_ 849 1000;
+BA_ "VFrameFormat" BO_ 849 14;
+BA_ "GenMsgDelayTime" BO_ 848 20;
+BA_ "GenMsgCycleTime" BO_ 848 1000;
+BA_ "VFrameFormat" BO_ 848 14;
+BA_ "GenMsgCycleTimeFast" BO_ 105 5000;
+BA_ "GenMsgCycleTime" BO_ 105 5000;
+BA_ "VFrameFormat" BO_ 105 14;
+BA_ "GenMsgCycleTimeFast" BO_ 104 5000;
+BA_ "GenMsgCycleTime" BO_ 104 5000;
+BA_ "VFrameFormat" BO_ 104 14;
+BA_ "GenMsgCycleTimeFast" BO_ 103 5000;
+BA_ "GenMsgCycleTime" BO_ 103 5000;
+BA_ "VFrameFormat" BO_ 103 14;
+BA_ "GenMsgCycleTimeFast" BO_ 102 5000;
+BA_ "GenMsgCycleTime" BO_ 102 5000;
+BA_ "VFrameFormat" BO_ 102 14;
+BA_ "GenMsgCycleTimeFast" BO_ 101 5000;
+BA_ "GenMsgCycleTime" BO_ 101 5000;
+BA_ "VFrameFormat" BO_ 101 14;
+BA_ "GenMsgCycleTimeFast" BO_ 100 5000;
+BA_ "GenMsgCycleTime" BO_ 100 5000;
+BA_ "VFrameFormat" BO_ 100 14;
+BA_ "GenMsgCycleTimeFast" BO_ 99 5000;
+BA_ "GenMsgCycleTime" BO_ 99 5000;
+BA_ "VFrameFormat" BO_ 99 14;
+BA_ "GenMsgCycleTimeFast" BO_ 98 5000;
+BA_ "GenMsgCycleTime" BO_ 98 5000;
+BA_ "VFrameFormat" BO_ 98 14;
+BA_ "GenMsgCycleTimeFast" BO_ 97 5000;
+BA_ "GenMsgCycleTime" BO_ 97 5000;
+BA_ "VFrameFormat" BO_ 97 14;
+BA_ "GenMsgSendType" BO_ 1647 8;
+BA_ "VFrameFormat" BO_ 1647 14;
+BA_ "GenMsgSendType" BO_ 1615 8;
+BA_ "VFrameFormat" BO_ 1615 14;
+BA_ "GenMsgSendType" BO_ 1583 8;
+BA_ "VFrameFormat" BO_ 1583 14;
+BA_ "GenMsgSendType" BO_ 1551 8;
+BA_ "VFrameFormat" BO_ 1551 14;
+BA_ "GenMsgSendType" BO_ 1872 8;
+BA_ "MsgType" BO_ 1872 2;
+BA_ "VFrameFormat" BO_ 1872 14;
+BA_ "GenMsgSendType" BO_ 1641 8;
+BA_ "VFrameFormat" BO_ 1641 14;
+BA_ "GenMsgSendType" BO_ 1640 8;
+BA_ "VFrameFormat" BO_ 1640 14;
+BA_ "GenMsgSendType" BO_ 1639 8;
+BA_ "VFrameFormat" BO_ 1639 14;
+BA_ "GenMsgSendType" BO_ 1638 8;
+BA_ "VFrameFormat" BO_ 1638 14;
+BA_ "GenMsgSendType" BO_ 1637 8;
+BA_ "VFrameFormat" BO_ 1637 14;
+BA_ "GenMsgSendType" BO_ 1636 8;
+BA_ "VFrameFormat" BO_ 1636 14;
+BA_ "GenMsgSendType" BO_ 1635 8;
+BA_ "VFrameFormat" BO_ 1635 14;
+BA_ "GenMsgSendType" BO_ 1634 8;
+BA_ "VFrameFormat" BO_ 1634 14;
+BA_ "GenMsgSendType" BO_ 1633 8;
+BA_ "VFrameFormat" BO_ 1633 14;
+BA_ "GenMsgSendType" BO_ 1609 8;
+BA_ "VFrameFormat" BO_ 1609 14;
+BA_ "GenMsgSendType" BO_ 1608 8;
+BA_ "VFrameFormat" BO_ 1608 14;
+BA_ "GenMsgSendType" BO_ 1607 8;
+BA_ "VFrameFormat" BO_ 1607 14;
+BA_ "GenMsgSendType" BO_ 1606 8;
+BA_ "VFrameFormat" BO_ 1606 14;
+BA_ "GenMsgSendType" BO_ 1605 8;
+BA_ "VFrameFormat" BO_ 1605 14;
+BA_ "GenMsgSendType" BO_ 1604 8;
+BA_ "VFrameFormat" BO_ 1604 14;
+BA_ "GenMsgSendType" BO_ 1603 8;
+BA_ "VFrameFormat" BO_ 1603 14;
+BA_ "GenMsgSendType" BO_ 1602 8;
+BA_ "VFrameFormat" BO_ 1602 14;
+BA_ "GenMsgSendType" BO_ 1601 8;
+BA_ "VFrameFormat" BO_ 1601 14;
+BA_ "MsgType" BO_ 1129 2;
+BA_ "GenMsgSendType" BO_ 1129 8;
+BA_ "VFrameFormat" BO_ 1129 14;
+BA_ "MsgType" BO_ 1128 2;
+BA_ "GenMsgSendType" BO_ 1128 8;
+BA_ "VFrameFormat" BO_ 1128 14;
+BA_ "MsgType" BO_ 1127 2;
+BA_ "GenMsgSendType" BO_ 1127 8;
+BA_ "VFrameFormat" BO_ 1127 14;
+BA_ "MsgType" BO_ 1126 2;
+BA_ "GenMsgSendType" BO_ 1126 8;
+BA_ "VFrameFormat" BO_ 1126 14;
+BA_ "MsgType" BO_ 1125 2;
+BA_ "GenMsgSendType" BO_ 1125 8;
+BA_ "VFrameFormat" BO_ 1125 14;
+BA_ "MsgType" BO_ 1124 2;
+BA_ "GenMsgSendType" BO_ 1124 8;
+BA_ "VFrameFormat" BO_ 1124 14;
+BA_ "MsgType" BO_ 1123 2;
+BA_ "GenMsgSendType" BO_ 1123 8;
+BA_ "VFrameFormat" BO_ 1123 14;
+BA_ "MsgType" BO_ 1122 2;
+BA_ "GenMsgSendType" BO_ 1122 8;
+BA_ "VFrameFormat" BO_ 1122 14;
+BA_ "MsgType" BO_ 1121 2;
+BA_ "GenMsgSendType" BO_ 1121 8;
+BA_ "VFrameFormat" BO_ 1121 14;
+BA_ "MsgType" BO_ 1097 2;
+BA_ "GenMsgSendType" BO_ 1097 8;
+BA_ "VFrameFormat" BO_ 1097 14;
+BA_ "MsgType" BO_ 1096 2;
+BA_ "GenMsgSendType" BO_ 1096 8;
+BA_ "VFrameFormat" BO_ 1096 14;
+BA_ "MsgType" BO_ 1095 2;
+BA_ "GenMsgSendType" BO_ 1095 8;
+BA_ "VFrameFormat" BO_ 1095 14;
+BA_ "MsgType" BO_ 1094 2;
+BA_ "GenMsgSendType" BO_ 1094 8;
+BA_ "VFrameFormat" BO_ 1094 14;
+BA_ "MsgType" BO_ 1093 2;
+BA_ "GenMsgSendType" BO_ 1093 8;
+BA_ "VFrameFormat" BO_ 1093 14;
+BA_ "MsgType" BO_ 1092 2;
+BA_ "GenMsgSendType" BO_ 1092 8;
+BA_ "VFrameFormat" BO_ 1092 14;
+BA_ "MsgType" BO_ 1091 2;
+BA_ "GenMsgSendType" BO_ 1091 8;
+BA_ "VFrameFormat" BO_ 1091 14;
+BA_ "MsgType" BO_ 1090 2;
+BA_ "GenMsgSendType" BO_ 1090 8;
+BA_ "VFrameFormat" BO_ 1090 14;
+BA_ "MsgType" BO_ 1089 2;
+BA_ "GenMsgSendType" BO_ 1089 8;
+BA_ "VFrameFormat" BO_ 1089 14;
+BA_ "GenMsgSendType" BO_ 1577 8;
+BA_ "VFrameFormat" BO_ 1577 14;
+BA_ "GenMsgSendType" BO_ 1576 8;
+BA_ "VFrameFormat" BO_ 1576 14;
+BA_ "GenMsgSendType" BO_ 1575 8;
+BA_ "VFrameFormat" BO_ 1575 14;
+BA_ "GenMsgSendType" BO_ 1574 8;
+BA_ "VFrameFormat" BO_ 1574 14;
+BA_ "GenMsgSendType" BO_ 1573 8;
+BA_ "VFrameFormat" BO_ 1573 14;
+BA_ "GenMsgSendType" BO_ 1572 8;
+BA_ "VFrameFormat" BO_ 1572 14;
+BA_ "GenMsgSendType" BO_ 1571 8;
+BA_ "VFrameFormat" BO_ 1571 14;
+BA_ "GenMsgSendType" BO_ 1570 8;
+BA_ "VFrameFormat" BO_ 1570 14;
+BA_ "GenMsgSendType" BO_ 1569 8;
+BA_ "VFrameFormat" BO_ 1569 14;
+BA_ "GenMsgSendType" BO_ 1545 8;
+BA_ "VFrameFormat" BO_ 1545 14;
+BA_ "GenMsgSendType" BO_ 1544 8;
+BA_ "VFrameFormat" BO_ 1544 14;
+BA_ "GenMsgSendType" BO_ 1543 8;
+BA_ "VFrameFormat" BO_ 1543 14;
+BA_ "GenMsgSendType" BO_ 1542 8;
+BA_ "VFrameFormat" BO_ 1542 14;
+BA_ "GenMsgSendType" BO_ 1541 8;
+BA_ "VFrameFormat" BO_ 1541 14;
+BA_ "GenMsgSendType" BO_ 1540 8;
+BA_ "VFrameFormat" BO_ 1540 14;
+BA_ "GenMsgSendType" BO_ 1539 8;
+BA_ "VFrameFormat" BO_ 1539 14;
+BA_ "GenMsgSendType" BO_ 1538 8;
+BA_ "VFrameFormat" BO_ 1538 14;
+BA_ "GenMsgSendType" BO_ 1537 8;
+BA_ "VFrameFormat" BO_ 1537 14;
+BA_ "GenMsgSendType" BO_ 1632 8;
+BA_ "VFrameFormat" BO_ 1632 14;
+BA_ "GenMsgSendType" BO_ 1568 8;
+BA_ "VFrameFormat" BO_ 1568 14;
+BA_ "GenMsgSendType" BO_ 1600 8;
+BA_ "VFrameFormat" BO_ 1600 14;
+BA_ "GenMsgSendType" BO_ 1536 8;
+BA_ "VFrameFormat" BO_ 1536 14;
+BA_ "MsgType" BO_ 1824 2;
+BA_ "GenMsgSendType" BO_ 1824 8;
+BA_ "VFrameFormat" BO_ 1824 14;
+BA_ "MsgType" BO_ 1792 2;
+BA_ "GenMsgSendType" BO_ 1792 8;
+BA_ "VFrameFormat" BO_ 1792 14;
+BA_ "GenMsgSendType" BO_ 1833 8;
+BA_ "MsgType" BO_ 1833 2;
+BA_ "VFrameFormat" BO_ 1833 14;
+BA_ "GenMsgSendType" BO_ 1832 8;
+BA_ "MsgType" BO_ 1832 2;
+BA_ "VFrameFormat" BO_ 1832 14;
+BA_ "GenMsgSendType" BO_ 1801 8;
+BA_ "MsgType" BO_ 1801 2;
+BA_ "VFrameFormat" BO_ 1801 14;
+BA_ "GenMsgSendType" BO_ 1800 8;
+BA_ "MsgType" BO_ 1800 2;
+BA_ "VFrameFormat" BO_ 1800 14;
+BA_ "GenMsgSendType" BO_ 1793 8;
+BA_ "MsgType" BO_ 1793 2;
+BA_ "VFrameFormat" BO_ 1793 14;
+BA_ "NmMessage" BO_ 2483042313 1;
+BA_ "MsgType" BO_ 2483042313 1;
+BA_ "VFrameFormat" BO_ 2483042313 15;
+BA_ "NmMessage" BO_ 2483042312 1;
+BA_ "MsgType" BO_ 2483042312 1;
+BA_ "VFrameFormat" BO_ 2483042312 15;
+BA_ "MsgType" BO_ 1033 2;
+BA_ "GenMsgSendType" BO_ 1033 8;
+BA_ "VFrameFormat" BO_ 1033 14;
+BA_ "MsgType" BO_ 1032 2;
+BA_ "GenMsgSendType" BO_ 1032 8;
+BA_ "VFrameFormat" BO_ 1032 14;
+BA_ "GenMsgSendType" BO_ 361 8;
+BA_ "VFrameFormat" BO_ 361 14;
+BA_ "GenMsgSendType" BO_ 359 8;
+BA_ "VFrameFormat" BO_ 359 14;
+BA_ "GenMsgSendType" BO_ 360 8;
+BA_ "VFrameFormat" BO_ 360 14;
+BA_ "GenMsgSendType" BO_ 358 8;
+BA_ "VFrameFormat" BO_ 358 14;
+BA_ "GenMsgSendType" BO_ 357 8;
+BA_ "VFrameFormat" BO_ 357 14;
+BA_ "GenMsgSendType" BO_ 356 8;
+BA_ "VFrameFormat" BO_ 356 14;
+BA_ "GenMsgSendType" BO_ 355 8;
+BA_ "VFrameFormat" BO_ 355 14;
+BA_ "GenMsgSendType" BO_ 354 8;
+BA_ "VFrameFormat" BO_ 354 14;
+BA_ "GenMsgSendType" BO_ 353 8;
+BA_ "VFrameFormat" BO_ 353 14;
+BA_ "GenMsgSendType" BO_ 368 8;
+BA_ "VFrameFormat" BO_ 368 14;
+BA_ "MsgType" BO_ 1065 2;
+BA_ "GenMsgSendType" BO_ 1065 8;
+BA_ "VFrameFormat" BO_ 1065 14;
+BA_ "MsgType" BO_ 1064 2;
+BA_ "GenMsgSendType" BO_ 1064 8;
+BA_ "VFrameFormat" BO_ 1064 14;
+BA_ "GenMsgCycleTime" BO_ 80 5000;
+BA_ "GenMsgCycleTimeFast" BO_ 80 5000;
+BA_ "VFrameFormat" BO_ 80 14;
+BA_ "MsgType" BO_ 2483042311 1;
+BA_ "NmMessage" BO_ 2483042311 1;
+BA_ "VFrameFormat" BO_ 2483042311 15;
+BA_ "MsgType" BO_ 2483042310 1;
+BA_ "NmMessage" BO_ 2483042310 1;
+BA_ "VFrameFormat" BO_ 2483042310 15;
+BA_ "MsgType" BO_ 2483042309 1;
+BA_ "NmMessage" BO_ 2483042309 1;
+BA_ "VFrameFormat" BO_ 2483042309 15;
+BA_ "MsgType" BO_ 2483042308 1;
+BA_ "NmMessage" BO_ 2483042308 1;
+BA_ "VFrameFormat" BO_ 2483042308 15;
+BA_ "MsgType" BO_ 2483042307 1;
+BA_ "NmMessage" BO_ 2483042307 1;
+BA_ "VFrameFormat" BO_ 2483042307 15;
+BA_ "MsgType" BO_ 2483042306 1;
+BA_ "NmMessage" BO_ 2483042306 1;
+BA_ "VFrameFormat" BO_ 2483042306 15;
+BA_ "MsgType" BO_ 2483042305 1;
+BA_ "NmMessage" BO_ 2483042305 1;
+BA_ "VFrameFormat" BO_ 2483042305 15;
+BA_ "NmMessage" BO_ 2483042304 1;
+BA_ "MsgType" BO_ 2483042304 1;
+BA_ "VFrameFormat" BO_ 2483042304 15;
+BA_ "GenMsgSendType" BO_ 1025 8;
+BA_ "MsgType" BO_ 1025 2;
+BA_ "VFrameFormat" BO_ 1025 14;
+BA_ "GenMsgSendType" BO_ 1026 8;
+BA_ "MsgType" BO_ 1026 2;
+BA_ "VFrameFormat" BO_ 1026 14;
+BA_ "GenMsgSendType" BO_ 1027 8;
+BA_ "MsgType" BO_ 1027 2;
+BA_ "VFrameFormat" BO_ 1027 14;
+BA_ "GenMsgSendType" BO_ 1028 8;
+BA_ "MsgType" BO_ 1028 2;
+BA_ "VFrameFormat" BO_ 1028 14;
+BA_ "GenMsgSendType" BO_ 1029 8;
+BA_ "MsgType" BO_ 1029 2;
+BA_ "VFrameFormat" BO_ 1029 14;
+BA_ "GenMsgSendType" BO_ 1030 8;
+BA_ "MsgType" BO_ 1030 2;
+BA_ "VFrameFormat" BO_ 1030 14;
+BA_ "GenMsgSendType" BO_ 1031 8;
+BA_ "MsgType" BO_ 1031 2;
+BA_ "VFrameFormat" BO_ 1031 14;
+BA_ "GenMsgSendType" BO_ 1057 8;
+BA_ "MsgType" BO_ 1057 2;
+BA_ "VFrameFormat" BO_ 1057 14;
+BA_ "GenMsgSendType" BO_ 1058 8;
+BA_ "MsgType" BO_ 1058 2;
+BA_ "VFrameFormat" BO_ 1058 14;
+BA_ "GenMsgSendType" BO_ 1059 8;
+BA_ "MsgType" BO_ 1059 2;
+BA_ "VFrameFormat" BO_ 1059 14;
+BA_ "GenMsgSendType" BO_ 1060 8;
+BA_ "MsgType" BO_ 1060 2;
+BA_ "VFrameFormat" BO_ 1060 14;
+BA_ "GenMsgSendType" BO_ 1061 8;
+BA_ "MsgType" BO_ 1061 2;
+BA_ "VFrameFormat" BO_ 1061 14;
+BA_ "GenMsgSendType" BO_ 1062 8;
+BA_ "MsgType" BO_ 1062 2;
+BA_ "VFrameFormat" BO_ 1062 14;
+BA_ "GenMsgSendType" BO_ 1063 8;
+BA_ "MsgType" BO_ 1063 2;
+BA_ "VFrameFormat" BO_ 1063 14;
+BA_ "GenMsgSendType" BO_ 1831 8;
+BA_ "MsgType" BO_ 1831 2;
+BA_ "VFrameFormat" BO_ 1831 14;
+BA_ "GenMsgSendType" BO_ 1830 8;
+BA_ "MsgType" BO_ 1830 2;
+BA_ "VFrameFormat" BO_ 1830 14;
+BA_ "GenMsgSendType" BO_ 1829 8;
+BA_ "MsgType" BO_ 1829 2;
+BA_ "VFrameFormat" BO_ 1829 14;
+BA_ "GenMsgSendType" BO_ 1828 8;
+BA_ "MsgType" BO_ 1828 2;
+BA_ "VFrameFormat" BO_ 1828 14;
+BA_ "GenMsgSendType" BO_ 1827 8;
+BA_ "MsgType" BO_ 1827 2;
+BA_ "VFrameFormat" BO_ 1827 14;
+BA_ "GenMsgSendType" BO_ 1826 8;
+BA_ "MsgType" BO_ 1826 2;
+BA_ "VFrameFormat" BO_ 1826 14;
+BA_ "GenMsgSendType" BO_ 1825 8;
+BA_ "MsgType" BO_ 1825 2;
+BA_ "VFrameFormat" BO_ 1825 14;
+BA_ "GenMsgSendType" BO_ 1799 8;
+BA_ "MsgType" BO_ 1799 2;
+BA_ "VFrameFormat" BO_ 1799 14;
+BA_ "GenMsgSendType" BO_ 1798 8;
+BA_ "MsgType" BO_ 1798 2;
+BA_ "VFrameFormat" BO_ 1798 14;
+BA_ "GenMsgSendType" BO_ 1797 8;
+BA_ "MsgType" BO_ 1797 2;
+BA_ "VFrameFormat" BO_ 1797 14;
+BA_ "GenMsgSendType" BO_ 1796 8;
+BA_ "MsgType" BO_ 1796 2;
+BA_ "VFrameFormat" BO_ 1796 14;
+BA_ "GenMsgSendType" BO_ 1795 8;
+BA_ "MsgType" BO_ 1795 2;
+BA_ "VFrameFormat" BO_ 1795 14;
+BA_ "GenMsgSendType" BO_ 1794 8;
+BA_ "MsgType" BO_ 1794 2;
+BA_ "VFrameFormat" BO_ 1794 14;
+BA_ "GenSigSendType" SG_ 3221225472 Anchor9Uwb_A2M 3;
+BA_ "GenSigSendType" SG_ 3221225472 Anchor8Uwb_A2M 3;
+BA_ "GenSigSendType" SG_ 3221225472 Anchor7Uwb_A2M 3;
+BA_ "GenSigSendType" SG_ 3221225472 Anchor6Uwb_A2M 3;
+BA_ "GenSigSendType" SG_ 3221225472 Anchor5Uwb_A2M 3;
+BA_ "GenSigSendType" SG_ 3221225472 Anchor4Uwb_A2M 3;
+BA_ "GenSigSendType" SG_ 3221225472 Anchor3Uwb_A2M 3;
+BA_ "GenSigSendType" SG_ 3221225472 Anchor2Uwb_A2M 3;
+BA_ "GenSigSendType" SG_ 857 Anchor9Status_UwbPwrMode 7;
+BA_ "GenSigSendType" SG_ 857 Anchor9Status_PwrModeDbg 7;
+BA_ "GenSigSendType" SG_ 857 Anchor9Status_MAC 7;
+BA_ "GenSigSendType" SG_ 857 Anchor9Status_Health 7;
+BA_ "GenSigSendType" SG_ 857 Anchor9Status_D_ES 7;
+BA_ "GenSigSendType" SG_ 857 Anchor9Status_AncPwrMode 7;
+BA_ "GenSigSendType" SG_ 857 Anchor9Status_AncIntPwrMode 7;
+BA_ "GenSigSendType" SG_ 856 Anchor8Status_UwbPwrMode 7;
+BA_ "GenSigSendType" SG_ 856 Anchor8Status_PwrModeDbg 7;
+BA_ "GenSigSendType" SG_ 856 Anchor8Status_MAC 7;
+BA_ "GenSigSendType" SG_ 856 Anchor8Status_Health 7;
+BA_ "GenSigSendType" SG_ 856 Anchor8Status_D_ES 7;
+BA_ "GenSigSendType" SG_ 856 Anchor8Status_AncPwrMode 7;
+BA_ "GenSigSendType" SG_ 856 Anchor8Status_AncIntPwrMode 7;
+BA_ "GenSigSendType" SG_ 855 Anchor7Status_UwbPwrMode 7;
+BA_ "GenSigSendType" SG_ 855 Anchor7Status_PwrModeDbg 7;
+BA_ "GenSigSendType" SG_ 855 Anchor7Status_MAC 7;
+BA_ "GenSigSendType" SG_ 855 Anchor7Status_Health 7;
+BA_ "GenSigSendType" SG_ 855 Anchor7Status_D_ES 7;
+BA_ "GenSigSendType" SG_ 855 Anchor7Status_AncPwrMode 7;
+BA_ "GenSigSendType" SG_ 855 Anchor7Status_AncIntPwrMode 7;
+BA_ "GenSigSendType" SG_ 854 Anchor6Status_UwbPwrMode 7;
+BA_ "GenSigSendType" SG_ 854 Anchor6Status_PwrModeDbg 7;
+BA_ "GenSigSendType" SG_ 854 Anchor6Status_MAC 7;
+BA_ "GenSigSendType" SG_ 854 Anchor6Status_Health 7;
+BA_ "GenSigSendType" SG_ 854 Anchor6Status_D_ES 7;
+BA_ "GenSigSendType" SG_ 854 Anchor6Status_AncPwrMode 7;
+BA_ "GenSigSendType" SG_ 854 Anchor6Status_AncIntPwrMode 7;
+BA_ "GenSigSendType" SG_ 853 Anchor5Status_UwbPwrMode 7;
+BA_ "GenSigSendType" SG_ 853 Anchor5Status_PwrModeDbg 7;
+BA_ "GenSigSendType" SG_ 853 Anchor5Status_MAC 7;
+BA_ "GenSigSendType" SG_ 853 Anchor5Status_Health 7;
+BA_ "GenSigSendType" SG_ 853 Anchor5Status_D_ES 7;
+BA_ "GenSigSendType" SG_ 853 Anchor5Status_AncPwrMode 7;
+BA_ "GenSigSendType" SG_ 853 Anchor5Status_AncIntPwrMode 7;
+BA_ "GenSigSendType" SG_ 852 Anchor4Status_MAC 7;
+BA_ "GenSigSendType" SG_ 852 Anchor4Status_UwbPwrMode 7;
+BA_ "GenSigSendType" SG_ 852 Anchor4Status_PwrModeDbg 7;
+BA_ "GenSigSendType" SG_ 852 Anchor4Status_Health 7;
+BA_ "GenSigSendType" SG_ 852 Anchor4Status_D_ES 7;
+BA_ "GenSigSendType" SG_ 852 Anchor4Status_AncPwrMode 7;
+BA_ "GenSigSendType" SG_ 852 Anchor4Status_AncIntPwrMode 7;
+BA_ "GenSigSendType" SG_ 851 Anchor3Status_UwbPwrMode 7;
+BA_ "GenSigSendType" SG_ 851 Anchor3Status_PwrModeDbg 7;
+BA_ "GenSigSendType" SG_ 851 Anchor3Status_MAC 7;
+BA_ "GenSigSendType" SG_ 851 Anchor3Status_Health 7;
+BA_ "GenSigSendType" SG_ 851 Anchor3Status_D_ES 7;
+BA_ "GenSigSendType" SG_ 851 Anchor3Status_AncPwrMode 7;
+BA_ "GenSigSendType" SG_ 851 Anchor3Status_AncIntPwrMode 7;
+BA_ "GenSigSendType" SG_ 850 Anchor2Status_UwbPwrMode 7;
+BA_ "GenSigSendType" SG_ 850 Anchor2Status_PwrModeDbg 7;
+BA_ "GenSigSendType" SG_ 850 Anchor2Status_MAC 7;
+BA_ "GenSigSendType" SG_ 850 Anchor2Status_Health 7;
+BA_ "GenSigSendType" SG_ 850 Anchor2Status_D_ES 7;
+BA_ "GenSigSendType" SG_ 850 Anchor2Status_AncPwrMode 7;
+BA_ "GenSigSendType" SG_ 850 Anchor2Status_AncIntPwrMode 7;
+BA_ "GenSigSendType" SG_ 849 Anchor1Status_UwbPwrMode 7;
+BA_ "GenSigSendType" SG_ 849 Anchor1Status_PwrModeDbg 7;
+BA_ "GenSigSendType" SG_ 849 Anchor1Status_MAC 7;
+BA_ "GenSigSendType" SG_ 849 Anchor1Status_Health 7;
+BA_ "GenSigSendType" SG_ 849 Anchor1Status_D_ES 7;
+BA_ "GenSigSendType" SG_ 849 Anchor1Status_AncPwrMode 7;
+BA_ "GenSigSendType" SG_ 849 Anchor1Status_AncIntPwrMode 7;
+BA_ "GenSigSendType" SG_ 848 AuthenticatorUwb 3;
+BA_ "GenSigSendType" SG_ 848 MAC 3;
+BA_ "GenSigSendType" SG_ 848 Authenticator 3;
+BA_ "GenSigSendType" SG_ 848 ResetCounter 3;
+BA_ "GenSigSendType" SG_ 848 TripCounter 3;
+BA_ "GenSigSendType" SG_ 848 PwrModeDbg 3;
+BA_ "GenSigSendType" SG_ 848 AncPwrMode 3;
+BA_ "GenSigSendType" SG_ 848 SysPwrMode 3;
+BA_ "GenSigStartValue" SG_ 105 Type_Sync_Anchor9 32;
+BA_ "GenSigStartValue" SG_ 104 Type_Sync_Anchor8 32;
+BA_ "GenSigStartValue" SG_ 103 Type_Sync_Anchor7 32;
+BA_ "GenSigStartValue" SG_ 102 Type_Sync_Anchor6 32;
+BA_ "GenSigStartValue" SG_ 98 Type_Sync_Anchor2 32;
+BA_ "GenSigStartValue" SG_ 97 Type_Sync_Anchor1 32;
+BA_ "GenSigSendType" SG_ 1647 AnchorFUwbXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1615 AnchorFUwbXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1583 AnchorFBleXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1551 AnchorFBleXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1872 TesterFunctional_Req 3;
+BA_ "GenSigSendType" SG_ 1641 Anchor9UwbXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1640 Anchor8UwbXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1639 Anchor7UwbXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1638 Anchor6UwbXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1637 Anchor5UwbXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1636 Anchor4UwbXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1635 Anchor3UwbXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1634 Anchor2UwbXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1633 Anchor1UwbXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1609 Anchor9UwbXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1608 Anchor8UwbXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1607 Anchor7UwbXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1606 Anchor6UwbXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1605 Anchor5UwbXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1604 Anchor4UwbXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1603 Anchor3UwbXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1602 Anchor2UwbXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1601 Anchor1UwbXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_PduId_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_RangingBlock_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_UwbSessionId_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_Distance_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_QualitiFactor_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_HopFlag_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_DeviceRef_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_CenterFrequencyDiff_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1129 Anchor9Uwb_CenterFrequencyDiff_A "Anchor9Uwb_CenterFrequencyDiff_A2M";
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_CurrentRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_NextRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_RangingBlockStartTime 3;
+BA_ "SystemSignalLongSymbol" SG_ 1129 Anchor9Uwb_RangingBlockStartTime "Anchor9Uwb_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_ResponseTxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Uwb_FinalDataRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Keyfob_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Keyfob_RangingBlockStartT 3;
+BA_ "SystemSignalLongSymbol" SG_ 1129 Anchor9Keyfob_RangingBlockStartT "Anchor9Keyfob_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1129 Anchor9Keyfob_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Keyfob_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Keyfob_ResponseTxError_A2 3;
+BA_ "SystemSignalLongSymbol" SG_ 1129 Anchor9Keyfob_ResponseTxError_A2 "Anchor9Keyfob_ResponseTxError_A2M";
+BA_ "GenSigSendType" SG_ 1129 Anchor9Keyfob_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1129 Anchor9Keyfob_FinalDataRxError_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1129 Anchor9Keyfob_FinalDataRxError_A "Anchor9Keyfob_FinalDataRxError_A2M";
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_PduId_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_RangingBlock_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_UwbSessionId_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_Distance_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_QualitiFactor_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_HopFlag_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_DeviceRef_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_CenterFrequencyDiff_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1128 Anchor8Uwb_CenterFrequencyDiff_A "Anchor8Uwb_CenterFrequencyDiff_A2M";
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_CurrentRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_NextRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_RangingBlockStartTime 3;
+BA_ "SystemSignalLongSymbol" SG_ 1128 Anchor8Uwb_RangingBlockStartTime "Anchor8Uwb_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_ResponseTxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Uwb_FinalDataRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Keyfob_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Keyfob_RangingBlockStartT 3;
+BA_ "SystemSignalLongSymbol" SG_ 1128 Anchor8Keyfob_RangingBlockStartT "Anchor8Keyfob_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1128 Anchor8Keyfob_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Keyfob_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Keyfob_ResponseTxError_A2 3;
+BA_ "SystemSignalLongSymbol" SG_ 1128 Anchor8Keyfob_ResponseTxError_A2 "Anchor8Keyfob_ResponseTxError_A2M";
+BA_ "GenSigSendType" SG_ 1128 Anchor8Keyfob_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1128 Anchor8Keyfob_FinalDataRxError_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1128 Anchor8Keyfob_FinalDataRxError_A "Anchor8Keyfob_FinalDataRxError_A2M";
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_PduId_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_RangingBlock_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_UwbSessionId_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_Distance_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_QualitiFactor_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_HopFlag_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_DeviceRef_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_CenterFrequencyDiff_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1127 Anchor7Uwb_CenterFrequencyDiff_A "Anchor7Uwb_CenterFrequencyDiff_A2M";
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_CurrentRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_NextRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_RangingBlockStartTime 3;
+BA_ "SystemSignalLongSymbol" SG_ 1127 Anchor7Uwb_RangingBlockStartTime "Anchor7Uwb_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_ResponseTxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Uwb_FinalDataRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Keyfob_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Keyfob_RangingBlockStartT 3;
+BA_ "SystemSignalLongSymbol" SG_ 1127 Anchor7Keyfob_RangingBlockStartT "Anchor7Keyfob_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1127 Anchor7Keyfob_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Keyfob_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Keyfob_ResponseTxError_A2 3;
+BA_ "SystemSignalLongSymbol" SG_ 1127 Anchor7Keyfob_ResponseTxError_A2 "Anchor7Keyfob_ResponseTxError_A2M";
+BA_ "GenSigSendType" SG_ 1127 Anchor7Keyfob_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1127 Anchor7Keyfob_FinalDataRxError_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1127 Anchor7Keyfob_FinalDataRxError_A "Anchor7Keyfob_FinalDataRxError_A2M";
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_PduId_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_RangingBlock_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_UwbSessionId_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_Distance_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_QualitiFactor_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_HopFlag_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_DeviceRef_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_CenterFrequencyDiff_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1126 Anchor6Uwb_CenterFrequencyDiff_A "Anchor6Uwb_CenterFrequencyDiff_A2M";
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_CurrentRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_NextRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_RangingBlockStartTime 3;
+BA_ "SystemSignalLongSymbol" SG_ 1126 Anchor6Uwb_RangingBlockStartTime "Anchor6Uwb_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_ResponseTxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Uwb_FinalDataRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Keyfob_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Keyfob_RangingBlockStartT 3;
+BA_ "SystemSignalLongSymbol" SG_ 1126 Anchor6Keyfob_RangingBlockStartT "Anchor6Keyfob_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1126 Anchor6Keyfob_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Keyfob_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Keyfob_ResponseTxError_A2 3;
+BA_ "SystemSignalLongSymbol" SG_ 1126 Anchor6Keyfob_ResponseTxError_A2 "Anchor6Keyfob_ResponseTxError_A2M";
+BA_ "GenSigSendType" SG_ 1126 Anchor6Keyfob_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1126 Anchor6Keyfob_FinalDataRxError_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1126 Anchor6Keyfob_FinalDataRxError_A "Anchor6Keyfob_FinalDataRxError_A2M";
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_PduId_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_RangingBlock_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_UwbSessionId_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_Distance_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_QualitiFactor_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_HopFlag_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_DeviceRef_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_CenterFrequencyDiff_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1125 Anchor5Uwb_CenterFrequencyDiff_A "Anchor5Uwb_CenterFrequencyDiff_A2M";
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_CurrentRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_NextRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_RangingBlockStartTime 3;
+BA_ "SystemSignalLongSymbol" SG_ 1125 Anchor5Uwb_RangingBlockStartTime "Anchor5Uwb_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_ResponseTxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Uwb_FinalDataRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Keyfob_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Keyfob_RangingBlockStartT 3;
+BA_ "SystemSignalLongSymbol" SG_ 1125 Anchor5Keyfob_RangingBlockStartT "Anchor5Keyfob_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1125 Anchor5Keyfob_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Keyfob_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Keyfob_ResponseTxError_A2 3;
+BA_ "SystemSignalLongSymbol" SG_ 1125 Anchor5Keyfob_ResponseTxError_A2 "Anchor5Keyfob_ResponseTxError_A2M";
+BA_ "GenSigSendType" SG_ 1125 Anchor5Keyfob_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1125 Anchor5Keyfob_FinalDataRxError_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1125 Anchor5Keyfob_FinalDataRxError_A "Anchor5Keyfob_FinalDataRxError_A2M";
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_PduId_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_RangingBlock_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_UwbSessionId_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_Distance_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_QualitiFactor_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_HopFlag_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_DeviceRef_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_CenterFrequencyDiff_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1124 Anchor4Uwb_CenterFrequencyDiff_A "Anchor4Uwb_CenterFrequencyDiff_A2M";
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_CurrentRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_NextRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_RangingBlockStartTime 3;
+BA_ "SystemSignalLongSymbol" SG_ 1124 Anchor4Uwb_RangingBlockStartTime "Anchor4Uwb_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_ResponseTxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Uwb_FinalDataRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Keyfob_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Keyfob_RangingBlockStartT 3;
+BA_ "SystemSignalLongSymbol" SG_ 1124 Anchor4Keyfob_RangingBlockStartT "Anchor4Keyfob_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1124 Anchor4Keyfob_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Keyfob_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Keyfob_ResponseTxError_A2 3;
+BA_ "SystemSignalLongSymbol" SG_ 1124 Anchor4Keyfob_ResponseTxError_A2 "Anchor4Keyfob_ResponseTxError_A2M";
+BA_ "GenSigSendType" SG_ 1124 Anchor4Keyfob_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1124 Anchor4Keyfob_FinalDataRxError_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1124 Anchor4Keyfob_FinalDataRxError_A "Anchor4Keyfob_FinalDataRxError_A2M";
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_PduId_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_RangingBlock_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_UwbSessionId_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_Distance_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_QualitiFactor_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_HopFlag_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_DeviceRef_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_CenterFrequencyDiff_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1123 Anchor3Uwb_CenterFrequencyDiff_A "Anchor3Uwb_CenterFrequencyDiff_A2M";
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_CurrentRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_NextRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_RangingBlockStartTime 3;
+BA_ "SystemSignalLongSymbol" SG_ 1123 Anchor3Uwb_RangingBlockStartTime "Anchor3Uwb_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_ResponseTxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Uwb_FinalDataRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Keyfob_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Keyfob_RangingBlockStartT 3;
+BA_ "SystemSignalLongSymbol" SG_ 1123 Anchor3Keyfob_RangingBlockStartT "Anchor3Keyfob_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1123 Anchor3Keyfob_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Keyfob_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Keyfob_ResponseTxError_A2 3;
+BA_ "SystemSignalLongSymbol" SG_ 1123 Anchor3Keyfob_ResponseTxError_A2 "Anchor3Keyfob_ResponseTxError_A2M";
+BA_ "GenSigSendType" SG_ 1123 Anchor3Keyfob_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1123 Anchor3Keyfob_FinalDataRxError_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1123 Anchor3Keyfob_FinalDataRxError_A "Anchor3Keyfob_FinalDataRxError_A2M";
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_PduId_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_RangingBlock_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_UwbSessionId_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_Distance_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_QualitiFactor_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_HopFlag_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_DeviceRef_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_CenterFrequencyDiff_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1122 Anchor2Uwb_CenterFrequencyDiff_A "Anchor2Uwb_CenterFrequencyDiff_A2M";
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_CurrentRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_NextRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_RangingBlockStartTime 3;
+BA_ "SystemSignalLongSymbol" SG_ 1122 Anchor2Uwb_RangingBlockStartTime "Anchor2Uwb_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_ResponseTxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Uwb_FinalDataRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Keyfob_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Keyfob_RangingBlockStartT 3;
+BA_ "SystemSignalLongSymbol" SG_ 1122 Anchor2Keyfob_RangingBlockStartT "Anchor2Keyfob_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1122 Anchor2Keyfob_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Keyfob_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Keyfob_ResponseTxError_A2 3;
+BA_ "SystemSignalLongSymbol" SG_ 1122 Anchor2Keyfob_ResponseTxError_A2 "Anchor2Keyfob_ResponseTxError_A2M";
+BA_ "GenSigSendType" SG_ 1122 Anchor2Keyfob_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1122 Anchor2Keyfob_FinalDataRxError_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1122 Anchor2Keyfob_FinalDataRxError_A "Anchor2Keyfob_FinalDataRxError_A2M";
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_PduId_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_RangingBlock_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_UwbSessionId_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_Distance_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_QualitiFactor_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_HopFlag_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_DeviceRef_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_CenterFrequencyDiff_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1121 Anchor1Uwb_CenterFrequencyDiff_A "Anchor1Uwb_CenterFrequencyDiff_A2M";
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_CurrentRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_NextRoundIdx_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_RangingBlockStartTime 3;
+BA_ "SystemSignalLongSymbol" SG_ 1121 Anchor1Uwb_RangingBlockStartTime "Anchor1Uwb_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_ResponseTxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Uwb_FinalDataRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Keyfob_UwbTagState_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Keyfob_RangingBlockStartT 3;
+BA_ "SystemSignalLongSymbol" SG_ 1121 Anchor1Keyfob_RangingBlockStartT "Anchor1Keyfob_RangingBlockStartTime_A2M";
+BA_ "GenSigSendType" SG_ 1121 Anchor1Keyfob_PrePollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Keyfob_PollRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Keyfob_ResponseTxError_A2 3;
+BA_ "SystemSignalLongSymbol" SG_ 1121 Anchor1Keyfob_ResponseTxError_A2 "Anchor1Keyfob_ResponseTxError_A2M";
+BA_ "GenSigSendType" SG_ 1121 Anchor1Keyfob_FinalRxError_A2M 3;
+BA_ "GenSigSendType" SG_ 1121 Anchor1Keyfob_FinalDataRxError_A 3;
+BA_ "SystemSignalLongSymbol" SG_ 1121 Anchor1Keyfob_FinalDataRxError_A "Anchor1Keyfob_FinalDataRxError_A2M";
+BA_ "GenSigSendType" SG_ 1097 Anchor9Uwb_M2A 3;
+BA_ "GenSigSendType" SG_ 1096 Anchor8Uwb_M2A 3;
+BA_ "GenSigSendType" SG_ 1095 Anchor7Uwb_M2A 3;
+BA_ "GenSigSendType" SG_ 1094 Anchor6Uwb_M2A 3;
+BA_ "GenSigSendType" SG_ 1093 Anchor5Uwb_M2A 3;
+BA_ "GenSigSendType" SG_ 1092 Anchor4Uwb_M2A 3;
+BA_ "GenSigSendType" SG_ 1091 Anchor3Uwb_M2A 3;
+BA_ "GenSigSendType" SG_ 1090 Anchor2Uwb_M2A 3;
+BA_ "GenSigSendType" SG_ 1089 Anchor1Uwb_M2A 3;
+BA_ "GenSigSendType" SG_ 1577 Anchor9BleXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1576 Anchor8BleXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1575 Anchor7BleXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1574 Anchor6BleXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1573 Anchor5BleXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1572 Anchor4BleXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1571 Anchor3BleXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1570 Anchor2BleXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1569 Anchor1BleXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1545 Anchor9BleXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1544 Anchor8BleXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1543 Anchor7BleXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1542 Anchor6BleXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1541 Anchor5BleXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1540 Anchor4BleXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1539 Anchor3BleXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1538 Anchor2BleXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1537 Anchor1BleXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1632 MasterUwbXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1568 MasterBleXcpResponse 3;
+BA_ "GenSigSendType" SG_ 1600 MasterUwbXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1536 MasterBleXcpRequest 3;
+BA_ "GenSigSendType" SG_ 1824 TesterPhysicalResMasterBle 3;
+BA_ "GenSigSendType" SG_ 1792 TesterPhysicalReqMasterBle 3;
+BA_ "GenSigSendType" SG_ 1833 TesterPhysicalResAnchor9 3;
+BA_ "GenSigSendType" SG_ 1832 TesterPhysicalResAnchor8 3;
+BA_ "GenSigSendType" SG_ 1801 TesterPhysicalReqAnchor9 3;
+BA_ "GenSigSendType" SG_ 1800 TesterPhysicalReqAnchor8 3;
+BA_ "GenSigSendType" SG_ 1793 TesterPhysicalReqAnchor1 3;
+BA_ "GenSigSendType" SG_ 1033 Anchor9Ble_M2A 3;
+BA_ "GenSigSendType" SG_ 1032 Anchor8Ble_M2A 3;
+BA_ "GenSigSendType" SG_ 361 Anchor9Hi_A2M_Payload 3;
+BA_ "GenSigSendType" SG_ 359 Anchor7Hi_A2M_Payload 3;
+BA_ "GenSigSendType" SG_ 360 Anchor8Hi_A2M_Payload 3;
+BA_ "GenSigSendType" SG_ 358 Anchor6Hi_A2M_Payload 3;
+BA_ "GenSigSendType" SG_ 357 Anchor5Hi_A2M_Payload 3;
+BA_ "GenSigSendType" SG_ 356 Anchor4Hi_A2M_Payload 3;
+BA_ "GenSigSendType" SG_ 355 Anchor3Hi_A2M_Payload 3;
+BA_ "GenSigSendType" SG_ 354 Anchor2Hi_A2M_Payload 3;
+BA_ "GenSigSendType" SG_ 353 Anchor1Hi_A2M_Payload 3;
+BA_ "GenSigSendType" SG_ 368 MasterHi_M2A_PCI 3;
+BA_ "GenSigSendType" SG_ 368 MasterHi_M2A_EncryptionFlag 3;
+BA_ "SystemSignalLongSymbol" SG_ 368 ResourceConflictCoord_UwbSession "ResourceConflictCoord_UwbSessionId_8";
+BA_ "SystemSignalLongSymbol" SG_ 368 ResourceConflictCoord_UwbSe_0000 "ResourceConflictCoord_UwbSessionId_7";
+BA_ "SystemSignalLongSymbol" SG_ 368 ResourceConflictCoord_UwbSe_0001 "ResourceConflictCoord_UwbSessionId_5";
+BA_ "SystemSignalLongSymbol" SG_ 368 ResourceConflictCoord_UwbSe_0002 "ResourceConflictCoord_UwbSessionId_6";
+BA_ "SystemSignalLongSymbol" SG_ 368 ResourceConflictCoord_UwbSe_0003 "ResourceConflictCoord_UwbSessionId_4";
+BA_ "SystemSignalLongSymbol" SG_ 368 ResourceConflictCoord_UwbSe_0004 "ResourceConflictCoord_UwbSessionId_3";
+BA_ "SystemSignalLongSymbol" SG_ 368 ResourceConflictCoord_UwbSe_0005 "ResourceConflictCoord_UwbSessionId_2";
+BA_ "SystemSignalLongSymbol" SG_ 368 ResourceConflictCoord_UwbSe_0006 "ResourceConflictCoord_UwbSessionId_1";
+BA_ "GenSigSendType" SG_ 368 Mux_MasterHi_M2A_PDUID 3;
+BA_ "GenSigSendType" SG_ 1065 Anchor9Ble_A2M 3;
+BA_ "GenSigSendType" SG_ 1064 Anchor8Ble_A2M 3;
+BA_ "GenSigStartValue" SG_ 80 Type_Sync_Master 32;
+BA_ "GenSigSendType" SG_ 1025 Anchor1Ble_M2A 3;
+BA_ "GenSigSendType" SG_ 1026 Anchor2Ble_M2A 3;
+BA_ "GenSigSendType" SG_ 1027 Anchor3Ble_M2A 3;
+BA_ "GenSigSendType" SG_ 1028 Anchor4Ble_M2A 3;
+BA_ "GenSigSendType" SG_ 1029 Anchor5Ble_M2A 3;
+BA_ "GenSigSendType" SG_ 1030 Anchor6Ble_M2A 3;
+BA_ "GenSigSendType" SG_ 1031 Anchor7Ble_M2A 3;
+BA_ "GenSigSendType" SG_ 1057 Anchor1Ble_A2M 3;
+BA_ "GenSigSendType" SG_ 1058 Anchor2Ble_A2M 3;
+BA_ "GenSigSendType" SG_ 1059 Anchor3Ble_A2M 3;
+BA_ "GenSigSendType" SG_ 1060 Anchor4Ble_A2M 3;
+BA_ "GenSigSendType" SG_ 1061 Anchor5Ble_A2M 3;
+BA_ "GenSigSendType" SG_ 1062 Anchor6Ble_A2M 3;
+BA_ "GenSigSendType" SG_ 1063 Anchor7Ble_A2M 3;
+BA_ "GenSigSendType" SG_ 1831 TesterPhysicalResAnchor7 3;
+BA_ "GenSigSendType" SG_ 1830 TesterPhysicalResAnchor6 3;
+BA_ "GenSigSendType" SG_ 1829 TesterPhysicalResAnchor5 3;
+BA_ "GenSigSendType" SG_ 1828 TesterPhysicalResAnchor4 3;
+BA_ "GenSigSendType" SG_ 1827 TesterPhysicalResAnchor3 3;
+BA_ "GenSigSendType" SG_ 1826 TesterPhysicalResAnchor2 3;
+BA_ "GenSigSendType" SG_ 1825 TesterPhysicalResAnchor1 3;
+BA_ "GenSigSendType" SG_ 1799 TesterPhysicalReqAnchor7 3;
+BA_ "GenSigSendType" SG_ 1798 TesterPhysicalReqAnchor6 3;
+BA_ "GenSigSendType" SG_ 1797 TesterPhysicalReqAnchor5 3;
+BA_ "GenSigSendType" SG_ 1796 TesterPhysicalReqAnchor4 3;
+BA_ "GenSigSendType" SG_ 1795 TesterPhysicalReqAnchor3 3;
+BA_ "GenSigSendType" SG_ 1794 TesterPhysicalReqAnchor2 3;
+VAL_ 857 Anchor9Status_UwbPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 857 Anchor9Status_AncPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 857 Anchor9Status_AncIntPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 856 Anchor8Status_UwbPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 856 Anchor8Status_AncPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 856 Anchor8Status_AncIntPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 855 Anchor7Status_UwbPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 855 Anchor7Status_AncPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 855 Anchor7Status_AncIntPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 854 Anchor6Status_UwbPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 854 Anchor6Status_AncPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 854 Anchor6Status_AncIntPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 853 Anchor5Status_UwbPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 853 Anchor5Status_AncPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 853 Anchor5Status_AncIntPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 852 Anchor4Status_UwbPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 852 Anchor4Status_AncPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 852 Anchor4Status_AncIntPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 851 Anchor3Status_UwbPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 851 Anchor3Status_AncPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 851 Anchor3Status_AncIntPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 850 Anchor2Status_UwbPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 850 Anchor2Status_AncPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 850 Anchor2Status_AncIntPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 849 Anchor1Status_UwbPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 849 Anchor1Status_AncPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 849 Anchor1Status_AncIntPwrMode 4 "LOCALISING_UWB" 3 "LOCALISING_BLE" 2 "STANDBY" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 848 SysPwrMode 5 "INVALID" 4 "LOCALISING_BLE" 3 "STANDBY" 2 "LOCALISING_UWB" 1 "SEARCHING" 0 "STOPPED" ;
+VAL_ 1129 Anchor9Uwb_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1129 Anchor9Keyfob_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1128 Anchor8Uwb_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1128 Anchor8Keyfob_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1127 Anchor7Uwb_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1127 Anchor7Keyfob_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1126 Anchor6Uwb_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1126 Anchor6Keyfob_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1125 Anchor5Uwb_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1125 Anchor5Keyfob_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1124 Anchor4Uwb_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1124 Anchor4Keyfob_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1123 Anchor3Uwb_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1123 Anchor3Keyfob_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1122 Anchor2Uwb_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1122 Anchor2Keyfob_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1121 Anchor1Uwb_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 1121 Anchor1Keyfob_UwbTagState_A2M 255 "General Error" 12 "Skipped Response, ToffMean limit" 11 "No NodeData" 10 "No Final Data" 9 "No Final" 8 "Response TX Failed" 7 "No Poll" 6 "PrePoll lost" 5 "Skipped Round Conflict" 4 "Skipped Low Prio" 3 "Ranging OK" 2 "Prepoll Caught" 1 "Catching Prepoll" 0 "Init" ;
+VAL_ 2483042313 AutosarNMControlAnchor9 8 "Request for Connection" 0 "No Wake Up" ;
+VAL_ 2483042312 AutosarNMControlAnchor8 8 "Request for Connection" 0 "No Wake Up" ;
+VAL_ 2483042311 AutosarNMControlAnchor7 8 "Request for Connection" 0 "No Wake Up" ;
+VAL_ 2483042310 AutosarNMControlAnchor6 8 "Request for Connection" 0 "No Wake Up" ;
+VAL_ 2483042309 AutosarNMControlAnchor5 8 "Request for Connection" 0 "No Wake Up" ;
+VAL_ 2483042308 AutosarNMControlAnchor4 8 "Request for Connection" 0 "No Wake Up" ;
+VAL_ 2483042307 AutosarNMControlAnchor3 8 "Request for Connection" 0 "No Wake Up" ;
+VAL_ 2483042306 AutosarNMControlAnchor2 8 "Request for Connection" 0 "No Wake Up" ;
+VAL_ 2483042305 AutosarNMControlAnchor1 8 "Request for Connection" 0 "No Wake Up" ;

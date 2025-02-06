@@ -1,0 +1,1324 @@
+/*@!Encoding:1252*/
+includes
+{ 
+  #include "Lib\Diag_Req_Resp.cin"
+  #include "Lib\DiagUtilities_New.cin"
+  
+}
+
+variables
+{  
+  //const byte Bosch = 0x61;
+  Char LogfileName[1000];
+  Char TestcaseName[1000];
+  Char ECU_qualifier[1000] = "DiagAnchor2";
+  Char Pos_FED8[100] = "62 FE D8 05 00"; // Combi: 62 FE D8 07 00 - Uwb: 62 FE D8 05 00
+  Char Pos_FE09[100] = "62 FE 09 01"; //01: InField - 02: Analysis
+  Char Pos_F180[100] = "62 F1 80 01 46 30 30 35 56 54 32 32 35 36 30 30"; // ../Build/HGT_C2/SwProperties/SwVersion_merged.properties
+  Char Pos_F181[100] = "62 F1 81 02 46 30 30 35 56 54 32 32 35 35 30 30 46 30 30 35 56 54 32 32 35 34 30 30"; // ../Build/HGT_C2/SwProperties/SwVersion_merged.properties
+  Char Pos_F18C[100] = "62 F1 8C 54 48 49 52 54 59 43 48 41 52 48 4F 4E 44 41 53 45 52 49 41 4C 4E 55 4D 5F 30 30 30 30 31"; // Combi: ProdData_CC26x2_Anchor.bin, Uwb: ProdData_S32.bin
+  Char Pos_F192[100] = "62 F1 92 46 30 30 35 56 30 33 34 35 30 30 30"; // Combi: ProdData_CC26x2_Anchor.bin, Uwb: ProdData_S32.bin
+  Char Pos_F195[100] = "62 F1 95 02 06 00 04 06 00 04";
+  message Anchor1Nm Anchr1;
+  message Anchor2Nm Anchr2;
+  message Anchor3Nm Anchr3;
+  message Anchor4Nm Anchr4;
+  message Anchor5Nm Anchr5;
+  message Anchor6Nm Anchr6;
+  message Anchor7Nm Anchr7;
+  message Anchor8Nm Anchr8;
+  message Anchor9Nm Anchr9;
+}
+
+NM_Wakeup()
+{
+    output(Anchr1);
+    output(Anchr2);
+    output(Anchr3);
+    output(Anchr4);
+    output(Anchr5);
+    output(Anchr6);
+    output(Anchr7);
+    output(Anchr8);
+    output(Anchr9);
+    testwaitfortimeout(200);  
+}
+
+
+PreCondition()
+{
+    testCaseComment("Precondition");
+    Teststep("1","Start tester present");
+    diagStartTesterPresent(ECU_qualifier);
+    TestStep("2","Send request 10 01 to enter Diagnostic Default Session ");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+}
+
+PostCondition()
+{
+    testCaseComment("PostCondition");
+    TestStep("1","Send request 10 01 to enter Diagnostic Default Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Stop tester present");
+    StopTesterPresent();
+    testwaitfortimeout(500);
+}
+
+StartLogging_Anchor(Char UseCaseName[])
+{
+    Strncat(LogfileName, "Logs/", 6);
+    Strncat(LogfileName, UseCaseName, elcount(TestcaseName));
+    Strncat(LogfileName, ".asc", elcount(TestcaseName));
+    setLogFileName(LogfileName);
+    StartLogging();
+}
+
+///////////////////////////////4554_TSU_PK_HGT_R01_AnchorUDSServer_ReadDataByIdentifier///////////////////////////////////
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_BLERIDs_App_ExtendedSession_NoSecurityLevel_25839()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_BLERIDs_App_ExtendedSession_NoSecurityLevel_25839");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send 3101FA01");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 01","7F 31 31");
+    TestStep("3","Send 3101FA02");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 02","7F 31 31");
+    TestStep("4","Send 3101FA04");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 04","7F 31 31");
+    TestStep("5","Send 3101FA1B");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 1B","7F 31 31");
+    TestStep("6","Send 3101FA30");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 30","7F 31 31");
+    TestStep("7","Send 3101FA32");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 32","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA01_Fbl_ExtendedSession_0x61SecurityLevel_26498()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA01_Fbl_ExtendedSession_0x61SecurityLevel_26498");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA01");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 01","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA01_Fbl_ProgrammingSession_0x61SecurityLevel_28494()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA01_Fbl_ProgrammingSession_0x61SecurityLevel_28494");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA01");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 01","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA02_Fbl_ExtendedSession_0x61SecurityLevel_25683()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA02 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA02_Fbl_ExtendedSession_0x61SecurityLevel_25683");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA02");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 02","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA02_Fbl_ProgrammingSession_0x61SecurityLevel_27749()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA02_Fbl_ProgrammingSession_0x61SecurityLevel_27749");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA02");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 02","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA03_Fbl_ExtendedSession_0x61SecurityLevel_26298()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA03_Fbl_ExtendedSession_0x61SecurityLevel_26298");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA03");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 03","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA03_Fbl_ProgrammingSession_0x61SecurityLevel_30407()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA03_Fbl_ProgrammingSession_0x61SecurityLevel_30407");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA03");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 03","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA04_Fbl_ExtendedSession_0x61SecurityLevel_29923()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA04_Fbl_ExtendedSession_0x61SecurityLevel_29923");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA04");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 04","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA04_Fbl_ProgrammingSession_0x61SecurityLevel_31394()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA04_Fbl_ProgrammingSession_0x61SecurityLevel_31394");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA04");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 04","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA05_Fbl_ExtendedSession_0x61SecurityLevel_27154()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA05_Fbl_ExtendedSession_0x61SecurityLevel_27154");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA05");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 05","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA05_Fbl_ProgrammingSession_0x61SecurityLevel_32428()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA05_Fbl_ProgrammingSession_0x61SecurityLevel_32428");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA05");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 05","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA08_Fbl_ExtendedSession_0x61SecurityLevel_27891()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA08_Fbl_ExtendedSession_0x61SecurityLevel_27891");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA08");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 08","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA08_Fbl_ProgrammingSession_0x61SecurityLevel_26966()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA08_Fbl_ProgrammingSession_0x61SecurityLevel_26966");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA08");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 08","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA09_Fbl_ExtendedSession_0x61SecurityLevel_28474()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA09_Fbl_ExtendedSession_0x61SecurityLevel_28474");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA09");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 09","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA09_Fbl_ProgrammingSession_0x61SecurityLevel_28057()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA09_Fbl_ProgrammingSession_0x61SecurityLevel_28057");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA09");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 09","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA0A_Fbl_ExtendedSession_0x61SecurityLevel_29248()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA0A_Fbl_ExtendedSession_0x61SecurityLevel_29248");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA0A");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 0A","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA0A_Fbl_ProgrammingSession_0x61SecurityLevel_25603()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA0A_Fbl_ProgrammingSession_0x61SecurityLevel_25603");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA0A");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 0A","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA0B_Fbl_ExtendedSession_0x61SecurityLevel_29877()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA0B_Fbl_ExtendedSession_0x61SecurityLevel_29877");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA0B");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 0B","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA0B_Fbl_ProgrammingSession_0x61SecurityLevel_26103()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA0B_Fbl_ProgrammingSession_0x61SecurityLevel_26103");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA0B");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 0B","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA11_Fbl_ExtendedSession_0x61SecurityLevel_32205()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA11_Fbl_ExtendedSession_0x61SecurityLevel_32205");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA11");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 11","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA11_Fbl_ProgrammingSession_0x61SecurityLevel_28783()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA11_Fbl_ProgrammingSession_0x61SecurityLevel_28783");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA11");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 11","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA13_Fbl_ExtendedSession_0x61SecurityLevel_25877()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA13_Fbl_ExtendedSession_0x61SecurityLevel_25877");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA13");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 13","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA13_Fbl_ProgrammingSession_0x61SecurityLevel_31521()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA13_Fbl_ProgrammingSession_0x61SecurityLevel_31521");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA13");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 13","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA1B_Fbl_ExtendedSession_0x61SecurityLevel_26549()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA1B_Fbl_ExtendedSession_0x61SecurityLevel_26549");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA1B");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 1B","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA1B_Fbl_ProgrammingSession_0x61SecurityLevel_32802()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA1B_Fbl_ProgrammingSession_0x61SecurityLevel_32802");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA1B");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 1B","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA20_Fbl_ExtendedSession_0x61SecurityLevel_26960()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA20_Fbl_ExtendedSession_0x61SecurityLevel_26960");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA20");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 20","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA20_Fbl_ProgrammingSession_0x61SecurityLevel_26941()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA20_Fbl_ProgrammingSession_0x61SecurityLevel_26941");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA20");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 20","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA30_Fbl_ExtendedSession_0x61SecurityLevel_30678()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA30_Fbl_ExtendedSession_0x61SecurityLevel_30678");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA30");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 30","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA30_Fbl_ProgrammingSession_0x61SecurityLevel_32317()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA30_Fbl_ProgrammingSession_0x61SecurityLevel_32317");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA30");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 30","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA31_Fbl_ExtendedSession_0x61SecurityLevel_32097()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA31_Fbl_ExtendedSession_0x61SecurityLevel_32097");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA31");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 31","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA31_Fbl_ProgrammingSession_0x61SecurityLevel_33168()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA31_Fbl_ProgrammingSession_0x61SecurityLevel_33168");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA31");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 31","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA32_Fbl_ExtendedSession_0x61SecurityLevel_32452()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA32_Fbl_ExtendedSession_0x61SecurityLevel_32452");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FA32");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 32","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA32_Fbl_ProgrammingSession_0x61SecurityLevel_25940()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFA32_Fbl_ProgrammingSession_0x61SecurityLevel_25940");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FA32");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA 32","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFAA0_Fbl_ExtendedSession_0x61SecurityLevel_28328()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFAA0_Fbl_ExtendedSession_0x61SecurityLevel_28328");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FAA0");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA A0","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFAA0_Fbl_ProgrammingSession_0x61SecurityLevel_26616()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFAA0_Fbl_ProgrammingSession_0x61SecurityLevel_26616");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FAA0");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FA A0","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB32_Fbl_ExtendedSession_0x61SecurityLevel_29456()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB32_Fbl_ExtendedSession_0x61SecurityLevel_29456");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FB32");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 32","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB32_Fbl_ProgrammingSession_0x61SecurityLevel_26115()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB32_Fbl_ProgrammingSession_0x61SecurityLevel_26115");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FB32");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 32","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB33_Fbl_ExtendedSession_0x61SecurityLevel_32994()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB33_Fbl_ExtendedSession_0x61SecurityLevel_32994");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FB33");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 33","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB33_Fbl_ProgrammingSession_0x61SecurityLevel_28481()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB33_Fbl_ProgrammingSession_0x61SecurityLevel_28481");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FB33");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 33","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB35_Fbl_ExtendedSession_0x61SecurityLevel_26237()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB35_Fbl_ExtendedSession_0x61SecurityLevel_26237");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FB35");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 35","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB35_Fbl_ProgrammingSession_0x61SecurityLevel_30219()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB35_Fbl_ProgrammingSession_0x61SecurityLevel_28481");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FB35");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 35","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB36_Fbl_ExtendedSession_0x61SecurityLevel_26631()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB36_Fbl_ExtendedSession_0x61SecurityLevel_26631");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FB36");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 36","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB36_Fbl_ProgrammingSession_0x61SecurityLevel_31816()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB36_Fbl_ProgrammingSession_0x61SecurityLevel_31816");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FB36");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 36","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB38_Fbl_ExtendedSession_0x61SecurityLevel_27142()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB38_Fbl_ExtendedSession_0x61SecurityLevel_27142");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FB38");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 38","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB38_Fbl_ProgrammingSession_0x61SecurityLevel_25959()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB38_Fbl_ProgrammingSession_0x61SecurityLevel_25959");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FB38");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 38","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB3A_Fbl_ExtendedSession_0x61SecurityLevel_25795()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB3A_Fbl_ExtendedSession_0x61SecurityLevel_25795");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FB3A");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 3A","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB3A_Fbl_ProgrammingSession_0x61SecurityLevel_29527()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB3A_Fbl_ProgrammingSession_0x61SecurityLevel_29527");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FB3A");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 3A","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB3B_Fbl_ExtendedSession_0x61SecurityLevel_27603()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB3B_Fbl_ExtendedSession_0x61SecurityLevel_27603");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FB3B");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 3B","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB3B_Fbl_ProgrammingSession_0x61SecurityLevel_32578()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB3B_Fbl_ProgrammingSession_0x61SecurityLevel_28481");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FB3B");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 3B","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB40_Fbl_ExtendedSession_0x61SecurityLevel_30251()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB40_Fbl_ExtendedSession_0x61SecurityLevel_30251");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FB40");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 40","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB40_Fbl_ProgrammingSession_0x61SecurityLevel_26109()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB40_Fbl_ProgrammingSession_0x61SecurityLevel_26109");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FB40");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 40","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB41_Fbl_ExtendedSession_0x61SecurityLevel_30671()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB41_Fbl_ExtendedSession_0x61SecurityLevel_30671");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FB41");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 41","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB41_Fbl_ProgrammingSession_0x61SecurityLevel_26122()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB41_Fbl_ProgrammingSession_0x61SecurityLevel_26122");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FB41");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 41","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB42_Fbl_ExtendedSession_0x61SecurityLevel_31609()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB42_Fbl_ExtendedSession_0x61SecurityLevel_31609");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FB42");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 42","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB42_Fbl_ProgrammingSession_0x61SecurityLevel_27550()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB42_Fbl_ProgrammingSession_0x61SecurityLevel_27550");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FB42");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 42","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB43_Fbl_ExtendedSession_0x61SecurityLevel_32528()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB43_Fbl_ExtendedSession_0x61SecurityLevel_32528");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send 3101FB43");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 43","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB43_Fbl_ProgrammingSession_0x61SecurityLevel_28426()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_RIDFB43_Fbl_ProgrammingSession_0x61SecurityLevel_28426");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+
+    
+    testCaseComment("Actions");
+    TestStep("1,2","Unlock Bosch Keys");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("3","Send (10 02) to request programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("4","Send 3101FB43");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 43","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_S32RIDs_App_ExtendedSession_NoSecurityLevel_33156()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_S32RIDs_App_ExtendedSession_NoSecurityLevel_33156");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Request Extended Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2","Request 31 FA 21.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FA 21","7F 31 31");   
+    TestStep("3","Request 31 FA 22.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FA 22","7F 31 31");
+    TestStep("4","Request 31 FA 23.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FA 23","7F 31 31");
+    TestStep("5","Request 31 FA 24.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FA 24","7F 31 31");
+
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_UnsupportedRIDs_App_ExtendedSession_NoSecurityLevel_26128()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_UnsupportedRIDs_App_ExtendedSession_NoSecurityLevel_26128");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Request Extended Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2","Request 31 F0 00.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 F0 00","7F 31 31");   
+    TestStep("3","Request 31 FB BB.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FB BB","7F 31 31");
+    TestStep("4","Request 31 FE FF.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FE FF","7F 31 31");
+    TestStep("5","Request 31 FA 12.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FA 12","7F 31 31");
+    TestStep("6","Request 31 FA 0F.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FA 0F","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_UnsupportedRIDs_Fbl_ExtendedSession_0x61SecurityLevel_27774()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_UnsupportedRIDs_Fbl_ExtendedSession_0x61SecurityLevel_27774");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    testCaseComment("Actions");
+    TestStep("1","Request Programming Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Request Extended Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Unlock 61 Security");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch); 
+    TestStep("5","Request 31 F0 00.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 F0 00","7F 31 31");   
+    TestStep("6","Request 31 FB BB.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FB BB","7F 31 31");
+    TestStep("7","Request 31 FE FF.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FE FF","7F 31 31");
+    TestStep("8","Request 31 FA 12.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FA 12","7F 31 31");
+    TestStep("9","Request 31 FA 0F.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FA 0F","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_UnsupportedRIDs_Fbl_ProgrammingSession_NoSecurityLevel_26135()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a request messages for RoutineControl RID FA03 is sent in bootloader extended session with 0x61 security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC31_UnsupportedRIDs_Fbl_ProgrammingSession_NoSecurityLevel_26135");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    testCaseComment("Actions");
+    TestStep("1","Request Programming Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+ 
+    TestStep("2","Request 31 F0 00.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 F0 00","7F 31 31");   
+    TestStep("3","Request 31 FB BB.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FB BB","7F 31 31");
+    TestStep("4","Request 31 FE FF.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FE FF","7F 31 31");
+    TestStep("5","Request 31 FA 12.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FA 12","7F 31 31");
+    TestStep("6","Request 31 FA 0F.");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 FA 0F","7F 31 31");
+    PostCondition();
+    stopLogging();      
+}

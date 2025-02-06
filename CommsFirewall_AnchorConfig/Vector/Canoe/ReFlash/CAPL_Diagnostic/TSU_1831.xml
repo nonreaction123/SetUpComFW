@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<testmodule title="HGT_PK-Diagnostics" version="">
+
+
+			
+<testgroup title="TSU_PK_HGT_DVPVTest_Anchor">
+
+<capltestcase name="TCS_PK_HGT_DVPVTest_Anchor_DiagSessionControl_29846"></capltestcase>
+<capltestcase name="TCS_PK_HGT_DVPVTest_Anchor_FEA4_RFTestMode_30060"></capltestcase>
+<capltestcase name="TCS_PK_HGT_DVPVTest_Anchor_EnterFastSleep_FA05_32491"></capltestcase>
+<capltestcase name="TCS_PK_HGT_DVPVTest_Anchor_ExitFastSleep_FA05_27401"></capltestcase>
+<capltestcase name="TCS_PK_HGT_DVPVTest_Anchor_TesterPresent_30340"></capltestcase>
+<capltestcase name="TCS_PK_HGT_DVPVTest_Anchor_ReadSWVersion_F195_FE11_31802"></capltestcase>
+<capltestcase name="TCS_PK_HGT_DVPVTest_Anchor_ReadWriteBleAddress_FE03_25477"></capltestcase>
+<capltestcase name="TCS_PK_HGT_DVPVTest_Anchor_EcuReset_27338"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_WriteDataByIdentifier_DIDFE03_BLEAddress_ExtendedSession_0x61SecurityLevel_29789"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF192_systemSupplierECUHardwareNumber_32592"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE05_TimeSinceResetUWB_App_ExtendedSession_0x61SecurityLevel_26190"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA01_BLERxSensitivityTest_ExtendedSession_0x61SecurityLevel_26285"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA02_BLETxPowerTest_ExtendedSession_0x61SecurityLevel_25670"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA09_uwbFramesRx_ExtendedSession_0x61SecurityLevel_30168"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA08_uwbFramesTx_ExtendedSession_0x61SecurityLevel_26322"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE06_TimeSinceReset_ExtendedSession_0x61SecurityLevel_29432"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_SecurityAccess_ExtendedSession_SecurityLevel0x61To0x61_25801"></capltestcase>
+<capltestcase name="TCS_PK_HGT_MasterAnchorUDSServer_RoutineControl_RIDFA13_UWBTxTest_ExtendedSession_0x61SecurityLevel_26008"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA10_uwbCyclic_ExtendedSession_0x61SecurityLevel_28457"></capltestcase>
+<capltestcase name="TCS_PK_HGT_Sys_IT_AnchorBLE_UDSServer_ReadDID_F18C_ECUSerialNumberDataIdentifier_28989"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE33_BLEChipTemp_ExtendedSession_0x61SecurityLevel_26329"></capltestcase>
+</testgroup>
+	
+
+</testmodule>

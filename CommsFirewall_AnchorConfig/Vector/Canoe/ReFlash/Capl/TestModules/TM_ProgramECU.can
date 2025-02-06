@@ -1,0 +1,359 @@
+/*@!Encoding:1252*/
+includes
+{
+    #include "..\Configuration.cin"
+    #include "..\Lib\UDS\DiagnosticSessionControl\DiagnosticSessionControl.cin"
+    #include "..\Lib\UDS\SecurityAccess\SecurityAccess.cin"
+    #include "..\Lib\UDS\ReadDataByIdentifier\ReadDataByIdentifier.cin"
+    #include "..\Lib\UDS\WriteDataByIdentifier\ReadWriteDataByIdentifier.cin"
+    #include "..\utility.cin"
+    #include "..\Lib\utility\util_compare.cin"
+
+    #include "..\UtilityBootloader.cin"
+    #include "..\DTCFunctions.cin"
+    #include "..\DownloadFunctions.cin"
+
+    //#include "..\ReadWriteDataByIdentifier.cin"
+    #include "..\BootloaderTestCases.cin"
+}
+
+variables
+{
+  struct gwParams
+  {
+    dword id;
+    byte  src;
+    int   dest[2];
+  };
+
+
+  //Paths for APP files
+  char ST_APP[50]     = "./InputFiles/MasterMcu_App_img.bin";
+  char ST_APP_SIG[50] = "./InputFiles/MasterMcu_AppCode.sig";
+
+  char MASTER_APP[100]     =  "C:/sandbox/rbd_pk_pf_sw_Development_RWS_RW12CL_2/_builds/Variant1/_bin/MasterBle_App.bin";
+
+  char ANCHOR_APP[100]     =  "C:/sandbox/rbd_pk_pf_sw_Development_RWS_RW12CL_2/_builds/Variant1/_bin/AnchorBle_App.bin";
+  
+  char APP_BIN[1000];
+  char CONFIG_BIN[1000];
+  
+  char APP_BLE_BIN[1000];
+  char APP_UWB_BIN[1000];
+
+  char Variant[20];
+}
+
+
+MainTest()
+{
+  // ----- add information to test report 
+  TestModuleTitle("Program ECU"); // change test module title and add description
+  utility_initBusContext();
+
+  // Initial setup
+  Configuration_Init();  
+  
+  // Calibration before Application
+  if (1 == @sysvar::PROGRAM_ECU::progCalib)
+  {
+    DiagSetTarget( "DiagMasterMCU" );
+
+    sysGetVariableString(sysvar::PROGRAM_ECU::strConfigurationFile, CONFIG_BIN, elCount(CONFIG_BIN));    
+    programCAL(CONFIG_BIN);
+  }  
+
+  if (1 == @sysvar::PROGRAM_ECU::progApp)
+  {   
+    DiagSetTarget( "DiagMasterMCU" );
+
+    sysGetVariableString(sysvar::PROGRAM_ECU::strApplicationFile, APP_BIN, elCount(APP_BIN));
+    programECU(APP_BIN);
+  }
+   
+  if (1 == @sysvar::PROGRAM_ECU::progMasterSW)
+  {
+    testGroupBegin("MasterMcu Check", "Checking MasterMcu is in Application");
+    tc_CheckMasterMcuInApplication();
+    testGroupEnd();
+    
+    if (0 == TestGetVerdictLastTestCase())
+    {
+      DiagSetTarget( "DiagMasterBLE" );
+      
+      testGroupBegin("Variant Check", "Checking Variant of Master");
+      tc_GetMasterBleVariant();
+      testGroupEnd();
+      
+      if (0 == TestGetVerdictLastTestCase())
+      {
+        sysGetVariableString(sysvar::PROGRAM_ECU::strMasterFile, APP_BIN, elCount(APP_BIN));
+        programMASTER(APP_BIN, Variant);
+      }
+      else
+      {
+        char dialogMsg[1000];
+    
+        snprintf(dialogMsg, elcount(dialogMsg),
+            "%s (%s)\n",
+            "Error: Invalid variant read.",
+            Variant
+            );
+        testWaitForTesterConfirmation(dialogMsg, 10000);
+      }      
+    }
+    else
+    {
+      char dialogMsg[1000];
+  
+      snprintf(dialogMsg, elcount(dialogMsg),
+          "%s\n",
+          "Error: MasterBle cannot be programmed because MasterMcu is not in Application."
+          );
+      testWaitForTesterConfirmation(dialogMsg, 10000);
+    }
+  }
+  
+
+
+  if (1 == @sysvar::PROGRAM_ECU::progAnchorSW)
+  {
+    testGroupBegin("Version Check", "Checking MasterMcu and MasterBle Versions.");
+    tc_CheckVersionInMaster();
+    testGroupEnd();
+    
+    switch (@sysvar::PROGRAM_ECU::AnchorID)
+    {
+      case 1: DiagSetTarget( "DiagAnchor1" );  break; 
+      case 2: DiagSetTarget( "DiagAnchor2" );  break; 
+      case 3: DiagSetTarget( "DiagAnchor3" );  break; 
+      case 4: DiagSetTarget( "DiagAnchor4" );  break; 
+      case 5: DiagSetTarget( "DiagAnchor5" );  break; 
+      case 6: DiagSetTarget( "DiagAnchor6" );  break; 
+      default: DiagSetTarget( "DiagAnchor1" );  break;
+    }
+    
+    testGroupBegin("Variant Check", "Checking Variant of Anchor");
+    tc_GetAnchorBleVariant();
+    testGroupEnd();
+    
+    if (0 == TestGetVerdictLastTestCase())
+    {
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchorFile, APP_BIN, elCount(APP_BIN));
+      programANCHOR(APP_BIN, Variant);
+    }
+    else
+    {
+      char dialogMsg[1000];
+  
+      snprintf(dialogMsg, elcount(dialogMsg),
+          "%s (%s)\n",
+          "Error: Invalid variant read.",
+          Variant
+          );
+      testWaitForTesterConfirmation(dialogMsg, 10000);
+    }
+  }
+  
+  if (1 == @sysvar::PROGRAM_ECU::B21_Version)
+  {   
+    if (1 == @sysvar::PROGRAM_ECU::progm_dialog_b21)
+    {
+      
+      DiagSetTarget( "DiagMasterMCU" );
+
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchorBleFile, APP_BLE_BIN, elCount(APP_BLE_BIN));
+      programBLE(APP_BLE_BIN);
+    }
+  }
+}
+
+
+testcase tc_CheckMasterMcuInApplication(void)
+{
+  testCaseTitle("MCU", "Checking MasterMcu is in Application");
+  
+  DiagSetTarget( "DiagMasterMCU" );
+  if (RESPONSE_CHECK_IS_OK == nf_DSC_ExtendedSession_Fuzzy("MCU $10 $03", UDS_ERROR_CODE_OK, 5000, 0))
+  {
+    testStepPass("MCU $10 $03", "MasterMcu is in Application");
+    tf_DSC_DefaultSession("MCU $10 $01", UDS_ERROR_CODE_OK, 5000);    
+  }
+  else
+  {
+    testStepFail("MCU $10 $03", "MasterMcu is not in Application");
+  }
+}
+
+testcase tc_CheckVersionInMaster(void)
+{
+  diagRequest DiagMasterMCU.SWInformation_All_Read McuSwInfo_req;
+  diagResponse DiagMasterMCU.SWInformation_All_Read McuSwInfo_resp;
+  diagRequest DiagMasterBLE.SWInformation_All_Read MBleSwInfo_req;
+  diagResponse DiagMasterBLE.SWInformation_All_Read MBleSwInfo_resp;
+  
+  char masterMcuVersion[3];
+  char masterBleVersion[3];
+  
+  byte mcuVersionValid;
+  byte mbleVersionValid;
+  
+  testCaseTitle("Master", "Checking MasterMcu and MasterBle versions ");   
+  
+  DiagSetTarget( "DiagMasterMCU" );
+  if (RESPONSE_CHECK_IS_OK == nf_RDBI_ReadDIDxxxx_Fuzzy("$22 $FE11", McuSwInfo_req, McuSwInfo_resp, UDS_ERROR_CODE_OK, 10000, 0))
+  {
+    masterMcuVersion[0] = diagGetParameter(McuSwInfo_resp, "Major");
+    masterMcuVersion[1] = diagGetParameter(McuSwInfo_resp, "Minor");
+    masterMcuVersion[2] = diagGetParameter(McuSwInfo_resp, "Revision");
+    mcuVersionValid = 1;
+  }
+  else
+  {
+    mcuVersionValid = 0;
+  }
+  
+  DiagSetTarget( "DiagMasterBLE" );
+  if (RESPONSE_CHECK_IS_OK == nf_RDBI_ReadDIDxxxx_Fuzzy("$22 $FE11", MBleSwInfo_req, MBleSwInfo_resp, UDS_ERROR_CODE_OK, 10000, 0))
+  {
+    masterBleVersion[0] = diagGetParameter(MBleSwInfo_resp, "Major");
+    masterBleVersion[1] = diagGetParameter(MBleSwInfo_resp, "Minor");
+    masterBleVersion[2] = diagGetParameter(MBleSwInfo_resp, "Revision");
+    mbleVersionValid = 1;
+  }
+  else
+  {
+    mbleVersionValid = 0;
+  }
+  
+  if  (   (1 == mcuVersionValid)
+      &&  (1 == mbleVersionValid)
+      )
+  {
+    if  (   (1 == nf_ucmp_CompareByte("$22 $FE11", "Major",    masterMcuVersion[0], masterBleVersion[0], 1))
+        &&  (1 == nf_ucmp_CompareByte("$22 $FE11", "Minor",    masterMcuVersion[1], masterBleVersion[1], 1))
+        &&  (1 == nf_ucmp_CompareByte("$22 $FE11", "Revision", masterMcuVersion[2], masterBleVersion[2], 1))
+        )
+    {
+      testStepPass("$22 $FE11", "Versions matched.");          
+    }
+    else
+    {
+      char dialogMsg[1000];
+      snprintf(dialogMsg, elcount(dialogMsg),
+                "%s\n%s%d.%d.%d\n%s%d.%d.%d\n",
+                "Warning: MasterMcu and MasterBle version mismatch!",
+                "     MasterMcu Version: ", masterMcuVersion[0], masterMcuVersion[1], masterMcuVersion[2],
+                "     MasterBle Version: ", masterBleVersion[0], masterBleVersion[1], masterBleVersion[2]
+              );
+      testWaitForTesterConfirmation(dialogMsg, 10000);
+      testStepWarning("$22 $FE11", "Versions mismatched.");          
+    }
+  }
+  else if (0 == mcuVersionValid)
+  {
+    char dialogMsg[1000];
+    snprintf(dialogMsg, elcount(dialogMsg),
+              "%s\n%s\n",
+              "Warning: MasterMcu and MasterBle version mismatch!",
+              "         Cannot read MasterMcu version."
+            );
+    testWaitForTesterConfirmation(dialogMsg, 10000);
+    testStepWarning("$22 $FE11", "Cannot read SW version of MasterMcu!");
+  }    
+  else //if (0 == mbleVersionValid)
+  {
+    char dialogMsg[1000];
+    snprintf(dialogMsg, elcount(dialogMsg),
+              "%s\n%s\n",
+              "Warning: MasterMcu and MasterBle version mismatch!",
+              "         Cannot read MasterBle version."
+            );
+    testWaitForTesterConfirmation(dialogMsg, 10000);
+    testStepWarning("$22 $FE11", "Cannot read SW version of MasterBle!");    
+  }      
+}
+
+testcase tc_GetAnchorBleVariant(void)
+{
+  diagRequest SWInformation_All_Read SwInfo_req;
+  diagResponse SWInformation_All_Read SwInfo_resp;  
+  
+  byte variantValid;
+  
+  testCaseTitle("HW Variant", "Getting AnchorBle HW variant");   
+  
+  if (RESPONSE_CHECK_IS_OK == nf_RDBI_ReadDIDxxxx_Fuzzy("$22 $FE11", SwInfo_req, SwInfo_resp, UDS_ERROR_CODE_OK, 10000, 0))
+  {
+    if (SwInfo_resp.GetParameter("Variant", Variant, elcount(Variant)) >= 0)
+    {
+      variantValid = 1;    
+    }
+    else
+    {
+      variantValid = 0;
+    }
+  }
+  else
+  {
+    variantValid = 0;
+  }
+  
+  if (1 == variantValid)
+  {
+    if (START_ADDRESS_ANCHOR_BLE.containsKey(Variant))
+    {
+      testStepPass("$22 $FE11", "Variant read (%s) is valid.", Variant);    
+    }
+    else
+    {
+      testStepFail("$22 $FE11", "Unknown variant(%s).", Variant);
+    }
+  }
+  else
+  {
+    testStepFail("$22 $FE11", "Reading variant failed.");
+  }
+}
+
+testcase tc_GetMasterBleVariant(void)
+{
+  diagRequest SWInformation_All_Read SwInfo_req;
+  diagResponse SWInformation_All_Read SwInfo_resp;  
+  
+  byte variantValid;
+  
+  testCaseTitle("HW Variant", "Getting MasterBle HW variant");   
+  
+  if (RESPONSE_CHECK_IS_OK == nf_RDBI_ReadDIDxxxx_Fuzzy("$22 $FE11", SwInfo_req, SwInfo_resp, UDS_ERROR_CODE_OK, 10000, 0))
+  {
+    if (SwInfo_resp.GetParameter("Variant", Variant, elcount(Variant)) >= 0)
+    {
+      variantValid = 1;    
+    }
+    else
+    {
+      variantValid = 0;
+    }
+  }
+  else
+  {
+    variantValid = 0;
+  }
+  
+  if (1 == variantValid)
+  {
+    if (START_ADDRESS_MASTER_BLE.containsKey(Variant))
+    {
+      testStepPass("$22 $FE11", "Variant read (%s) is valid.", Variant);    
+    }
+    else
+    {
+      testStepFail("$22 $FE11", "Unknown variant(%s).", Variant);
+    }
+  }
+  else
+  {
+    testStepFail("$22 $FE11", "Reading variant failed.");
+  }
+}

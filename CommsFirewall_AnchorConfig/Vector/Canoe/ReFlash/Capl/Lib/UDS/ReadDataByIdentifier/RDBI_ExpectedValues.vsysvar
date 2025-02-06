@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="" interface="">
+    <namespace name="UDS_RDBI_3CH" comment="" interface="">
+      <variable anlyzLocal="0" readOnly="true" valueSequence="false" unit="" name="F180_BootSwId" comment="" bitcount="80" isSigned="true" encoding="65001" type="string" startValue="SW0004.0000.0013               " />
+      <variable anlyzLocal="0" readOnly="true" valueSequence="false" unit="" name="F180_NumOfModule" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="1" />
+      <variable anlyzLocal="0" readOnly="true" valueSequence="false" unit="" name="F194_SwContainerID" comment="" bitcount="80" isSigned="true" encoding="65001" type="string" startValue="F005VT1477                      " />
+      <variable anlyzLocal="0" readOnly="true" valueSequence="false" unit="" name="F195_EcuSwVersionNumber" comment="" bitcount="80" isSigned="true" encoding="65001" type="string" startValue="SW0004.0000.0013                " />
+    </namespace>
+    <namespace name="UDS_RDBI_8CH" comment="" interface="">
+      <variable anlyzLocal="0" readOnly="true" valueSequence="false" unit="" name="F180_BootSwId" comment="" bitcount="80" isSigned="true" encoding="65001" type="string" startValue="SW0003.0002.0040               " />
+      <variable anlyzLocal="0" readOnly="true" valueSequence="false" unit="" name="F180_NumOfModule" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="1" />
+      <variable anlyzLocal="0" readOnly="true" valueSequence="false" unit="" name="F194_SwContainerID" comment="" bitcount="80" isSigned="true" encoding="65001" type="string" startValue="F005VT1478                      " />
+      <variable anlyzLocal="0" readOnly="true" valueSequence="false" unit="" name="F195_EcuSwVersionNumber" comment="" bitcount="80" isSigned="true" encoding="65001" type="string" startValue="SW0003.0002.0040                " />
+    </namespace>
+  </namespace>
+</systemvariables>

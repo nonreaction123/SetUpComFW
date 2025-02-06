@@ -1,0 +1,79 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  diagRequest DiagMasterBLE.ExtendedDiagnosticSession_Start Ext;
+  diagRequest DiagMasterBLE.TesterPresent_Send TPS;
+  diagRequest DiagMasterBLE.PEPSModes_MasterBle_Write PEPS;
+  diagRequest DiagMasterBLE.PEPSModes_MasterBle_Read PEPS_READ;
+  diagResponse DiagMasterBLE.PEPSModes_MasterBle_Read PEPS_READ_RESP;
+  msTimer testerpresent;
+//  msTimer initdelay;
+}
+
+on start
+{
+  diagSendRequest(PEPS_READ);
+}
+
+//on diagResponse PEPS_READ_RESP
+//{
+//  @sysvar::Fingerprinting::LED == diagGetParameter(this, "LEVL_enabled");
+//}
+
+on sysvar_update sysvar::Fingerprinting::Button_On
+{
+  If (1 == @sysvar::Fingerprinting::Button_On)
+  {
+    @sysvar::Fingerprinting::LED = 1;
+    setTimer(testerpresent, 2000);
+    diagSetParameter(PEPS, "LEVL_enabled", 1);
+    diagSendRequest(Ext);
+    diagSendRequest(TPS);
+    diagSendRequest(PEPS);
+//    setTimer(initdelay, 20000);
+  }
+}
+
+//on timer initdelay
+//{
+//  if (2 == VehicleStatus::LockStatus)
+//  {
+//    if (VehicleStatus::TagLocation_0 == 20)
+//    {
+//      SetControlVisibility("Fingerprinting", "StaticText", 1);
+//    }
+//    else
+//    {
+//      SetControlVisibility("Fingerprinting", "StaticText", 0);
+//    }
+//  }
+//  else
+//    {
+//      SetControlVisibility("Fingerprinting", "StaticText", 0);
+//    }
+//    setTimer(initdelay, 20000);
+//}
+
+on timer testerpresent
+{
+  diagSendRequest(TPS);
+  setTimer(testerpresent, 2000);
+}
+
+on sysvar_update sysvar::Fingerprinting::Button_Off
+{
+  If (1 == @sysvar::Fingerprinting::Button_Off)
+  {
+    @sysvar::Fingerprinting::LED = 0;
+    cancelTimer(testerpresent);
+    diagSetParameter(PEPS, "LEVL_enabled", 0);
+    diagSendRequest(Ext);
+    diagSendRequest(TPS);
+    diagSendRequest(PEPS);
+  }
+}

@@ -1,0 +1,5 @@
+[NStatePersistence]
+Signature=VectorStatePersistence
+[VTestExecutable]
+TestNode1_LastReportTmpFile=..\..\..\..\..\..\..\Users\DAR5HC\AppData\Local\Temp
+TestNode0_LastReportTmpFile=CAPL_BruteForceAttackForRanging

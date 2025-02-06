@@ -1,0 +1,48 @@
+/*@!Encoding:1252*/
+
+variables
+{
+    dword table[256];
+    int have_table = 0;
+}
+ 
+dword crc32(dword crc, byte buf[], dword len)
+{
+
+	dword rem;
+	byte octet;
+	int i, j, p;
+ 
+	/* This check is not thread safe; there is no mutex. */
+	if (have_table == 0) 
+	{
+		/* Calculate CRC table. */
+		for (i = 0; i < 256; i++) 
+		{
+			rem = i;  /* remainder from polynomial division */
+			for (j = 0; j < 8; j++)
+			{
+				if (rem & 1)
+				{
+					rem >>= 1;
+					rem ^= 0xedb88320;
+				}
+				else
+				{
+					rem >>= 1;
+				}
+			}
+			table[i] = rem;
+		}
+		have_table = 1;
+	}
+ 
+	crc = ~crc;
+
+	for (p = 0; p < len; p++)
+	{
+		octet = buf[p];  /* Cast to unsigned octet. */
+		crc = (crc >> 8) ^ table[(crc & 0xff) ^ octet];
+	}
+	return ~crc;
+}

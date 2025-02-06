@@ -1,0 +1,609 @@
+/*@!Encoding:1252*/
+includes
+{
+  #include "crc32.cin"
+  #include "RoutineControl.cin"
+}
+
+variables
+{
+  dword crc;
+}
+
+void Program_ECU(byte LOGICAL_BLOCK[], dword START_ADDRESS)
+{
+    //Aux
+    int counterBlock;
+    int counterDtc;
+    char testName[64] = "Programming ECU";
+
+    //Write data
+    byte buffer[0x1000];  // Bigger than allowed by Transfer Data
+    dword localDataLeft;
+    dword currentAddress;
+    dword transferCounter;
+    dword transferLength;
+
+    //Security
+    //byte SeedArray[SEED_LENGTH_MAX];
+    //byte KeyArray[KEY_LENGTH_MAX];
+    //dword ActualSize;
+
+    //Output
+    byte info_Out;
+    byte status_Out;
+    long responseLength_Out;
+    byte ListOfDTCAndStatus_Out[NUMBER_DTC_MAX * LOGICAL_BLOCKS_MAX * REPORT_SUPPORTED_DTC_ENCODING_LENGTH];
+    byte AvailabilityMask_Out;
+
+    int i;
+
+    write("Enter Default Session before entering Programming Session");
+    //Default session
+    tc_DSC_DefaultSession(testName, UDS_ERROR_CODE_OK, 1000);
+
+    //Programming session
+    write("Enter Programming Session");
+
+    // If Default-App go to Extended
+    //##tc_DSC_ExtendedSession_Fuzzy(testName, UDS_ERROR_CODE_OK, 1000, 0);
+    //##tc_SA_SecurityUnlockL1(testName);
+
+    tc_DSC_ProgrammingSession(testName, UDS_ERROR_CODE_OK, 5000);
+
+    //##tc_SA_SecurityUnlockL1(testName);
+
+  //Downloading
+  write("wy12cl Reported data length %d", dataLength);
+
+  localDataLeft   = dataLength; // - 10
+  currentAddress  = START_ADDRESS;
+  transferCounter = 1;
+  fileRewind(fileFwHandle);//Make sure file pointer is at the beginning of the file
+
+  write("Address %x Forced data length %d", currentAddress, localDataLeft);
+  RequestDownload(  RQST_DOWNLOAD_DATA_FORMAT, RQST_DOWNLOAD_ADDRESS_LENGTH_FORMAT
+                   ,currentAddress, localDataLeft, UDS_ERROR_CODE_OK, 10000, testName);  // App has many blocks to erase.
+
+
+  //For each segment in Logical block, do step D to H
+  testGroupBegin("TransferData", "Downloading Data");
+  write("Transfer Data");
+  if (0 == DownloadMaxNumberOfBlockLength)
+  {
+    transferLength = TRANSFER_LENGTH;
+  }
+  else
+  {
+    transferLength = DownloadMaxNumberOfBlockLength - 2;  // remove 2 bytes for SID and BSC
+  }
+  while(localDataLeft > 0)
+  {
+    if(localDataLeft >= transferLength)
+    {
+      fileGetBinaryBlock ( buffer , transferLength , fileFwHandle);
+      //TODO: If attribute "maxNumberOfBlockLength" is defined for logical block...
+      TransferDataTest( buffer,  transferLength, transferCounter, UDS_ERROR_CODE_OK, 2000, testName);
+      localDataLeft   -= transferLength;
+      currentAddress  += transferLength;
+      transferCounter++;
+    }
+    else
+    {
+      fileGetBinaryBlock ( buffer , localDataLeft , fileFwHandle);
+      //TODO: If attribute "maxNumberOfBlockLength" is defined for logical block...
+      TransferDataTest( buffer,  localDataLeft, transferCounter, UDS_ERROR_CODE_OK, 2000, testName);
+      localDataLeft   -= localDataLeft;
+      currentAddress  += localDataLeft;
+    }
+  }
+  testGroupEnd();
+
+  write("Transfer Exit");
+  TransferExit(UDS_ERROR_CODE_OK, 2000, testName);
+
+  if ( (LOGICAL_BLOCK[1] == 0x01) || (LOGICAL_BLOCK[1] == 0x02) )
+  {
+    //Run Programming failure test
+    RunDTC_TestLogicalBlock(LOGICAL_BLOCK1, DTC_PROG_FAIL, info_Out, status_Out,UDS_ERROR_CODE_OK, 20000, testName );
+    utility_compareByte(DTC_STATUS_OK, status_Out, testName, "Check: DTC status of $FD01-51");
+
+    RunDTC_TestLogicalBlock(LOGICAL_BLOCK1, DTC_ALGORITHM_FAIL, info_Out, status_Out, UDS_ERROR_CODE_OK, 20000, testName );
+    utility_compareByte(DTC_STATUS_OK, status_Out, testName, "Check: DTC status of $FD01-06");
+
+    RunDTC_TestLogicalBlock(LOGICAL_BLOCK2, DTC_PROG_FAIL, info_Out, status_Out,UDS_ERROR_CODE_OK, 20000, testName );
+    utility_compareByte(DTC_STATUS_OK, status_Out, testName, "Check: DTC status of $FD02-51");
+
+    RunDTC_TestLogicalBlock(LOGICAL_BLOCK2, DTC_ALGORITHM_FAIL, info_Out, status_Out, UDS_ERROR_CODE_OK, 20000, testName );
+    utility_compareByte(DTC_STATUS_OK, status_Out, testName, "Check: DTC status of $FD02-06");
+
+  }
+
+  //Default session
+  tc_DSC_DefaultSession(testName, UDS_ERROR_CODE_OK, 1000);
+}
+
+void Program_CAL(byte LOGICAL_BLOCK[], dword START_ADDRESS)
+{
+    //Aux
+    int counterBlock;
+    int counterDtc;
+    char testName[64] = "Programming Calibration";
+
+    //Write data
+    byte buffer[0x1000];  // Bigger than allowed by Transfer Data
+    dword localDataLeft;
+    dword currentAddress;
+    dword transferCounter;
+    dword transferLength;
+
+    //Security
+    //byte SeedArray[SEED_LENGTH_MAX];
+    //byte KeyArray[KEY_LENGTH_MAX];
+    //dword ActualSize;
+
+    //Output
+    byte info_Out;
+    byte status_Out;
+    long responseLength_Out;
+    byte ListOfDTCAndStatus_Out[NUMBER_DTC_MAX * LOGICAL_BLOCKS_MAX * REPORT_SUPPORTED_DTC_ENCODING_LENGTH];
+    byte AvailabilityMask_Out;
+
+    int i;
+
+    write("Enter Default Session before entering Programming Session");
+    //Default session
+    tc_DSC_DefaultSession(testName, UDS_ERROR_CODE_OK, 1000);
+
+    //Programming session
+    write("Enter Programming Session");
+
+    // If Default-App go to Extended
+    //##tc_DSC_ExtendedSession_Fuzzy(testName, UDS_ERROR_CODE_OK, 1000, 0);
+    //##tc_SA_SecurityUnlockL1(testName);
+
+    tc_DSC_ProgrammingSession(testName, UDS_ERROR_CODE_OK, 5000);
+
+    //##tc_SA_SecurityUnlockL1(testName);
+
+  //Downloading
+  write("Reported data length %d", dataLength);
+
+  localDataLeft   = dataLength; // - 10
+  currentAddress  = START_ADDRESS;
+  transferCounter = 1;
+  fileRewind(fileFwHandle);//Make sure file pointer is at the beginning of the file
+
+  write("Address %x Forced data length %d", currentAddress, localDataLeft);
+  RequestDownload(  RQST_DOWNLOAD_DATA_FORMAT, RQST_DOWNLOAD_ADDRESS_LENGTH_FORMAT
+                   ,currentAddress, localDataLeft, UDS_ERROR_CODE_OK, 10000, testName);  // App has many blocks to erase.
+
+
+  //For each segment in Logical block, do step D to H
+  testGroupBegin("TransferData", "Downloading Data");
+  write("Transfer Data");
+  if (0 == DownloadMaxNumberOfBlockLength)
+  {
+    transferLength = TRANSFER_LENGTH;
+  }
+  else
+  {
+    transferLength = DownloadMaxNumberOfBlockLength - 2;  // remove 2 bytes for SID and BSC
+  }
+  while(localDataLeft > 0)
+  {
+    if(localDataLeft >= transferLength)
+    {
+      fileGetBinaryBlock ( buffer , transferLength , fileFwHandle);
+      //TODO: If attribute "maxNumberOfBlockLength" is defined for logical block...
+      TransferDataTest( buffer,  transferLength, transferCounter, UDS_ERROR_CODE_OK, 2000, testName);
+      localDataLeft   -= transferLength;
+      currentAddress  += transferLength;
+      transferCounter++;
+    }
+    else
+    {
+      fileGetBinaryBlock ( buffer , localDataLeft , fileFwHandle);
+      //TODO: If attribute "maxNumberOfBlockLength" is defined for logical block...
+      TransferDataTest( buffer,  localDataLeft, transferCounter, UDS_ERROR_CODE_OK, 2000, testName);
+      localDataLeft   -= localDataLeft;
+      currentAddress  += localDataLeft;
+    }
+  }
+  testGroupEnd();
+
+  write("Transfer Exit");
+  TransferExit(UDS_ERROR_CODE_OK, 2000, testName);
+
+
+  //Run Programming failure test
+  RunDTC_TestLogicalBlock(LOGICAL_BLOCK1, DTC_PROG_FAIL, info_Out, status_Out,UDS_ERROR_CODE_OK, 20000, testName );
+  utility_compareByte(DTC_STATUS_OK, status_Out, testName, "Check: DTC status of $FD01-51");
+
+  RunDTC_TestLogicalBlock(LOGICAL_BLOCK1, DTC_ALGORITHM_FAIL, info_Out, status_Out, UDS_ERROR_CODE_OK, 20000, testName );
+  utility_compareByte(DTC_STATUS_OK, status_Out, testName, "Check: DTC status of $FD01-06");
+
+  RunDTC_TestLogicalBlock(LOGICAL_BLOCK2, DTC_PROG_FAIL, info_Out, status_Out,UDS_ERROR_CODE_OK, 20000, testName );
+  utility_compareByte(DTC_STATUS_OK, status_Out, testName, "Check: DTC status of $FD02-51");
+
+  RunDTC_TestLogicalBlock(LOGICAL_BLOCK2, DTC_ALGORITHM_FAIL, info_Out, status_Out, UDS_ERROR_CODE_OK, 20000, testName );
+  utility_compareByte(DTC_STATUS_OK, status_Out, testName, "Check: DTC status of $FD02-06");
+
+
+  //Default session
+  tc_DSC_DefaultSession(testName, UDS_ERROR_CODE_OK, 1000);
+}
+
+void Program_BLE_ECU(dword START_ADDRESS)
+{
+    //Aux
+    int counterBlock;
+    int counterDtc;
+    char testName[64] = "Programming ECU";
+
+    //Write data
+    byte buffer[0x1000];  // Bigger than allowed by Transfer Data
+    dword localDataLeft;
+    dword currentAddress;
+    dword transferCounter;
+    dword transferLength;
+
+    //Hash
+    byte hashToWrite[HASH_LENGTH];
+
+    //Security
+    //byte SeedArray[SEED_LENGTH_MAX];
+    //byte KeyArray[KEY_LENGTH_MAX];
+    //dword ActualSize;
+
+    //Output
+    byte info_Out;
+    byte status_Out;
+    long responseLength_Out;
+    //byte ListOfDTCAndStatus_Out[NUMBER_DTC_MAX * LOGICAL_BLOCKS_MAX * REPORT_SUPPORTED_DTC_ENCODING_LENGTH];
+    byte AvailabilityMask_Out;
+
+    int i;
+
+    //Extended session
+    tc_DSC_ExtendedSession(testName, UDS_ERROR_CODE_OK, 1000);
+    tc_SA_SecurityUnlockL1(testName);
+
+	  // Enter programming session
+    tc_DSC_ProgrammingSession(testName, UDS_ERROR_CODE_OK, 5000);
+    //tc_SA_SecurityUnlockL1(testName);
+
+  crc = 0x00;//FFFFFFFF;
+
+  localDataLeft   = dataLength;
+  currentAddress  = START_ADDRESS;
+  transferCounter = 1;
+  fileRewind(fileFwHandle);//Make sure file pointer is at the beginning of the file
+
+  write("Address %x Forced data length %d", currentAddress, localDataLeft);
+  RequestDownload(  RQST_DOWNLOAD_DATA_FORMAT, RQST_DOWNLOAD_ADDRESS_LENGTH_FORMAT
+                   ,currentAddress, localDataLeft, UDS_ERROR_CODE_OK, 20000, testName);  // App has many blocks to erase.
+
+  if (0 == TestGetVerdictLastTestCase())
+  {
+    testGroupBegin("TransferData", "Downloading Data");
+    write("Transfer Data");
+    if (0 == DownloadMaxNumberOfBlockLength)
+    {
+      transferLength = BLE_TRANSFER_LENGTH;
+    }
+    else
+    {
+      transferLength = DownloadMaxNumberOfBlockLength - 2;  // remove 2 bytes for SID and BSC
+    }
+    while(localDataLeft > 0)
+    {
+      if(localDataLeft >= transferLength)
+      {
+        fileGetBinaryBlock ( buffer , transferLength , fileFwHandle);
+        //TODO: If attribute "maxNumberOfBlockLength" is defined for logical block...
+        //write("Prev CRC is %x", crc);
+        crc = crc32(crc,buffer,transferLength);
+       // write("Current CRC is %x", crc);
+        TransferDataTest( buffer,  transferLength, transferCounter, UDS_ERROR_CODE_OK, 20000, testName);
+        localDataLeft   -= transferLength;
+        currentAddress  += transferLength;
+        transferCounter++;
+      }
+      else
+      {
+        fileGetBinaryBlock ( buffer , localDataLeft , fileFwHandle);
+        //TODO: If attribute "maxNumberOfBlockLength" is defined for logical block...
+        // write("Prev CRC is %x", crc);
+        crc = crc32(crc,buffer,localDataLeft);
+       // write("Current CRC is %x", crc);
+        TransferDataTest( buffer,  localDataLeft, transferCounter, UDS_ERROR_CODE_OK, 20000, testName);
+        localDataLeft   -= localDataLeft;
+        currentAddress  += localDataLeft;
+      }
+    }
+    testGroupEnd();
+
+    write("Transfer Exit");
+    TransferExit(UDS_ERROR_CODE_OK, 20000, testName);
+
+    write("Final CRC is %x", crc);
+
+    SignatureVerify_Start(0x00000000);
+
+/*    Check_Programming_dependencies_Start(crc,status_Out,responseLength_Out,UDS_ERROR_CODE_OK, 5000,testName);
+    if (0 == status_Out)
+    {
+      write("Check_Programming_dependencies OK");
+    }
+    else
+    {
+      write("Check_Programming_dependencies failed");
+      stop();
+    }
+    Check_Programming_dependencies_Results(responseLength_Out,0,3000,testName);
+    testWaitForTimeout( 3000 );
+    */
+    // Check if ECU is still in programming session
+    tc_DSC_ExtendedSession(testName, UDS_ERROR_CODE_OK, 1000);
+    //Default session
+    tc_DSC_DefaultSession(testName, UDS_ERROR_CODE_OK, 5000);
+
+    // Wait & check if ECU is in default session
+    testWaitForTimeout( 2000 );
+    tc_DSC_ExtendedSession(testName, UDS_ERROR_CODE_OK, 5000);
+    tc_DSC_DefaultSession(testName, UDS_ERROR_CODE_OK, 1000);
+  }
+}
+
+void Program_R4_ECU(dword START_ADDRESS)
+{
+    //Aux
+    int counterBlock;
+    int counterDtc;
+    char testName[64] = "Programming ECU";
+
+    //Write data
+    byte buffer[0x1000];  // Bigger than allowed by Transfer Data
+    dword localDataLeft;
+    dword currentAddress;
+    dword transferCounter;
+    dword transferLength;
+
+    //Hash
+    byte hashToWrite[HASH_LENGTH];
+
+    //Security
+    //byte SeedArray[SEED_LENGTH_MAX];
+    //byte KeyArray[KEY_LENGTH_MAX];
+    //dword ActualSize;
+
+    //Output
+    byte info_Out;
+    byte status_Out;
+    long responseLength_Out;
+    //byte ListOfDTCAndStatus_Out[NUMBER_DTC_MAX * LOGICAL_BLOCKS_MAX * REPORT_SUPPORTED_DTC_ENCODING_LENGTH];
+    byte AvailabilityMask_Out;
+
+    int i;
+
+    //Extended session
+    tc_DSC_ExtendedSession(testName, UDS_ERROR_CODE_OK, 1000);
+    tc_SA_SecurityUnlockL1(testName);
+
+	  // Enter programming session
+    tc_DSC_ProgrammingSession(testName, UDS_ERROR_CODE_OK, 5000);
+    //tc_SA_SecurityUnlockL1(testName);
+
+  crc = 0x00;//FFFFFFFF;
+
+  localDataLeft   = dataLength;
+  currentAddress  = START_ADDRESS;
+  transferCounter = 1;
+  fileRewind(fileFwHandle);//Make sure file pointer is at the beginning of the file
+
+  write("Address %x Forced data length %d", currentAddress, localDataLeft);
+  RequestDownload(  RQST_DOWNLOAD_DATA_FORMAT, RQST_DOWNLOAD_ADDRESS_LENGTH_FORMAT
+                   ,currentAddress, localDataLeft, UDS_ERROR_CODE_OK, 20000, testName);  // App has many blocks to erase.
+
+  if (0 == TestGetVerdictLastTestCase())
+  {
+    testGroupBegin("TransferData", "Downloading Data");
+    write("Transfer Data");
+    if (0 == DownloadMaxNumberOfBlockLength)
+    {
+      transferLength = BLE_TRANSFER_LENGTH;
+    }
+    else
+    {
+      transferLength = DownloadMaxNumberOfBlockLength - 2;  // remove 2 bytes for SID and BSC
+    }
+    while(localDataLeft > 0)
+    {
+      if(localDataLeft >= transferLength)
+      {
+        fileGetBinaryBlock ( buffer , transferLength , fileFwHandle);
+        //TODO: If attribute "maxNumberOfBlockLength" is defined for logical block...
+        //write("Prev CRC is %x", crc);
+        crc = crc32(crc,buffer,transferLength);
+       // write("Current CRC is %x", crc);
+        TransferDataTest( buffer,  transferLength, transferCounter, UDS_ERROR_CODE_OK, 20000, testName);
+        localDataLeft   -= transferLength;
+        currentAddress  += transferLength;
+        transferCounter++;
+      }
+      else
+      {
+        fileGetBinaryBlock ( buffer , localDataLeft , fileFwHandle);
+        //TODO: If attribute "maxNumberOfBlockLength" is defined for logical block...
+        // write("Prev CRC is %x", crc);
+        crc = crc32(crc,buffer,localDataLeft);
+       // write("Current CRC is %x", crc);
+        TransferDataTest( buffer,  localDataLeft, transferCounter, UDS_ERROR_CODE_OK, 20000, testName);
+        localDataLeft   -= localDataLeft;
+        currentAddress  += localDataLeft;
+      }
+    }
+    testGroupEnd();
+
+    write("Transfer Exit");
+    TransferExit(UDS_ERROR_CODE_OK, 20000, testName);
+
+    write("Final CRC is %x", crc);
+    
+    SignatureVerify_Start(0xB0000000);
+
+    // Check if ECU is still in programming session
+    tc_DSC_ExtendedSession(testName, UDS_ERROR_CODE_OK, 1000);
+
+    //Default session
+    tc_DSC_DefaultSession(testName, UDS_ERROR_CODE_OK, 5000);
+
+    // Wait & check if ECU is in default session
+    testWaitForTimeout( 5000 );
+    tc_DSC_ExtendedSession(testName, UDS_ERROR_CODE_OK, 5000);
+    tc_DSC_DefaultSession(testName, UDS_ERROR_CODE_OK, 1000);
+  }
+}
+
+//TODO: The read of DTC status needs to be retested when code is completed ReportSupportedDTC, Possibly RunDTC_TestLogicalBlock
+void programECU(char APPfilename[])
+{
+  //Get the resources
+  write("Opening hash and application files");
+  loadFWFile(APPfilename);
+  write("Programming the ECU APP");
+
+  //Call Program_ECU function with APP Logical Block and APP Start Address
+  Program_ECU(LOGICAL_BLOCK1, START_ADDRESS_APP_B21);
+
+  //Free the resources
+  fileClose(fileFwHandle);
+
+  write("Programming function exit");
+}
+void programCAL(char CALfilename[])
+{
+  //Get the resources
+  write("Opening CAL file");
+  loadFWFile(CALfilename);
+
+
+  write("Programming the ECU CAL");
+  //Call Program_ECU function with APP Logical Block and APP Start Address
+  Program_CAL(LOGICAL_BLOCK2, START_ADDRESS_CAL_B21);
+
+  //Free the resources
+  fileClose(fileFwHandle);
+
+  write("Programming function exit");
+}
+
+void programMASTER(char APPfilename[], char Variant[])
+{
+  //Get the resources
+  write("Opening hash and Master files");
+  loadFWFile(APPfilename);
+  write("Programming the Master files");
+
+  //Call Program_ECU function with APP Logical Block and APP Start Address
+  Program_BLE_ECU(START_ADDRESS_MASTER_BLE[Variant]);
+
+  //Free the resources
+  fileClose(fileFwHandle);
+
+  write("Programming function exit");
+}
+
+void programBleANCHOR(char APPfilename[])
+{
+  //Get the resources
+  write("Opening Anchor files");
+  loadFWFile(APPfilename);
+  if (1 == @sysvar::PROGRAM_ECU::boABleS32)
+  {
+    write("Programming S32 Anchor...");
+  }
+  else
+  {
+    write("Programming BLE Anchor...");
+  }
+  //address 0x0 means "app" for both Combi (BLE) and UWBOnly (S32) anchors
+  Program_BLE_ECU(0x00000000);
+
+  //Free the resources
+  fileClose(fileFwHandle);
+
+  write("Programming function exit");
+}
+
+void programBleMaster(char APPfilename[])
+{
+  //Get the resources
+  write("Opening Master Ble files");
+  loadFWFile(APPfilename);
+  write("Programming the Master Ble files");
+  Program_BLE_ECU(0x00000000);
+ 
+
+  //Free the resources
+  fileClose(fileFwHandle);
+
+  write("Programming function exit");
+}
+
+void programR4(char APPfilename[])
+{
+  //Get the resources
+  loadFWFile(APPfilename);
+
+  //Call Program_ECU function with APP Logical Block and APP Start Address
+  Program_R4_ECU(0xA0206600);
+
+  //Free the resources
+  fileClose(fileFwHandle);
+
+  write("Programming function exit");
+}
+
+void programR4RxConfig(char APPfilename[])
+{
+  //Get the resources
+  loadFWFile(APPfilename);
+		
+  //Call Program_ECU function with APP Logical Block and APP Start Address
+  Program_R4_ECU(0xA0238a00);
+
+  //Free the resources
+  fileClose(fileFwHandle);
+
+  write("Programming function exit");
+}
+
+void programR4TxConfig(char APPfilename[])
+{
+  //Get the resources
+  loadFWFile(APPfilename);
+  
+  //Call Program_ECU function with APP Logical Block and APP Start Address
+  Program_R4_ECU(0xA023aa00);
+
+  //Free the resources
+  fileClose(fileFwHandle);
+
+  write("Programming function exit");
+}
+
+void programR4PKG(char APPfilename[])
+{
+  //Get the resources
+  loadFWFile(APPfilename);
+		
+  //Call Program_ECU function with APP Logical Block and APP Start Address
+  Program_R4_ECU(0xB0000000);
+
+  //Free the resources
+  fileClose(fileFwHandle);
+
+  write("Programming function exit");
+} 

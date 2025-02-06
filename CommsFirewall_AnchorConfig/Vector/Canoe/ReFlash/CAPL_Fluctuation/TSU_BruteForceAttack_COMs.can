@@ -1,0 +1,296 @@
+/*@!Encoding:1252*/
+includes
+{ 
+  #include "Lib\Diag_Req_Resp.cin"
+  #include "Lib\DiagUtilities_New.cin"
+  #include "Lib\InvalidFrame.cin"
+  #include "Lib\PowerFluctuation.cin"
+  #include "Lib\BruteForceAttack.cin"
+}
+
+variables
+{ 
+  
+  //const byte Bosch = 0x61;
+  Char LogfileName[1000];
+  Char TestcaseName[1000];
+  Char ECU_qualifier[1000] = "DiagAnchor2";
+  Char Pos_F192[1000] = "62 F1 92 46 30 30 35 56 30 33 34 35 33 30 30"; // F005V0345300 (Modify the value in corresponds build package).
+  Char Pos_F195[1000] = "62 F1 95 02 06 00 05 06 00 05"; // Modify the value in corresponds build version. //62 F1 95 02 06 00 04 06 00 04
+  message Anchor1Nm Anchr1;
+  message Anchor2Nm Anchr2;
+  message Anchor3Nm Anchr3;
+  message Anchor4Nm Anchr4;
+  message Anchor5Nm Anchr5;
+  message Anchor6Nm Anchr6;
+  message Anchor7Nm Anchr7;
+  message Anchor8Nm Anchr8;
+  message Anchor9Nm Anchr9;
+  int BruteForceAttackTimes; // Times we will make Brute Force Attack
+}
+
+
+
+
+//Wake up Can
+NM_Wakeup()
+{
+    output(Anchr1);
+    output(Anchr2);
+    output(Anchr3);
+    output(Anchr4);
+    output(Anchr5);
+    output(Anchr6);
+    output(Anchr7);
+    output(Anchr8);
+    output(Anchr9);
+    testwaitfortimeout(200);  
+}
+
+
+PreCondition()
+{
+    testCaseComment("Precondition");
+    Teststep("1","Start tester present");
+    diagStartTesterPresent(ECU_qualifier);
+    TestStep("2","Send request 10 01 to enter Diagnostic Default Session ");
+    SendDiag_Request_Verify_Response_Step(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+}
+
+PostCondition()
+{
+    testCaseComment("PostCondition");
+    TestStep("1","Send request 10 01 to enter Diagnostic Default Session");
+    SendDiag_Request_Verify_Response_Step(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Stop tester present");
+    diagStopTesterPresent(ECU_qualifier);
+    testwaitfortimeout(500);
+}
+
+
+StartLogging_Anchor(Char UseCaseName[])
+{
+    Strncat(LogfileName, "Logs/", 6);
+    Strncat(LogfileName, UseCaseName, elcount(TestcaseName));
+    Strncat(LogfileName, ".asc", elcount(TestcaseName));
+    setLogFileName(LogfileName);
+    StartLogging();
+}
+
+////////////////////////////////////////////////
+testcase TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235()
+{
+    @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = 0;
+    BruteForceAttackTimes = 0;
+    testCaseDescription("Verify Anchor doesn't unlock when receiving Invalid Keys through SecurityAccess (0x27) during Power Fluctuation Low to High (LtoH) pattern.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235");
+    PreCondition();  
+    testCaseComment("Actions");
+    TestStep("1","Inject Power Fluctuation");
+    PowerFluctuationLowtoHigh();
+    TestStep("2","Request Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4"); 
+    TestStep("3","Inject Brute Force Attack");
+    Brute_Force_Attack_Bosch_1_Security_Function();
+    testStepPass("CONCLUSIONS","Brute Force Attack Counts: %d times.\n Times: %d ms", @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times, time);
+    
+    TestStep("4","Verify requested security level is still locked by reading DID FE14");  
+    testWaitForTimeout(5000);
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 14","7F 22 33");
+    TestStep("5,6","Verify requested Bosch Security");  
+    //Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    PostCondition();
+    stopLogging();
+    testWaitForTimeout(10000);
+}
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_InCar1SecurityAccess_231239()
+{
+    @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = 0;
+    testCaseDescription("Verify Anchor doesn't unlock when receiving Invalid Keys through SecurityAccess (0x27) during Power Fluctuation Low to High (LtoH) pattern.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235");
+    PreCondition();  
+    testCaseComment("Actions");
+    TestStep("1","Inject Power Fluctuation");
+    PowerFluctuationLowtoHigh();
+    TestStep("2","Request Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4"); 
+    TestStep("3","Inject Brute Force Attack");
+    Brute_Force_Attack_InCar1_1_Security_Function();
+    testStepPass("CONCLUSIONS","Brute Force Attack Counts: %d times.\n Times: %d ms", @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times, time);
+    
+    TestStep("4","Verify requested security level is still locked by reading DID FE14");
+    testWaitForTimeout(5000);
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 14","7F 22 33");
+    SendDiag_Request_Verify_Response_Step(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("5,6","Verify requested Bosch Security");  
+    //Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    PostCondition();
+    stopLogging();
+    testWaitForTimeout(10000);
+}
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationHtoL_BruteForceAttack_InvalidKey_SecOCexchangeKey_231243()
+{
+    @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = 0;
+    testCaseDescription("Verify Anchor doesn't unlock when receiving Invalid Keys through SecurityAccess (0x27) during Power Fluctuation Low to High (LtoH) pattern.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235");
+    PreCondition();  
+    testCaseComment("Actions");
+    TestStep("1","Inject Power Fluctuation");
+    PowerFluctuationHightoLow();
+    testWaitForTimeout(5000);
+    TestStep("2","Request Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4"); 
+    TestStep("3","Inject Brute Force Attack");
+    //Brute_Force_Attack_Exchange_Keys_3_Security_Function();
+    testStepPass("CONCLUSIONS","Brute Force Attack Counts: %d times.\n Times: %d ms", @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times, time);
+    PostCondition();
+    stopLogging();
+    testWaitForTimeout(10000);
+}
+
+testcase TCS_PK_HGT_COMFW_ControlStageBySignal_BruteForceAttack_InvalidKey_InCar1SecurityAccess_231241()
+{
+    @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = 0;
+    testCaseDescription("Verify Anchor doesn't unlock when receiving Invalid Keys through SecurityAccess (0x27) during Power Fluctuation Low to High (LtoH) pattern.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235");
+    PreCondition();  
+    testCaseComment("Actions");
+    TestStep("1","Inject Power Fluctuation");
+    ControlStageBySignal();
+    testWaitForTimeout(2000);
+    TestStep("2","Request Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4"); 
+    TestStep("3","Inject Brute Force Attack");
+    Brute_Force_Attack_InCar1_2_Security_Function();
+    testStepPass("CONCLUSIONS","Brute Force Attack Counts: %d times.\n Times: %d ms", @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times, time);
+   
+    TestStep("4","Verify requested security level is still locked by reading DID FE14");
+    testWaitForTimeout(5000);
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 14","7F 22 33");
+    TestStep("5,6","Verify requested Bosch Security");  
+    //Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    PostCondition();
+    stopLogging();
+    testWaitForTimeout(10000);
+}
+
+testcase TCS_PK_HGT_COMFW_ControlStageBySignal_BruteForceAttack_InvalidKey_SecOCexchangeKey_231244()
+{
+    @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = 0;
+    testCaseDescription("Verify Anchor doesn't unlock when receiving Invalid Keys through SecurityAccess (0x27) during Power Fluctuation Low to High (LtoH) pattern.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235");
+    PreCondition();  
+    testCaseComment("Actions");
+    TestStep("1","Inject Power Fluctuation");
+    ControlStageBySignal();
+    testWaitForTimeout(2000);
+    TestStep("2","Request Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4"); 
+    TestStep("3","Inject Brute Force Attack");
+    //Brute_Force_Attack_Exchange_Keys_1_Security_Function();
+    
+    testStepPass("CONCLUSIONS","Brute Force Attack Counts: %d times.\n Times: %d ms", @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times, time);
+    PostCondition();
+    stopLogging();
+    testWaitForTimeout(10000);
+}
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationHtoL_BruteForceAttack_InvalidKey_BoschSecurityAccess_231236()
+{
+    @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = 0;
+    testCaseDescription("Verify Anchor doesn't unlock when receiving Invalid Keys through SecurityAccess (0x27) during Power Fluctuation Low to High (LtoH) pattern.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235");
+    PreCondition();  
+    testCaseComment("Actions");
+    TestStep("1","Inject Power Fluctuation");
+    PowerFluctuationHightoLow();
+    testWaitForTimeout(2000);
+    TestStep("2","Request Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4"); 
+    TestStep("3","Inject Brute Force Attack");
+    Brute_Force_Attack_Bosch_2_Security_Function();
+    testStepPass("CONCLUSIONS","Brute Force Attack Counts: %d times.\n Times: %d ms", @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times, time);
+    testWaitForTimeout(5000);
+    TestStep("4","Verify requested security level is still locked by reading DID FE14");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 14","7F 22 33");
+    TestStep("5,6","Verify requested Bosch Security");  
+    //Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    PostCondition();
+    stopLogging();
+    testWaitForTimeout(10000);
+}
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_SecOCexchangeKey_231242()
+{
+    @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = 0;
+    testCaseDescription("Verify Anchor doesn't unlock when receiving Invalid Keys through SecurityAccess (0x27) during Power Fluctuation Low to High (LtoH) pattern.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235");
+    PreCondition();  
+    testCaseComment("Actions");
+    TestStep("1","Inject Power Fluctuation");
+    PowerFluctuationLowtoHigh();
+    TestStep("2","Request Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4"); 
+    TestStep("3","Inject Brute Force Attack");
+    Brute_Force_Attack_Exchange_Keys_2_Security_Function();
+    testStepPass("CONCLUSIONS","Brute Force Attack Counts: %d times.\n Times: %d ms", @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times, time);
+
+    PostCondition();
+    stopLogging();
+    testWaitForTimeout(10000);
+}
+
+testcase TCS_PK_HGT_COMFW_ControlStageBySignal_BruteForceAttack_InvalidKey_BoschSecurityAccess_231237()
+{
+    @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = 0;
+    testCaseDescription("Verify Anchor doesn't unlock when receiving Invalid Keys through SecurityAccess (0x27) during Power Fluctuation Low to High (LtoH) pattern.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235");
+    PreCondition();  
+    testCaseComment("Actions");
+    TestStep("1","Inject Power Fluctuation");
+    ControlStageBySignal();
+    testWaitForTimeout(5000);
+    TestStep("2","Request Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4"); 
+    TestStep("3","Inject Brute Force Attack");
+    Brute_Force_Attack_Bosch_3_Security_Function();
+    testStepPass("CONCLUSIONS","Brute Force Attack Counts: %d times.\n Times: %d ms", @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times, time);
+    
+    TestStep("4","Verify requested security level is still locked by reading DID FE14");  
+    testWaitForTimeout(5000);
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 14","7F 22 33");
+    TestStep("5,6","Verify requested Bosch Security");  
+    //Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    PostCondition();
+    stopLogging();
+    testWaitForTimeout(10000);
+}
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationHtoL_BruteForceAttack_InvalidKey_InCar1SecurityAccess_231240()
+{
+    @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = 0;
+    testCaseDescription("Verify Anchor doesn't unlock when receiving Invalid Keys through SecurityAccess (0x27) during Power Fluctuation Low to High (LtoH) pattern.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235");
+    PreCondition();  
+    testCaseComment("Actions");
+    TestStep("1","Inject Power Fluctuation");
+    PowerFluctuationHightoLow();
+    testStepPass("","Brute Force Attack Times: %d", @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times);
+    testWaitForTimeout(2000);
+    TestStep("2","Request Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4"); 
+    TestStep("3","Inject Brute Force Attack");
+    Brute_Force_Attack_InCar1_3_Security_Function();
+    testStepPass("CONCLUSIONS","Brute Force Attack Counts: %d times.\n Times: %d ms", @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times, time);
+   
+    TestStep("4","Verify requested security level is still locked by reading DID FE14"); 
+    testWaitForTimeout(5000);
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 14","7F 22 33");
+    TestStep("5,6","Verify requested Bosch Security");  
+    //Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    PostCondition();
+    stopLogging();
+    testWaitForTimeout(10000);
+}

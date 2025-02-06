@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<testmodule starttime="2024-06-03 11:26:01" timestamp="   6.655388" verdicts="2_basic">
+  <testgroup>
+    <testcase starttime="2024-06-03 11:26:01" timestamp="   6.655388">
+      <comment timestamp="   6.655388">
+        <text>Precondition</text>
+      </comment>
+      <teststep timestamp="   6.655388" level="0" type="user" ident="1" result="na">Start tester present</teststep>
+      <teststep timestamp="   6.655388" level="0" type="user" ident="2" result="na">Send request 10 01 to enter Diagnostic Default Session </teststep>
+      <testpattern timestamp="   6.655388" name="SendDiag_Request_Verify_Response" type="testpattern">
+        <title>SendDiag_Request_Verify_Response</title>
+        <teststep timestamp="   8.655388" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=2000ms (max=2000ms)</teststep>
+        <teststep timestamp="   8.655388" level="0" type="user" ident="" result="fail">Timeout expired while trying to send request</teststep>
+        <teststep timestamp="   8.755388" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp="   8.755388" result="fail"/>
+      </testpattern>
+      <comment timestamp="   8.755388">
+        <text>Actions</text>
+      </comment>
+      <teststep timestamp="   8.755388" level="0" type="user" ident="1" result="na">Send request 10 01 to enter Default Diagnostic Session</teststep>
+      <testpattern timestamp="   8.755388" name="SendDiag_Request_Verify_Response" type="testpattern">
+        <title>SendDiag_Request_Verify_Response</title>
+        <teststep timestamp="  10.658790" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=1903.4ms (max=2000ms)</teststep>
+        <teststep timestamp="  10.658790" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_RQ</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-RQ</cell>
+              <cell>0x10</cell>
+              <cell>10 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x01</cell>
+              <cell>01 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="  12.658790" level="1" type="auto" ident="Resume reason" result="na">Resumed on Communication error with &apos;DiagAnchor2&apos; Elapsed time=2000ms (max=5000ms)</teststep>
+        <teststep timestamp="  12.658790" level="0" type="user" ident="" result="fail">P2 or p2*timeout</teststep>
+        <teststep timestamp="  12.758790" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp="  12.758790" result="fail"/>
+      </testpattern>
+      <teststep timestamp="  12.758790" level="0" type="user" ident="2" result="na">Send request 22 F1 88 to request ReadDataByIdentifier Service</teststep>
+      <testpattern timestamp="  12.758790" name="SendDiag_Request_Verify_Response_Length" type="testpattern">
+        <title>SendDiag_Request_Verify_Response_Length</title>
+        <teststep timestamp="  14.660855" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=1902.07ms (max=2000ms)</teststep>
+        <teststep timestamp="  14.660855" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/VehicleManufacturerECUSoftwareNumberDataIdentifier_Read/RDBI_RQ</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-RQ</cell>
+              <cell>0x22</cell>
+              <cell>22 </cell>
+            </row>
+            <row level="0">
+              <cell>Identifier</cell>
+              <cell>0xF188</cell>
+              <cell>f1 88 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="  16.660855" level="1" type="auto" ident="Resume reason" result="na">Resumed on Communication error with &apos;DiagAnchor2&apos; Elapsed time=2000ms (max=5000ms)</teststep>
+        <teststep timestamp="  16.660855" level="0" type="user" ident="" result="fail">P2 or p2*timeout</teststep>
+        <teststep timestamp="  16.760855" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp="  16.760855" result="fail"/>
+      </testpattern>
+      <teststep timestamp="  16.760855" level="0" type="user" ident="3" result="na">Send request 10 03 to enter Extended Diagnostic Session</teststep>
+      <testpattern timestamp="  16.760855" name="SendDiag_Request_Verify_Response" type="testpattern">
+        <title>SendDiag_Request_Verify_Response</title>
+        <teststep timestamp="  18.662837" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=1901.98ms (max=2000ms)</teststep>
+        <teststep timestamp="  18.662837" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/ExtendedDiagnosticSession_Start/STDS_RQ</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-RQ</cell>
+              <cell>0x10</cell>
+              <cell>10 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x03</cell>
+              <cell>03 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="  20.662837" level="1" type="auto" ident="Resume reason" result="na">Resumed on Communication error with &apos;DiagAnchor2&apos; Elapsed time=2000ms (max=5000ms)</teststep>
+        <teststep timestamp="  20.662837" level="0" type="user" ident="" result="fail">P2 or p2*timeout</teststep>
+        <teststep timestamp="  20.762837" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp="  20.762837" result="fail"/>
+      </testpattern>
+      <teststep timestamp="  20.762837" level="0" type="user" ident="4" result="na">Send request 22 F1 88 to request ReadDataByIdentifier Service</teststep>
+      <testpattern timestamp="  20.762837" name="SendDiag_Request_Verify_Response_Length" type="testpattern">
+        <title>SendDiag_Request_Verify_Response_Length</title>
+        <teststep timestamp="  22.664810" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=1901.97ms (max=2000ms)</teststep>
+        <teststep timestamp="  22.664810" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/VehicleManufacturerECUSoftwareNumberDataIdentifier_Read/RDBI_RQ</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-RQ</cell>
+              <cell>0x22</cell>
+              <cell>22 </cell>
+            </row>
+            <row level="0">
+              <cell>Identifier</cell>
+              <cell>0xF188</cell>
+              <cell>f1 88 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="  24.664810" level="1" type="auto" ident="Resume reason" result="na">Resumed on Communication error with &apos;DiagAnchor2&apos; Elapsed time=2000ms (max=5000ms)</teststep>
+        <teststep timestamp="  24.664810" level="0" type="user" ident="" result="fail">P2 or p2*timeout</teststep>
+        <teststep timestamp="  24.764810" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp="  24.764810" result="fail"/>
+      </testpattern>
+      <teststep timestamp="  24.764810" level="0" type="user" ident="5,6" result="na">Send Security Seed Request 61 and Key 62 in DiagAnchor</teststep>
+      <!-- Measurement stop forced. Test is incomplete! -->
+      <verdict time="2024-06-03 11:26:03" timestamp="   8.655388" endtime="2024-06-03 11:26:20" endtimestamp="  24.764810" result="fail" />
+      <title>TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF188_100453</title>
+      <description>The intention of the test case is to verify the positive response and data for SID 22 along with the DID for Read Vehicle Manufacturer ECU Software Number F188 of the Anchor ECU.</description>
+      <extendedinfo type="html"><![CDATA[<b>Measurement stop forced. Test is incomplete!</b>]]></extendedinfo>
+    </testcase>
+    <title>TSU_PK_HGT_DVPVTest_Anchor</title>
+  </testgroup>
+  <verdict time="2024-06-03 11:26:03" timestamp="   8.655388" endtime="2024-06-03 11:26:20" endtimestamp="  24.764810" result="fail" />
+  <title>HGT_PK-Diagnostics</title>
+  <testlogfiles>
+  </testlogfiles>
+  <engineer>
+    <xinfo>
+      <name>Windows Login Name</name>
+      <description>DAR5HC</description>
+    </xinfo>
+  </engineer>
+  <testsetup>
+    <xinfo>
+      <name>Version</name>
+      <description>CANoe.CAN /pro 12.0.101 (SP2)</description>
+    </xinfo>
+    <xinfo>
+      <name>Configuration</name>
+      <description>U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\Canoe\ReFlash\DV5187_PK_Private_COMMUNICATIONFIREWALL.cfg</description>
+    </xinfo>
+    <xinfo>
+      <name>Database PK_BB_CAN on Private</name>
+      <description>U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_BB_CAN.dbc (2024-02-12 14:51:03)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor1</name>
+      <description>CommonDiagnostics, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor2</name>
+      <description>CommonDiagnostics, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor3</name>
+      <description>CommonDiagnostics, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor4</name>
+      <description>CommonDiagnostics, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor5</name>
+      <description>CommonDiagnostics, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor6</name>
+      <description>CommonDiagnostics, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor7</name>
+      <description>CommonDiagnostics, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor8</name>
+      <description>CommonDiagnostics, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor9</name>
+      <description>CommonDiagnostics, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchorF</name>
+      <description>CommonDiagnostics, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagMasterBLE</name>
+      <description>CommonDiagnostics, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of VKM_Base</name>
+      <description>Base_Variant, en-US, U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\databases\MasterMcu\PKCV_Diag_Master.120.cdd</description>
+    </xinfo>
+    <xinfo>
+      <name>Test Module Name</name>
+      <description>TSU_4554</description>
+    </xinfo>
+    <xinfo>
+      <name>Test Module File</name>
+      <description>U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\Canoe\ReFlash\CAPL_Diagnostic\TSU_4554.xml</description>
+    </xinfo>
+    <xinfo>
+      <name>Last modification of Test Module File</name>
+      <description>2024-04-08, 18:56:30</description>
+    </xinfo>
+    <xinfo>
+      <name>Test Module Library (CAPL)</name>
+      <description>U:\TriDT\PKHonda\PowerFluctuation_AnchorConfig\Vector\Canoe\ReFlash\CAPL_Diagnostic\TSU_4554.can</description>
+    </xinfo>
+    <xinfo>
+      <name>Windows Computer Name</name>
+      <description>HC-C-003DJ</description>
+    </xinfo>
+    <xinfo>
+      <name>Nodelayer Module J1939TestServiceLibraryNL</name>
+      <description>J1939 Test Service Library for CANoe, Version 12.0.101.0, C:\Program Files\Vector CANoe 12.0\Exec32\J1939TestServiceLibraryNL.dll</description>
+    </xinfo>
+  </testsetup>
+  <hardware name="CAN Channel Interfaces" category="CategoryCANIF">
+    <xinfoset type="device">
+      <xinfoobject type="device">
+      <xinfo key="channel">
+        <name>Channel</name>
+        <description>1</description>
+      </xinfo>
+      <xinfo key="device">
+        <name>Device</name>
+        <description>VN1630</description>
+      </xinfo>
+      <xinfo key="serialnumber">
+        <name>Serial number</name>
+        <description>553870</description>
+      </xinfo>
+      <xinfo key="driverdllversion">
+        <name>Driver DLL version</name>
+        <description>20.30.16</description>
+      </xinfo>
+      <xinfo key="driverversion">
+        <name>Driver version</name>
+        <description>20.30.14</description>
+      </xinfo>
+      </xinfoobject>
+      <xinfoobject type="device">
+      <xinfo key="channel">
+        <name>Channel</name>
+        <description>2</description>
+      </xinfo>
+      <xinfo key="device">
+        <name>Device</name>
+        <description>VN1630</description>
+      </xinfo>
+      <xinfo key="serialnumber">
+        <name>Serial number</name>
+        <description>553870</description>
+      </xinfo>
+      <xinfo key="driverdllversion">
+        <name>Driver DLL version</name>
+        <description>20.30.16</description>
+      </xinfo>
+      <xinfo key="driverversion">
+        <name>Driver version</name>
+        <description>20.30.14</description>
+      </xinfo>
+      </xinfoobject>
+    </xinfoset>
+  </hardware>
+  <extendedinfo type="html"><![CDATA[<b>Measurement stop forced. Test is incomplete!</b>]]></extendedinfo>
+</testmodule>
+<!--footprint="2e5e8f3196f59f9a19e0d6a28949d44d" version="1"-->

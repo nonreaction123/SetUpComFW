@@ -1,0 +1,600 @@
+/*@!Encoding:1252*/
+
+variables
+{
+  int canFdMode = 1;
+  int checkMemSent = 0 ;
+  int lastDiagId = 0x701;
+}
+
+//0xFF01
+//Results are not required by any of the test cases in the specification, therefore, they are not extracted from the message
+testcase Check_Programming_dependencies_Results(long & responseLength_Out               //<! Length of the response output
+                               ,long expectedErrorCode                  //<! Expected Error Code
+                               ,int timeOutForResponse                  //<! Timeout for the response
+                               ,char identifier[] )                     //<! testcase identifier)
+{
+    //message PK_BB_CAN::TesterPhysical_Req_PK_Anchor1 DiagReq;
+    message * DiagReq;
+    DiagReq.id = lastDiagId;
+    write("Check mem: Get result");
+    if (0 == canFdMode)
+    {
+      DiagReq.FDF = 0;
+    }
+    else
+    {
+      DiagReq.FDF = 1;
+      DiagReq.BRS = 1;
+    }
+    DiagReq.msgChannel = 1;
+    DiagReq.DataLength = 8;
+    DiagReq.byte(0) = 0x04; // ISO-TP PCI
+    DiagReq.byte(1) = 0x31; // UDS SID
+    DiagReq.byte(2) = 0x03; // Result
+    DiagReq.byte(3) = 0xFF; // Check programming 
+    DiagReq.byte(4) = 0x01; // Dependencies
+    DiagReq.byte(5) = 0x00; // Padding
+    DiagReq.byte(6) = 0x00; // Padding
+    DiagReq.byte(7) = 0x00; // Padding
+    output(DiagReq);
+    write("Check mem: Get result request sent.");
+    while (0 != CheckMemResults_WaitForResponse(expectedErrorCode, timeOutForResponse));
+    responseLength_Out = 1;
+}
+
+int CheckMemResults_WaitForResponse(long expectedErrorCode, int timeOutForResponse)
+{
+  int retVal = 0;
+  message * response;
+  if (0 == canFdMode)
+  {
+    response.FDF = 0;
+  }
+  else
+  {
+    response.FDF = 1;
+    response.BRS = 1;
+  }
+  response.id = (lastDiagId + 0x20);
+  //Get the response
+  testWaitForMessage( response.id, timeOutForResponse );
+  testGetWaitEventMsgData(response);
+  if(( response.byte(1)== ( 0x71)) && (response.byte(2)== ( 0x03)) && (response.byte(3)== ( 0xFF)) && (response.byte(4)== ( 0x01)) )
+  {
+    write("Check mem: Positive response received ");
+    if ((response.byte(5)== ( expectedErrorCode)))
+    {
+      write("Check mem: CRC OK");
+      testStepPass("Positive response received ");
+    }
+    else
+    {
+      write("Check mem: Bad CRC");
+      testStepFail("Bad CRC");
+    }
+  }
+  else if (( response.byte(1)== ( 0x7F)) && (response.byte(2)== ( 0x31)))
+  {
+    if ((response.byte(3)!= ( 0x78)))
+    {
+      write("Check mem: Negative response received: %x",response.byte(3) );
+      testStepFail("Negative response");
+    }
+    else
+    {
+      retVal = 2;
+      write("Check mem: Response pending");
+    }
+  }
+  else
+  {
+    write("Check mem: Timeout or bad message");
+    testStepFail("No answer");
+  }
+  return retVal;
+}
+
+
+int SignatureVerify_WaitForResponse(long expectedErrorCode, int timeOutForResponse)
+{
+  int retVal = 0;
+  message * response;
+  if (0 == canFdMode)
+  {
+    response.FDF = 0;
+  }
+  else
+  {
+    response.FDF = 1;
+    response.BRS = 1;
+  }
+  response.id = (lastDiagId + 0x20);
+  response.CAN = 2;
+  //Get the response
+  testWaitForMessage( response.id, timeOutForResponse );
+  testGetWaitEventMsgData(response);
+
+  if(( response.byte(1)== ( 0x71)) && (response.byte(2)== ( 0x01)) && (response.byte(3)== ( 0xFC)) && (response.byte(4)== ( 0x04)) )
+  {
+    if ((response.byte(5)== ( expectedErrorCode)))
+    {
+      write("SignatureVerify: SUCCESS");
+      testStepPass("SignatureVerify success ");
+    }
+    else
+    {
+      write("SignatureVerify: FAIL");
+      testStepFail("SignatureVerify fail");
+    }
+    retVal = 1;
+  }
+  else if (( response.byte(1)== ( 0x7F)) && (response.byte(2)== ( 0x31)))
+  {
+    if ((response.byte(3)== ( 0x78)))
+    {
+      retVal = 2;
+      write("SignatureVerify: Response pending");
+    }
+  }
+  else
+  {
+    write("SignatureVerify: Timeout or bad message %x:%x:%x", response.byte(1), response.byte(2),response.byte(3));
+    testStepFail("No answer");
+  }
+
+  return retVal;
+}
+
+testcase SignatureVerify_Start( dword start_address)
+{
+  message * DiagReq;
+  DiagReq.id = lastDiagId;
+  
+  if (0 == canFdMode)
+  {
+    
+  }
+  else
+  {
+    DiagReq.FDF = 1;
+    DiagReq.BRS = 1;
+    DiagReq.msgChannel = 1;
+    DiagReq.DLC = 9;      // DLC 9 = 12 bytes
+    DiagReq.CAN = 2;
+    
+    DiagReq.byte(0) = 0x00; //Routine Length
+    DiagReq.byte(1) = 0x08; 
+    
+    DiagReq.byte(2) = 0x31; // Routine 
+    DiagReq.byte(3) = 0x01; // Start
+    DiagReq.byte(4) = 0xFC; // Routine ID
+    DiagReq.byte(5) = 0x04; // Routine ID
+    
+    DiagReq.byte(6) = ((start_address >> 24) & 0xFF); // Start Address
+    DiagReq.byte(7) = ((start_address >> 16) & 0xFF); // Start Address
+    DiagReq.byte(8) = ((start_address >> 8) & 0xFF);  // Start Address
+    DiagReq.byte(9) = ((start_address >> 0) & 0xFF);  // Start Address
+    
+    checkMemSent = 1 ;
+    output(DiagReq);  //send out request
+
+  //For UWB images it only takes 2ms for the validate signature to send a reply
+  if ( (start_address == 0xB0000000) || (start_address == 0xB0000001) )
+  {
+    testWaitForTimeout(2);
+  }
+  else
+  {
+    testWaitForTimeout(50);
+  }
+    while (2 == SignatureVerify_WaitForResponse(0x01, 20000));
+    
+    testStepPass("Signature verify passed");
+    
+  }
+}
+
+//0xFF01
+testcase Check_Programming_dependencies_Start( dword crc //<! Data to be transfered
+                                 ,byte & routine_status_Out
+                                 ,long & responseLength_Out               //<! Length of the response output
+                               ,long expectedErrorCode                  //<! Expected Error Code
+                               ,int timeOutForResponse                  //<! Timeout for the response
+                               ,char identifier[] )                     //<! testcase identifier)
+{
+  
+  message * DiagReq;
+  DiagReq.id = lastDiagId;
+  
+  if (0 == canFdMode)
+  {
+      DiagReq.msgChannel = 1;
+      DiagReq.DLC = 8;
+      DiagReq.byte(0) = 0x10; // ISO-TP PCI
+      DiagReq.byte(1) = 0x08; // ISO-TP PCI
+      DiagReq.byte(2) = 0x31; // UDS SID
+      DiagReq.byte(3) = 0x01; // Start
+      DiagReq.byte(4) = 0xFF; // Check programming 
+      DiagReq.byte(5) = 0x01; // Dependencies
+      DiagReq.byte(6) = ((crc & 0xFF000000) >> 24);
+      DiagReq.byte(7) = ((crc & 0x00FF0000) >> 16);
+      //DiagReq.byte(7) = 
+      checkMemSent = 1;
+      output(DiagReq);
+      testWaitForTimeout(100);
+      
+      
+      //testWaitForTimeout(2000);
+      if (2 == checkMemSent)
+      {
+        checkMemSent = 3;
+        //DiagReq.id = 0x714;
+        DiagReq.msgChannel = 1;
+        DiagReq.DataLength = 8;
+        DiagReq.byte(0) = 0x21; // ISO-TP PCI
+        DiagReq.byte(1) = ((crc & 0x0000FF00) >> 8);
+        DiagReq.byte(2) = (crc & 0xFF);
+        DiagReq.byte(3) = 0x55; // Padding
+        DiagReq.byte(4) = 0x55; // Padding
+        DiagReq.byte(5) = 0x55; // Padding
+        DiagReq.byte(6) = 0x55; // Padding
+        DiagReq.byte(7) = 0x55; // Padding
+        
+        output(DiagReq);
+        testWaitForTimeout(200);
+        write("Check mem req sent");
+        routine_status_Out = 0;
+        testStepPass("Check mem req sent");
+      }
+      else
+      {
+        routine_status_Out = 1;
+        testStepFail("Check mem req failed");
+      }
+  }
+  else
+  {
+    DiagReq.FDF = 1;
+    DiagReq.BRS = 1;
+    DiagReq.msgChannel = 1;
+    DiagReq.DLC = 10;
+    DiagReq.byte(0) = 0x00; // ISO-TP PCI
+    DiagReq.byte(1) = 0x08; // ISO-TP PCI
+    DiagReq.byte(2) = 0x31; // UDS SID
+    DiagReq.byte(3) = 0x01; // Start
+    DiagReq.byte(4) = 0xFF; // Check programming 
+    DiagReq.byte(5) = 0x01; // Dependencies
+    DiagReq.byte(6) = ((crc & 0xFF000000) >> 24);
+    DiagReq.byte(7) = ((crc & 0x00FF0000) >> 16);
+    DiagReq.byte(8) = ((crc & 0x0000FF00) >> 8);
+    DiagReq.byte(9) = (crc & 0xFF);
+    output(DiagReq);
+    write("Check mem req sent");
+    routine_status_Out = 0;
+    testStepPass("Check mem req sent");
+    testWaitForTimeout(200);
+  }
+//  byte crcBytes[4];
+//  crcBytes[0] = ((crc & 0xFF000000) >> 24);
+//  crcBytes[1] = ((crc & 0x00FF0000) >> 16);
+//  crcBytes[2] = ((crc & 0x0000FF00) >> 8);
+//  crcBytes[3] = (crc & 0xFF);
+//  diagSetParameterRaw(req,"RoutineControlOptionRecord",crcBytes,4);
+
+}
+
+on message *
+{
+  
+
+}
+
+on message PK_BB_CAN::TesterPhysical_Res_PK_Anchor1
+{
+  lastDiagId = this.id - 0x20;
+  canFdMode = this.FDF;
+  
+
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x05) && (this.byte(1) == 0x71) && (this.byte(5) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x02) && (this.byte(1) == 0x71) && (this.byte(2) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }  
+}
+
+on message PK_BB_CAN::TesterPhysical_Res_PK_Anchor2
+{
+  lastDiagId = this.id - 0x20;
+  canFdMode = this.FDF;
+  
+    if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x05) && (this.byte(1) == 0x71) && (this.byte(5) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x02) && (this.byte(1) == 0x71) && (this.byte(2) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+}
+
+on message PK_BB_CAN::TesterPhysical_Res_PK_Anchor3
+{
+  lastDiagId = this.id - 0x20;
+  canFdMode = this.FDF;
+  
+    if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x05) && (this.byte(1) == 0x71) && (this.byte(5) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x02) && (this.byte(1) == 0x71) && (this.byte(2) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+}
+
+on message PK_BB_CAN::TesterPhysical_Res_PK_Anchor4
+{
+  lastDiagId = this.id - 0x20;
+  canFdMode = this.FDF;
+  
+    if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x05) && (this.byte(1) == 0x71) && (this.byte(5) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x02) && (this.byte(1) == 0x71) && (this.byte(2) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+}
+
+on message PK_BB_CAN::TesterPhysical_Res_PK_Anchor5
+{
+  lastDiagId = this.id - 0x20;
+  canFdMode = this.FDF;
+  
+    if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x05) && (this.byte(1) == 0x71) && (this.byte(5) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x02) && (this.byte(1) == 0x71) && (this.byte(2) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+}
+
+on message PK_BB_CAN::TesterPhysical_Res_PK_Anchor6
+{
+  lastDiagId = this.id - 0x20;
+  canFdMode = this.FDF;
+  
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x05) && (this.byte(1) == 0x71) && (this.byte(5) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x02) && (this.byte(1) == 0x71) && (this.byte(2) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+}
+
+on message PK_BB_CAN::TesterPhysical_Res_PK_Anchor7
+{
+  lastDiagId = this.id - 0x20;
+  canFdMode = this.FDF;
+  
+    if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x05) && (this.byte(1) == 0x71) && (this.byte(5) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x02) && (this.byte(1) == 0x71) && (this.byte(2) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+}
+
+on message PK_BB_CAN::TesterPhysical_Res_PK_Anchor8
+{
+  lastDiagId = this.id - 0x20;
+  canFdMode = this.FDF;
+  
+    if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x05) && (this.byte(1) == 0x71) && (this.byte(5) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x02) && (this.byte(1) == 0x71) && (this.byte(2) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+}
+
+on message PK_BB_CAN::TesterPhysical_Res_PK_Anchor9
+{
+  lastDiagId = this.id - 0x20;
+  canFdMode = this.FDF;
+  
+    if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x05) && (this.byte(1) == 0x71) && (this.byte(5) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x02) && (this.byte(1) == 0x71) && (this.byte(2) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+}
+
+on message 0x72F  //missing PK_BB_CAN::TesterPhysical_Res_PK_AnchorF
+{
+  lastDiagId = this.id - 0x20;
+  canFdMode = this.FDF;
+  
+    if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x05) && (this.byte(1) == 0x71) && (this.byte(5) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x02) && (this.byte(1) == 0x71) && (this.byte(2) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  
+}
+on message PK_BB_CAN::TesterPhysical_Res_PK_MasterBle
+{
+  lastDiagId = this.id - 0x20;
+  canFdMode = this.FDF;
+    if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x05) && (this.byte(1) == 0x71) && (this.byte(5) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+  if (this.dlc == (8) )
+  {
+    if (1 == checkMemSent)
+    {
+      if((this.byte(0) == 0x02) && (this.byte(1) == 0x71) && (this.byte(2) == 0x01)) // Flow control, clear to send
+      {
+         checkMemSent = 2;
+      }
+    }
+  }
+}

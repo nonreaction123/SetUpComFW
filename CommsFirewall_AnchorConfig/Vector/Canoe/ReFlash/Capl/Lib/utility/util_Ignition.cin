@@ -1,0 +1,39 @@
+/*@!Encoding:1252*/
+
+testcase tc_uign_TurnIgnOn(
+    char testID[]
+)
+{
+    nf_uign_TurnIgnOn(testID, 1);
+}
+
+void nf_uign_TurnIgnOn(
+    char testID[],          //<! Test identifier
+    byte isTest
+    )
+{
+    @sysvar::IO::VN1600_1::DOUT = 0;
+    if (1 == isTest)
+    {
+        testStepPass(testID, "Ignition On");        
+    }
+}
+
+testcase tc_uign_TurnIgnOff(
+    char testID[]
+)
+{
+    nf_uign_TurnIgnOff(testID, 1);
+}
+
+void nf_uign_TurnIgnOff(
+    char testID[],          //<! Test identifier
+    byte isTest
+    )
+{
+    @sysvar::IO::VN1600_1::DOUT = 1;
+    if (1 == isTest)
+    {
+        testStepPass(testID, "Ignition Off");        
+    }
+}

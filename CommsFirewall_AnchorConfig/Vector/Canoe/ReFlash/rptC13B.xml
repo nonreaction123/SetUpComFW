@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<testmodule starttime="2024-04-02 15:29:00" timestamp="   6.813027" verdicts="2_basic">
+  <testgroup>
+    <testcase starttime="2024-04-02 15:29:00" timestamp="   6.813027">
+      <comment timestamp="   6.813027">
+        <text>Precondition</text>
+      </comment>
+      <teststep timestamp="   6.813027" level="0" type="user" ident="1" result="na">Start tester present</teststep>
+      <teststep timestamp="   6.813027" level="0" type="user" ident="2" result="na">Send request 10 01 to enter Diagnostic Default Session </teststep>
+      <testpattern timestamp="   6.813027" name="SendDiag_Request_Verify_Response" type="testpattern">
+        <title>SendDiag_Request_Verify_Response</title>
+        <teststep timestamp="   6.840762" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=27.7358ms (max=2000ms)</teststep>
+        <teststep timestamp="   6.840762" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_RQ</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-RQ</cell>
+              <cell>0x10</cell>
+              <cell>10 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x01</cell>
+              <cell>01 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="   6.845528" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=4.76591ms (max=5000ms)</teststep>
+        <teststep timestamp="   6.845528" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_PR</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-PR</cell>
+              <cell>0x50</cell>
+              <cell>50 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x01</cell>
+              <cell>01 </cell>
+            </row>
+            <row level="0">
+              <cell>P2</cell>
+              <cell>50 ms</cell>
+              <cell>00 32 </cell>
+            </row>
+            <row level="0">
+              <cell>P2Ex</cell>
+              <cell>5000 ms</cell>
+              <cell>01 f4 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="   6.845528" level="0" type="user" ident="" result="pass">Response received is valid : Actual Response = 50 1 0 32 1 f4  Expected Response = 50 01 00 32 01 F4</teststep>
+        <teststep timestamp="   6.945528" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp="   6.945528" result="pass"/>
+      </testpattern>
+      <comment timestamp="   6.945528">
+        <text>Actions</text>
+      </comment>
+      <teststep timestamp="   6.945528" level="0" type="user" ident="1" result="na">Send request 10 01 to enter Default Diagnostic Session</teststep>
+      <testpattern timestamp="   6.945528" name="SendDiag_Request_Verify_Response" type="testpattern">
+        <title>SendDiag_Request_Verify_Response</title>
+        <teststep timestamp="   6.946687" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=1.15828ms (max=2000ms)</teststep>
+        <teststep timestamp="   6.946687" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_RQ</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-RQ</cell>
+              <cell>0x10</cell>
+              <cell>10 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x01</cell>
+              <cell>01 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="   6.951649" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=4.96191ms (max=5000ms)</teststep>
+        <teststep timestamp="   6.951649" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_PR</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-PR</cell>
+              <cell>0x50</cell>
+              <cell>50 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x01</cell>
+              <cell>01 </cell>
+            </row>
+            <row level="0">
+              <cell>P2</cell>
+              <cell>50 ms</cell>
+              <cell>00 32 </cell>
+            </row>
+            <row level="0">
+              <cell>P2Ex</cell>
+              <cell>5000 ms</cell>
+              <cell>01 f4 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="   6.951649" level="0" type="user" ident="" result="pass">Response received is valid : Actual Response = 50 1 0 32 1 f4  Expected Response = 50 01 00 32 01 F4</teststep>
+        <teststep timestamp="   7.051649" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp="   7.051649" result="pass"/>
+      </testpattern>
+      <teststep timestamp="   7.051649" level="0" type="user" ident="2" result="na">Send request 10 03 to enter Extended Diagnostic Session</teststep>
+      <testpattern timestamp="   7.051649" name="SendDiag_Request_Verify_Response" type="testpattern">
+        <title>SendDiag_Request_Verify_Response</title>
+        <teststep timestamp="   7.052647" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=0.998781ms (max=2000ms)</teststep>
+        <teststep timestamp="   7.052647" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/ExtendedDiagnosticSession_Start/STDS_RQ</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-RQ</cell>
+              <cell>0x10</cell>
+              <cell>10 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x03</cell>
+              <cell>03 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="   7.057573" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=4.92587ms (max=5000ms)</teststep>
+        <teststep timestamp="   7.057573" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/ExtendedDiagnosticSession_Start/STDS_PR</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-PR</cell>
+              <cell>0x50</cell>
+              <cell>50 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x03</cell>
+              <cell>03 </cell>
+            </row>
+            <row level="0">
+              <cell>P2</cell>
+              <cell>50 ms</cell>
+              <cell>00 32 </cell>
+            </row>
+            <row level="0">
+              <cell>P2Ex</cell>
+              <cell>5000 ms</cell>
+              <cell>01 f4 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="   7.057573" level="0" type="user" ident="" result="pass">Response received is valid : Actual Response = 50 3 0 32 1 f4  Expected Response = 50 03 00 32 01 F4</teststep>
+        <teststep timestamp="   7.157573" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp="   7.157573" result="pass"/>
+      </testpattern>
+      <teststep timestamp="   7.157573" level="0" type="user" ident="3,4" result="na">Send Security Seed Request 61 and Key 62 in DiagAnchor</teststep>
+      <teststep timestamp="   7.158519" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=0.945297ms (max=5000ms)</teststep>
+      <teststep timestamp="   7.158519" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/Request_Seed_Bosch_Request/SA_RSD_RQ</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-RQ</cell>
+            <cell>0x27</cell>
+            <cell>27 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x61</cell>
+            <cell>61 </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp="   7.175849" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=17.3304ms (max=5050ms)</teststep>
+      <teststep timestamp="   7.175849" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/Request_Seed_Bosch_Request/SA_RSD_PR</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-PR</cell>
+            <cell>0x67</cell>
+            <cell>67 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x61</cell>
+            <cell>61 </cell>
+          </row>
+          <row level="0">
+            <cell rowspan="3">Seed</cell>
+            <cell rowspan="3">0xB7 0x0A 0x2D 0xA6 0xE8 0x5F 0xE0 0x6C 0x04 0x33 0xA1 0xEC 0x52 0xEF 0x1C 0x4C 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x30 0x31</cell>
+            <cell>0000: b7 0a 2d a6 e8 5f e0 6c 04 33 a1 ec 52 ef 1c 4c </cell>
+          </row>
+          <row level="0">
+            <cell>0010: 30 31 32 33 34 35 36 37 38 39 30 31 32 33 34 35 </cell>
+          </row>
+          <row level="0">
+            <cell>0020: 36 37 38 39 30 31 32 33 34 35 36 37 38 39 30 31 </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp="   7.177027" level="1" type="auto" ident="Resume reason" result="na">Resumed on Computation of security key completed for &apos;DiagAnchor2&apos; Elapsed time=1.1778ms (max=5000ms)</teststep>
+      <teststep timestamp="   7.180920" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=3.89323ms (max=5000ms)</teststep>
+      <teststep timestamp="   7.180920" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/Send_Key_Bosch_Send/SA_SK_RQ</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-RQ</cell>
+            <cell>0x27</cell>
+            <cell>27 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x62</cell>
+            <cell>62 </cell>
+          </row>
+          <row level="0">
+            <cell rowspan="4">SecurityKey</cell>
+            <cell rowspan="4">0xE0 0xD8 0x72 0x16 0x8B 0xE0 0x22 0x9E 0x93 0x14 0x2D 0xFD 0x97 0xC6 0x5D 0x58 0xC0 0x88 0x53 0x73 0x85 0x1E 0xEE 0x3D 0xE4 0x20 0x11 0x8E 0xEF 0xC8 0x8A 0xDA 0xD0 0xC9 0xDD 0x2C 0x86 0x01 0x06 0x71 0x9C 0x3F 0xA4 0xEE 0xE5 0x9B 0xEC 0x5F 0x52 0xAC 0x5D 0xB6 0xB4 0xC6 0x9F 0x82 0xE9 0xC9 0x3D 0x69 0xD5 0xED 0xEA 0xBD</cell>
+            <cell>0000: e0 d8 72 16 8b e0 22 9e 93 14 2d fd 97 c6 5d 58 </cell>
+          </row>
+          <row level="0">
+            <cell>0010: c0 88 53 73 85 1e ee 3d e4 20 11 8e ef c8 8a da </cell>
+          </row>
+          <row level="0">
+            <cell>0020: d0 c9 dd 2c 86 01 06 71 9c 3f a4 ee e5 9b ec 5f </cell>
+          </row>
+          <row level="0">
+            <cell>0030: 52 ac 5d b6 b4 c6 9f 82 e9 c9 3d 69 d5 ed ea bd </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp="   7.426599" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=245.679ms (max=5050ms)</teststep>
+      <teststep timestamp="   7.426599" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/Send_Key_Bosch_Send/SA_SK_PR</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-PR</cell>
+            <cell>0x67</cell>
+            <cell>67 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x62</cell>
+            <cell>62 </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp="   7.426599" level="0" type="user" ident="" result="pass">Security Access</teststep>
+      <teststep timestamp="   7.426599" level="0" type="user" ident="5" result="na">Send request 10 01 to enter Default Diagnostic Session</teststep>
+      <testpattern timestamp="   7.426599" name="SendDiag_Request_Verify_Response" type="testpattern">
+        <title>SendDiag_Request_Verify_Response</title>
+        <teststep timestamp="   7.427482" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=0.882281ms (max=2000ms)</teststep>
+        <teststep timestamp="   7.427482" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_RQ</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-RQ</cell>
+              <cell>0x10</cell>
+              <cell>10 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x01</cell>
+              <cell>01 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="   7.431570" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=4.08791ms (max=5000ms)</teststep>
+        <teststep timestamp="   7.431570" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_PR</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-PR</cell>
+              <cell>0x50</cell>
+              <cell>50 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x01</cell>
+              <cell>01 </cell>
+            </row>
+            <row level="0">
+              <cell>P2</cell>
+              <cell>50 ms</cell>
+              <cell>00 32 </cell>
+            </row>
+            <row level="0">
+              <cell>P2Ex</cell>
+              <cell>5000 ms</cell>
+              <cell>01 f4 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="   7.431570" level="0" type="user" ident="" result="pass">Response received is valid : Actual Response = 50 1 0 32 1 f4  Expected Response = 50 01 00 32 01 F4</teststep>
+        <teststep timestamp="   7.531570" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp="   7.531570" result="pass"/>
+      </testpattern>
+      <teststep timestamp="   7.531570" level="0" type="user" ident="6" result="na">BruteForceAttack</teststep>
+      <teststep timestamp="   7.541570" type="user" ident="" result="pass">1</teststep>
+      <teststep timestamp="   8.031570" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=500ms (max=500ms)</teststep>

@@ -1,0 +1,1190 @@
+/*@!Encoding:1252*/
+/*  Diagnostic Request/Responses functions
+
+Document Name : Diag_Req_Resp.cin
+Created by : Ishwarya Renake
+Creation Date : 24.08.3021 
+
+Last Modified by : Ishwarya Renake
+Last Modified Date : 
+Reason: This file contains all required diagnostic functions to read and evaluate response
+*/
+includes
+{
+  
+ 
+}
+
+variables
+{
+  byte Diag_Req[4095];
+  byte Diag_Resp[4095];
+  byte Actual_response[4095];
+  int Diag_Req_len=0;
+  DiagRequest ReadDataByIdentifier Phy_ReadDataByIdentifier_Req;
+  DiagResponse ReadDataByIdentifier Phy_ReadDataByIdentifier_Res;
+  byte Get_Response[4095]; 
+  
+  char MasterMCU_Qualifier[24]="SPAAK";
+  char ECU_Qualifier[24]="SPAAK";
+  char MasterBLE_Qualifier[24]="DiagAnchorMaster";
+  char Anchor_Qualifier[24] = "DiagAnchor2";  //UWB Anchor or Combi Anchor (Change the Qualifier based on type of Anchor
+  char CombiAnchor_Qualifier[24] ="DiagAnchor3"; //Combi Anchor
+  
+  char Anchor123[24] = "DiagAnchor3";
+  char DiagAnchor1[24] = "DiagAnchor1";
+  char DiagAnchor2[24] = "DiagAnchor2";
+  char DiagAnchor3[24] = "DiagAnchor3";
+  char DiagAnchor4[24] = "DiagAnchor4";
+  char DiagAnchor5[24] = "DiagAnchor5";
+  msTimer Periodic_TesterPresentTimer;
+  const int PERIODIC_TIMER = 5000;
+}
+
+on timer Periodic_TesterPresentTimer
+{
+  diagStartTesterPresent(MasterMCU_Qualifier);
+}
+
+void SendTesterPresent()
+{
+  //diagStartTesterPresent(MasterMCU_Qualifier);
+  diagStartTesterPresent(Anchor_Qualifier);
+  TestStepPass("", "Cyclic physical Tester Present sent");
+  setTimerCyclic(Periodic_TesterPresentTimer, PERIODIC_TIMER);      
+}
+
+void StopTesterPresent()
+{
+  //diagStopTesterPresent(MasterMCU_Qualifier);
+  diagStopTesterPresent(Anchor_Qualifier);
+  TestStepPass("", "Cyclic physical Tester Present stopped");
+  cancelTimer(Periodic_TesterPresentTimer);  
+}
+
+
+
+void Bytes_to_String(byte Resp_buffer[],int Resp_Len, char Byte_string_output1[])
+{
+  char temp[10];
+  char temp1[2]="0";
+  byte buff[100];
+  char space[2]=" ";
+  int i=0;
+ 
+  strncpy( Byte_string_output1,"",strlen( Byte_string_output1));
+ // write("First:%s\n", Byte_string_output1);
+  for(i=0;i<Resp_Len;i++)
+  {
+   ltoa(Resp_buffer[i],temp,16);
+   
+   strncat(Byte_string_output1,temp,150);
+   strncat(Byte_string_output1,space,150);
+   
+  }
+ //write("First:%s\n", Byte_string_output1);
+  //write("%s",Output);
+   strncpy(temp,"",strlen(temp));
+}
+
+dword string_To_Bytes(char buff_in[], byte buff_out[])
+{
+	dword counter, i;
+	byte temp_byte;
+	byte second_nibble;
+
+  counter=0; second_nibble=0; i=0;
+  
+  if(elcount(buff_out)<strlen(buff_in)/3)
+  {
+    write("Function string_To_Bytes received wrong parameter! buff_out array size to small ");
+    return 0;
+  }
+
+  while(buff_in[counter])
+	{
+		if (buff_in[counter] == 0x20)
+		{
+			counter++;
+			continue;
+		}
+		if (!second_nibble)
+		{
+			temp_byte = char_To_Byte(buff_in[counter]);
+			second_nibble = 1;
+		}
+		else
+		{
+      buff_out[i++] = (temp_byte << 4) + char_To_Byte(buff_in[counter]);
+			second_nibble = 0;
+		}
+		counter++;
+	}
+  //write("buff_out:%02X\n",buff_out[0]);
+	return i;
+}
+
+
+byte char_To_Byte(char character)
+{
+	if (character >= 0x41 && character <= 0x46)
+		return (byte)character - 0x37;
+
+	else if (character >= 0x61 && character <= 0x66)
+		return (byte)character - 0x57;
+
+	else if (character >= 0x30 && character <= 0x39)
+		return (byte)character - 0x30;
+
+	return 0;
+}
+
+
+//Send the request and store the response in a character
+testfunction SendDiag_Request_Verify_and_GetResponse(char Qualifier[],char Diag_Request[], char ExpectedResp[], int len)
+{
+  byte Valid_Response_Flag = 0,i=0;
+  char buffer[100];
+  long ret, ret2, ret3, ret4;
+  int ExpectedResp_len=0;
+  byte ExpectedResp_Buffer[4095];
+  char Received_Response[4095];
+  int Response_size=0;
+  
+  Diag_Req_len = string_To_Bytes(Diag_Request,Diag_Req); //_Str_To_Data_Bytes(Diag_Request, MAX_STR_REQ, tx_buffer, MAX_DATA);
+ 
+  ExpectedResp_len= string_To_Bytes(ExpectedResp,ExpectedResp_Buffer);//_Str_To_Data_Bytes(ExpectedResp, MAX_STR_REQ, ExpectedResp_Buffer, MAX_DATA);
+  diagSetTarget(Qualifier);
+    
+  DiagResize(Phy_ReadDataByIdentifier_Req,Diag_Req_len);
+  Phy_ReadDataByIdentifier_Req.SetPrimitiveData(Diag_Req,Diag_Req_len);
+  
+
+      
+  DiagSendRequest(Phy_ReadDataByIdentifier_Req);//Send Request
+
+  ret = testWaitForDiagRequestSent(Phy_ReadDataByIdentifier_Req, 2000); // Wait until the request has been completely sent
+  if(ret==1) // Request sent
+  {
+     TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Req); // Write the request-Object to the testreport
+
+     ret2=TestWaitForDiagResponse(Phy_ReadDataByIdentifier_Req, 5000); // Wait for a response, here for 5000ms. Note: This is no P2 timeout!
+        
+     if(ret2==1) // Response received
+     {
+        ret3=DiagGetLastResponse(Phy_ReadDataByIdentifier_Req,Phy_ReadDataByIdentifier_Res); // Get the receveived response
+        if(ret3 == 0)
+        {
+           if(diagIsPositiveResponse(Phy_ReadDataByIdentifier_Res)) // Is it a positive response?
+           {
+             Response_size=diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Actual_response, elcount(Actual_response)); 
+             diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Diag_Resp, len);  // Retrieve the response in raw format
+         
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             
+            for(i=0;i<ExpectedResp_len;i++)
+            {
+             if(Diag_Resp[i] != ExpectedResp_Buffer[i])
+            {
+              Valid_Response_Flag = 1;
+             
+              break;
+            }
+             else
+            {
+              Valid_Response_Flag = 0;         
+            }            
+            }
+            
+            for(i=0;i<=len;i++)
+            {
+              Get_Response[i] = Diag_Resp[i];
+            }
+            
+            if(Valid_Response_Flag)           
+            {
+              Valid_Response_Flag=0;
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              Teststepfail("","Response received is invalid : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+            }
+            else
+            {
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              TeststepPass("","Response received is valid : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+            } 
+        }
+           else // It is a negative Response
+           {
+             ret4=diagGetResponseCode(Phy_ReadDataByIdentifier_Res);
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             Bytes_to_string(Actual_response,Response_size,Received_Response);
+             Teststepfail("","Negative response received : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+           }
+        }
+        else
+        {
+           Teststepfail("", "response not received" );
+
+        }
+        
+        
+     } 
+    if(ret2==0) // Timeout. No response received
+      {
+         TeststepFail("", "response Timeout" );
+
+     }
+          if(ret2<0) // Error e.g. transport protocol level
+     {
+        if(ret2==-92) // This is the error code for P2 or P2* timeouts
+        {
+           TeststepFail("", "P2 or p2*timeout" );
+
+        }
+        else
+        {
+           TeststepFail("", "Error %d in the diagnostic or transport layer" );
+      
+        }
+      }
+    
+   }
+  else if(ret==0)
+    {
+       TeststepFail("", "Timeout expired while trying to send request" );
+
+    }//else if(ret==0) // Request TX Timeout
+    else if(ret<0)
+    {
+      TeststepFail("","Internal error %d occured while trying to send request" );
+ 
+    }//else if(ret<0) Internal error      
+  testWaitForTimeout(100);
+}
+
+
+//Verify the Postive Response with expected and actual value
+testfunction SendDiag_Request_Verify_Response(char Qualifier[],char Diag_Request[], char ExpectedResp[])
+{
+  byte Valid_Response_Flag = 0,i=0;
+  char buffer[100];
+  long ret, ret2, ret3, ret4;
+  int ExpectedResp_len=0;
+  byte ExpectedResp_Buffer[4095];
+  char Received_Response[4095];
+  int Response_size=0;
+  
+  Diag_Req_len = string_To_Bytes(Diag_Request,Diag_Req); //_Str_To_Data_Bytes(Diag_Request, MAX_STR_REQ, tx_buffer, MAX_DATA);
+ 
+  ExpectedResp_len= string_To_Bytes(ExpectedResp,ExpectedResp_Buffer);//_Str_To_Data_Bytes(ExpectedResp, MAX_STR_REQ, ExpectedResp_Buffer, MAX_DATA);
+  diagSetTarget(Qualifier);
+    
+  DiagResize(Phy_ReadDataByIdentifier_Req,Diag_Req_len);
+  Phy_ReadDataByIdentifier_Req.SetPrimitiveData(Diag_Req,Diag_Req_len);
+  
+
+      
+  DiagSendRequest(Phy_ReadDataByIdentifier_Req);//Send Request
+
+  ret = testWaitForDiagRequestSent(Phy_ReadDataByIdentifier_Req, 2000); // Wait until the request has been completely sent
+  if(ret==1) // Request sent
+  {
+     TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Req); // Write the request-Object to the testreport
+
+     ret2=TestWaitForDiagResponse(Phy_ReadDataByIdentifier_Req, 5000); // Wait for a response, here for 5000ms. Note: This is no P2 timeout!
+        
+     if(ret2==1) // Response received
+     {
+        ret3=DiagGetLastResponse(Phy_ReadDataByIdentifier_Req,Phy_ReadDataByIdentifier_Res); // Get the receveived response
+        if(ret3 == 0)
+        {
+           if(diagIsPositiveResponse(Phy_ReadDataByIdentifier_Res)) // Is it a positive response?
+           {
+             Response_size=diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Actual_response, elcount(Actual_response)); 
+             diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Diag_Resp, ExpectedResp_len);  // Retrieve the response in raw format
+         
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             
+            for(i=0;i<ExpectedResp_len;i++)
+            {
+              //write("Diag_Resp:%02X ExpectedResp_Buffer:%02X", Diag_Resp[i],ExpectedResp_Buffer[i]);
+             if(Diag_Resp[i] != ExpectedResp_Buffer[i])
+            {
+              Valid_Response_Flag = 1;
+             
+              break;
+            }
+             else
+            {
+              Valid_Response_Flag = 0;
+              
+             
+            }
+            
+            }
+  
+            
+            if(Valid_Response_Flag)           
+            {
+              Valid_Response_Flag=0;
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              Teststepfail("","Response received is invalid : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+            }
+            else
+            {
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              TeststepPass("","Response received is valid : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+            } 
+        }
+           else // It is a negative Response
+           {
+             ret4=diagGetResponseCode(Phy_ReadDataByIdentifier_Res);
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             Bytes_to_string(Actual_response,Response_size,Received_Response);
+             Teststepfail("","Negative response received : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+           }
+        }
+        else
+        {
+           Teststepfail("", "response not received" );
+
+        }
+        
+        
+     } 
+	 
+	 else if(strncmp(ExpectedResp," ",elCount(ExpectedResp)) == 0)
+	    {
+	       TeststepPass("","No Response received");
+	    }
+    else if(ret2==0) // Timeout. No response received
+      {
+         TeststepFail("", "response Timeout" );
+
+     }
+	 
+    else if(ret2<0) // Error e.g. transport protocol level
+     {
+	    
+        if(ret2==-92) // This is the error code for P2 or P2* timeouts
+        {
+           TeststepFail("", "P2 or p2*timeout" );
+
+        }
+        else
+        {
+           TeststepFail("", "Error %d in the diagnostic or transport layer" );
+      
+        }
+      }
+    
+   }
+  else if(ret==0)
+    {
+       TeststepFail("", "Timeout expired while trying to send request" );
+
+    }//else if(ret==0) // Request TX Timeout
+    else if(ret<0)
+    {
+      TeststepFail("","Internal error %d occured while trying to send request" );
+ 
+    }//else if(ret<0) Internal error      
+   testWaitForTimeout(100);
+}
+
+
+ //Verify the Postive Response with expected min and max value AND actual value
+testfunction SendDiag_Request_Verify_Response(char Qualifier[],char Diag_Request[], char MinValue[],char MaxValue[])
+{
+  byte Valid_Response_Flag = 0,i=0;
+  char buffer[100];
+  long ret, ret2, ret3, ret4;
+  int ExpectedResp_len_Min=0; 
+  int ExpectedResp_len_Max=0;
+  byte ExpectedResp_Buffer_Min[4095];
+  byte ExpectedResp_Buffer_Max[4095];
+  char Received_Response[4095];
+  int Response_size =0,Min_Max_Flag=0;
+  
+  Diag_Req_len = string_To_Bytes(Diag_Request,Diag_Req); //_Str_To_Data_Bytes(Diag_Request, MAX_STR_REQ, tx_buffer, MAX_DATA);
+ 
+  ExpectedResp_len_Min= string_To_Bytes(MinValue,ExpectedResp_Buffer_Min);//_Str_To_Data_Bytes(ExpectedResp, MAX_STR_REQ, ExpectedResp_Buffer, MAX_DATA);
+  ExpectedResp_len_Max = string_To_Bytes(MaxValue,ExpectedResp_Buffer_Max);
+  diagSetTarget(Qualifier);
+    
+  DiagResize(Phy_ReadDataByIdentifier_Req,Diag_Req_len);
+  Phy_ReadDataByIdentifier_Req.SetPrimitiveData(Diag_Req,Diag_Req_len);
+  
+
+      
+  DiagSendRequest(Phy_ReadDataByIdentifier_Req);//Send Request
+
+  ret = testWaitForDiagRequestSent(Phy_ReadDataByIdentifier_Req, 2000); // Wait until the request has been completely sent
+  if(ret==1) // Request sent
+  {
+     TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Req); // Write the request-Object to the testreport
+
+     ret2=TestWaitForDiagResponse(Phy_ReadDataByIdentifier_Req, 5000); // Wait for a response, here for 5000ms. Note: This is no P2 timeout!
+   if(ExpectedResp_len_Min == ExpectedResp_len_Max) //Expected response length should be same for Min and Max data value of response
+    {     
+     if(ret2==1) // Response received
+     {
+        ret3=DiagGetLastResponse(Phy_ReadDataByIdentifier_Req,Phy_ReadDataByIdentifier_Res); // Get the receveived response
+        if(ret3 == 0)
+        {
+           if(diagIsPositiveResponse(Phy_ReadDataByIdentifier_Res)) // Is it a positive response?
+           {
+             Response_size=diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Actual_response, elcount(Actual_response)); 
+             diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Diag_Resp, ExpectedResp_len_Min);  // Retrieve the response in raw format
+         
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             
+            for(i=0;i<ExpectedResp_len_Min;i++)
+            {
+              //if( (ExpectedResp_Buffer_Min[i] == ExpectedResp_Buffer_Max[i]) || ((i <= 4) && (Min_Max_Flag ==0)) )
+              if( ((ExpectedResp_Buffer_Min[i] == ExpectedResp_Buffer_Max[i]) && (Min_Max_Flag ==0)) || (ExpectedResp_len_Min != 5) )
+              {
+                
+                if((Diag_Resp[i] >= ExpectedResp_Buffer_Min[i]) && (Diag_Resp[i] <= ExpectedResp_Buffer_Max[i]))
+                {
+                   Valid_Response_Flag = 0;
+                  write("Diag_Resp:%02X ExpectedResp_Buffer_Min:%02X  ExpectedResp_Buffer_Max:%02X", Diag_Resp[i],ExpectedResp_Buffer_Min[i],ExpectedResp_Buffer_Max[i] );
+              
+                 }
+                else 
+                {
+                  Valid_Response_Flag = 1;
+             
+                  break; 
+                        
+                }
+                
+              }
+              else
+                
+              {
+                Min_Max_Flag =1;
+                
+                if((Diag_Resp[i] <= ExpectedResp_Buffer_Min[i]) && (Diag_Resp[i] <= ExpectedResp_Buffer_Max[i]))
+                {
+                   Valid_Response_Flag = 0;
+                   write("Diag_Resp:%02X ExpectedResp_Buffer_Min:%02X  ExpectedResp_Buffer_Max:%02X", Diag_Resp[i],ExpectedResp_Buffer_Min[i],ExpectedResp_Buffer_Max[i] );
+                     
+                    
+                 }
+                else 
+                {
+                  Valid_Response_Flag = 1;
+             
+                  break; 
+                        
+                }
+                
+                //Min_Max_Flag =1
+              }
+              
+            
+             
+            
+            }
+  
+            
+            if(Valid_Response_Flag)           
+            {
+              Valid_Response_Flag=0;
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              Teststepfail("","Response received is invalid : Actual Response = %s Expected Response in this range: %s and %s",Received_Response,MinValue, MaxValue);
+            }
+            else
+            {
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              TeststepPass("","Response received is valid : Actual Response = %s Expected Response in this range: %s and %s",Received_Response,MinValue, MaxValue);
+            } 
+        }
+           else // It is a negative Response
+           {
+             ret4=diagGetResponseCode(Phy_ReadDataByIdentifier_Res);
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             Bytes_to_string(Actual_response,Response_size,Received_Response);
+             Teststepfail("","Negative response received : Actual Response = %s Expected Response in this range: %s and %s",Received_Response,MinValue, MaxValue);
+           }
+        }
+        else
+        {
+           Teststepfail("", "response not received" );
+
+        }
+        
+        
+     } 
+    }
+	 else if(strncmp(MinValue," ",elCount(MinValue)) == 0)
+	    {
+	       TeststepPass("","No Response received");
+	    }
+    else if(ret2==0) // Timeout. No response received
+      {
+         TeststepFail("", "response Timeout" );
+
+     }
+	 
+    else if(ret2<0) // Error e.g. transport protocol level
+     {
+	    
+        if(ret2==-92) // This is the error code for P2 or P2* timeouts
+        {
+           TeststepFail("", "P2 or p2*timeout" );
+
+        }
+        else
+        {
+           TeststepFail("", "Error %d in the diagnostic or transport layer" );
+      
+        }
+      }
+    
+   }
+  else if(ret==0)
+    {
+       TeststepFail("", "Timeout expired while trying to send request" );
+
+    }//else if(ret==0) // Request TX Timeout
+    else if(ret<0)
+    {
+      TeststepFail("","Internal error %d occured while trying to send request" );
+ 
+    }//else if(ret<0) Internal error      
+   testWaitForTimeout(100);
+}
+testfunction SendDiag_Request_Verify_Negative_Response(char Qualifier[],char Diag_Request[], char ExpectedResp[])
+{
+  byte Valid_Response_Flag = 0,i=0;
+  char buffer[100];
+  long ret, ret2, ret3, ret4;
+  int ExpectedResp_len=0;
+  byte ExpectedResp_Buffer[4095];
+  char Received_Response[4095];
+  int Response_size=0;
+  
+  Diag_Req_len = string_To_Bytes(Diag_Request,Diag_Req); //_Str_To_Data_Bytes(Diag_Request, MAX_STR_REQ, tx_buffer, MAX_DATA);
+ 
+  ExpectedResp_len= string_To_Bytes(ExpectedResp,ExpectedResp_Buffer);//_Str_To_Data_Bytes(ExpectedResp, MAX_STR_REQ, ExpectedResp_Buffer, MAX_DATA);
+  diagSetTarget(Qualifier);
+    
+  DiagResize(Phy_ReadDataByIdentifier_Req,Diag_Req_len);
+  Phy_ReadDataByIdentifier_Req.SetPrimitiveData(Diag_Req,Diag_Req_len); 
+
+      
+  DiagSendRequest(Phy_ReadDataByIdentifier_Req);//Send Request
+  ret = testWaitForDiagRequestSent(Phy_ReadDataByIdentifier_Req, 2000); // Wait until the request has been completely sent
+  if(ret==1) // Request sent
+  {
+     TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Req); // Write the request-Object to the testreport
+
+     ret2=TestWaitForDiagResponse(Phy_ReadDataByIdentifier_Req, 5000); // Wait for a response, here for 5000ms. Note: This is no P2 timeout!
+        
+     if(ret2==1) // Response received
+     {
+        ret3=DiagGetLastResponse(Phy_ReadDataByIdentifier_Req,Phy_ReadDataByIdentifier_Res); // Get the receveived response
+        if(ret3 == 0)
+        {
+           if(diagIsNegativeResponse(Phy_ReadDataByIdentifier_Res)) // Is it a positive response?
+           {
+             Response_size=diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Actual_response, elcount(Actual_response)); 
+             diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Diag_Resp, ExpectedResp_len);  // Retrieve the response in raw format
+         
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             
+            for(i=0;i<ExpectedResp_len;i++)
+            {
+             if(Diag_Resp[i] != ExpectedResp_Buffer[i])
+            {
+              Valid_Response_Flag = 1;
+             
+              break;
+            }
+             else
+            {
+              Valid_Response_Flag = 0;
+              
+             
+            }
+            
+            }
+            
+            if(Valid_Response_Flag)           
+            {
+              Valid_Response_Flag=0;
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              Teststepfail("","Response received is invalid : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+            }
+            else
+            {
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              TeststepPass("","Response received is valid : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+            } 
+        }
+           else // It is a Positive Response
+           {
+             ret4=diagGetResponseCode(Phy_ReadDataByIdentifier_Res);
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             Bytes_to_string(Actual_response,Response_size,Received_Response);
+             Teststepfail("","Positive response received : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+           }
+        }
+        else
+        {
+           Teststepfail("", "response not received" );
+
+        }
+        
+        
+     } 
+    if(ret2==0) // Timeout. No response received
+      {
+         TeststepFail("", "response Timeout" );
+
+     }
+          if(ret2<0) // Error e.g. transport protocol level
+     {
+        if(ret2==-92) // This is the error code for P2 or P2* timeouts
+        {
+           TeststepFail("", "P2 or p2*timeout" );
+
+        }
+        else
+        {
+           TeststepFail("", "Error %d in the diagnostic or transport layer" );
+      
+        }
+      }
+    
+   }
+  else if(ret==0)
+    {
+       TeststepFail("", "Timeout expired while trying to send request" );
+
+    }//else if(ret==0) // Request TX Timeout
+    else if(ret<0)
+    {
+      TeststepFail("","Internal error %d occured while trying to send request" );
+ 
+    }//else if(ret<0) Internal error      
+   testWaitForTimeout(100);
+}
+
+testfunction SendDiag_Request_Verify_Response_Length(char Qualifier[],char Diag_Request[],int Expected_Response_Length)
+{
+
+  byte Valid_Response_Flag = 0,i=0;
+  char buffer[100];
+  long ret, ret2, ret3, ret4;
+  int Actual_Response_len=0;
+  byte ExpectedResp_Buffer[4095];
+  char Received_Response[4095];
+  int Response_size=0;
+  
+  Diag_Req_len = string_To_Bytes(Diag_Request,Diag_Req); //_Str_To_Data_Bytes(Diag_Request, MAX_STR_REQ, tx_buffer, MAX_DATA);
+ 
+ // ExpectedResp_len= string_To_Bytes(ExpectedResp,ExpectedResp_Buffer);//_Str_To_Data_Bytes(ExpectedResp, MAX_STR_REQ, ExpectedResp_Buffer, MAX_DATA);
+  diagSetTarget(Qualifier);
+    
+  DiagResize(Phy_ReadDataByIdentifier_Req,Diag_Req_len);
+  Phy_ReadDataByIdentifier_Req.SetPrimitiveData(Diag_Req,Diag_Req_len);
+  
+  DiagSendRequest(Phy_ReadDataByIdentifier_Req);
+
+  ret = testWaitForDiagRequestSent(Phy_ReadDataByIdentifier_Req, 2000); // Wait until the request has been completely sent
+  if(ret==1) // Request sent
+  {
+     TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Req); // Write the request-Object to the testreport
+
+     ret2=TestWaitForDiagResponse(Phy_ReadDataByIdentifier_Req, 5000); // Wait for a response, here for 5000ms. Note: This is no P2 timeout!
+        
+     if(ret2==1) // Response received.
+     {
+        ret3=DiagGetLastResponse(Phy_ReadDataByIdentifier_Req,Phy_ReadDataByIdentifier_Res); // Get the receveived response
+          
+      if(ret3 == 0)
+        {
+        
+           if(diagIsPositiveResponse(Phy_ReadDataByIdentifier_Res)) // Is it a positive response?
+           {
+          //  Actual_Response_len= DiagGetPrimitiveSize(Phy_ReadDataByIdentifier_Res);//Retrieve response length
+             Response_size=diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Actual_response, elcount(Actual_response)); 
+             diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Diag_Resp, Response_size);  // Retrieve the response in raw format
+         
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             
+            if(Expected_Response_Length != Response_size)//Response length check
+            {
+              Valid_Response_Flag = 1;
+            }
+         
+            if(Valid_Response_Flag)           
+            {
+              Valid_Response_Flag=0;
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              TeststepFail("","Length of response received is invalid : Actual Response Length = %d Expected Response Length = %d",Response_size,Expected_Response_Length);
+              //Teststep("","Actual Response = %s",Received_Response);
+              
+            }
+            else
+            {
+               
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              TeststepPass("","Length of response received is valid : Actual Response Length = %d Expected Response Length = %d",Response_size,Expected_Response_Length);
+             // Teststep("","Actual Response = %s",Received_Response);
+            } 
+             
+           
+
+             
+           }
+           else // It is a negative Response
+           {
+             ret4=diagGetResponseCode(Phy_ReadDataByIdentifier_Res);
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             Bytes_to_string(Actual_response,Response_size,Received_Response);
+             TeststepFail("","Negative response received : Actual Response = %s",Received_Response);
+			      //Teststepfail("",Negative response received:Actual Response = %s",Received_Response);
+           }
+        }
+        else
+        {
+           Teststepfail("", "Response not received" );
+
+        }
+        
+        
+     } 
+    if(ret2==0) // Timeout. No response received
+      {
+         TeststepFail("", "Response Timeout" );
+
+     }
+          if(ret2<0) // Error e.g. transport protocol level
+     {
+        if(ret2==-92) // This is the error code for P2 or P2* timeouts
+        {
+           TeststepFail("", "P2 or p2*timeout" );
+
+        }
+        else
+        {
+           TeststepFail("", "Error %d in the diagnostic or transport layer" );
+      
+        }
+      }
+    
+   }
+  else if(ret==0)
+    {
+       TeststepFail("", "Timeout expired while trying to send request" );
+
+    }//else if(ret==0) // Request TX Timeout
+    else if(ret<0)
+    {
+      TeststepFail("","Internal error %d occured while trying to send request" );
+ 
+    }//else if(ret<0) Internal error      
+   testWaitForTimeout(100);
+}
+
+
+
+
+
+//byte Security_Seed_11_Key_12()
+//{
+//  DiagRequest SPAAK_0001_00000000_018.Authenticated_Diagnostics_Access_Request_Challenge_Request SecurityAccessRequestSeed_Level_1_Req;
+//  DiagRequest SPAAK_0001_00000000_018.Authenticated_Diagnostics_Access_Send_Signed_Challenge_Send SecurityAccessSendKey_Level_1_Req;
+//    char buffer[100];
+//  long ret, ret2, ret3, ret4;
+//  byte securitySeed[31], securityKey[12];
+//  dword keySizeOut;
+//  byte returnValue;
+//  char AddtoReportName[100]; dword AddtoReportCount; int Tester;
+//   
+//  
+//  diagGetObjectName(SecurityAccessRequestSeed_Level_1_Req, buffer, elCount(buffer)); // Get the name of the diagnostic object
+//  returnValue = 0;
+//  switch (Tester)
+//  {
+//    case 0: 
+//    { 
+//      DiagSendRequest(SecurityAccessRequestSeed_Level_1_Req);
+//      break;
+//    }
+//    case 1: 
+//    { 
+//      DiagSendFunctional(SecurityAccessRequestSeed_Level_1_Req);
+//      break;
+//    }
+//  } 
+//  ret = testWaitForDiagRequestSent(SecurityAccessRequestSeed_Level_1_Req, 2000); // Wait until the request has been completely sent
+//  if(ret==1) // Request sent
+//  {
+//     TestReportWriteDiagObject(SecurityAccessRequestSeed_Level_1_Req); // Write the request-Object to the testreport
+//
+//     ret2=TestWaitForDiagResponse(SecurityAccessRequestSeed_Level_1_Req, 5010); // Wait for a response, here for 5000ms. Note: This is no P2 timeout!
+//        
+//     if(ret2==1) // Response received
+//     {
+//        ret3=DiagGetLastResponseCode(SecurityAccessRequestSeed_Level_1_Req); // Get the code of the receveived response
+//        if(ret3 == -1) // Positive response received
+//        {
+//          diagGetRespParameterRaw(SecurityAccessRequestSeed_Level_1_Req, "Seed", securitySeed, elCount(securitySeed)); // Retrieve the seed
+//          //write("Seed is: 0x%02X%02X%", securitySeed[0],securitySeed[1]);
+//          testReportWriteDiagResponse(SecurityAccessRequestSeed_Level_1_Req); // Write the response to the testreport
+//          
+//          // Generate key from seed. Wait max 5000ms for the function in the DLL to return.
+//          //ret4 = testWaitForGenerateKeyFromSeed("SPAAK_0001_00000000_018", securitySeed, elCount(securitySeed), 0x12, "", "", securityKey, eWelclCount(securityKey), keySizeOut, 5000); 
+//          ret4 = testWaitForGenerateKeyFromSeed("SPAAK_0001_00000000_018", securitySeed, elCount(securitySeed), 0x11, "CommonDiagnostics", "", securityKey, elCount(securityKey), keySizeOut, 5000);           
+//          if(ret4==1) // Key generation successful
+//          {
+//            //write("Key is: 0x%02X%02X", securityKey[0], securityKey[1]);
+//            diagSetParameterRaw(SecurityAccessSendKey_Level_1_Req, "Key", securityKey, elCount(securityKey)); // Set the key in the request-object
+//            diagGetObjectName(SecurityAccessSendKey_Level_1_Req, buffer, elCount(buffer));
+//            
+//              switch (Tester)
+//              {
+//                case 0: 
+//              { 
+//                DiagSendRequest(SecurityAccessSendKey_Level_1_Req);
+//                break;
+//              }
+//                case 1: 
+//              { 
+//                DiagSendFunctional(SecurityAccessSendKey_Level_1_Req);
+//                break;
+//              }
+//             }
+//            ret = testWaitForDiagRequestSent(SecurityAccessSendKey_Level_1_Req, 2000); // Wait until the request has been completely sent
+//            if(ret==1) //Request sent
+//            {
+//              TestReportWriteDiagObject(SecurityAccessSendKey_Level_1_Req); // Write the request-Object to the testreport
+//         
+//              ret2=TestWaitForDiagResponse(SecurityAccessSendKey_Level_1_Req, 5000); // Wait for a response, here for 5000ms. Note: This is no P2 timeout!  
+//              if(ret2 == 1) // Response received
+//              {
+//                ret3=DiagGetLastResponseCode(SecurityAccessSendKey_Level_1_Req); // Get the code of the receveived response
+//                if(ret3 == -1) // Positive response received
+//                {
+//                  //write("ECU unlocked for level 1");
+//                  testReportWriteDiagResponse(SecurityAccessSendKey_Level_1_Req);
+//                  TeststepPass(0, "Security Access", "ECU unlocked for level 1");
+//                  returnValue = 1;
+//                }
+//                else // Negative response received
+//                {
+//                  //write("Negative Response upon Request %s, NRC: 0x%02X",buffer, (byte)ret3);
+//                  TestReportWriteDiagResponse(SecurityAccessRequestSeed_Level_1_Req); // Write the response-Object to the testreport
+//                  TeststepFail(0, "Security Access", "Negative Response upon Request %s, NRC: 0x%02X",buffer, (byte)ret3); // AddtoReport failed  
+//                }
+//              }
+//              else
+//              {
+//                //diagresponse(ret2); 
+//                //write("DiagResponseError");
+//              }
+//            }
+//            else
+//            {
+//              //DiagRequestSentError(ret, buffer); 
+//              //write("DiagRequestSentError");
+//            }
+//          }
+//          else
+//          {
+//            if(ret4==0)
+//            {
+//              //write("Timeout during key generation");
+//              TeststepFail(0, "Security Access", "Timeout during key generation"); // AddtoReport failed
+//            }
+//            else
+//            {
+//              //write("Error code %d during key calculation",ret4);
+//              TeststepFail(0, "Security Access", "Error code %d during key calculation",ret4);
+//            }
+//          }
+//        }
+//        else // Negative response received
+//        {
+//          //write("Negative Response upon Request %s, NRC: 0x%02X", buffer, (byte)ret3);
+//          TestReportWriteDiagResponse(SecurityAccessRequestSeed_Level_1_Req); // Write the response-Object to the testreport
+//          TeststepFail(0, "Security Access", "Negative Response upon Request %s, NRC: 0x%02X", buffer, (byte)ret3); // AddtoReport failed  
+//        }
+//     }
+//     else
+//     {
+//        //DiagResponseError(ret2);
+//      write("DiagResponseError");
+//     }
+//   }
+//   else
+//   {
+//      //DiagRequestSentError(ret, buffer);
+//    write("DiagRequestSentError");
+//   }       
+//  return returnValue;
+//}
+
+
+
+void SendDiag_Request_Verify_Response_Step(char Qualifier[],char Diag_Request[], char ExpectedResp[])
+{
+  byte Valid_Response_Flag = 0,i=0;
+  char buffer[100];
+  long ret, ret2, ret3, ret4;
+  int ExpectedResp_len=0;
+  byte ExpectedResp_Buffer[4095];
+  char Received_Response[4095];
+  int Response_size=0;
+  
+  Diag_Req_len = string_To_Bytes(Diag_Request,Diag_Req); //_Str_To_Data_Bytes(Diag_Request, MAX_STR_REQ, tx_buffer, MAX_DATA);
+ 
+  ExpectedResp_len= string_To_Bytes(ExpectedResp,ExpectedResp_Buffer);//_Str_To_Data_Bytes(ExpectedResp, MAX_STR_REQ, ExpectedResp_Buffer, MAX_DATA);
+  diagSetTarget(Qualifier);
+    
+  DiagResize(Phy_ReadDataByIdentifier_Req,Diag_Req_len);
+  Phy_ReadDataByIdentifier_Req.SetPrimitiveData(Diag_Req,Diag_Req_len);
+  
+
+      
+  DiagSendRequest(Phy_ReadDataByIdentifier_Req);//Send Request
+
+  ret = testWaitForDiagRequestSent(Phy_ReadDataByIdentifier_Req, 2000); // Wait until the request has been completely sent
+  if(ret==1) // Request sent
+  {
+     TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Req); // Write the request-Object to the testreport
+
+     ret2=TestWaitForDiagResponse(Phy_ReadDataByIdentifier_Req, 5000); // Wait for a response, here for 5000ms. Note: This is no P2 timeout!
+        
+     if(ret2==1) // Response received
+     {
+        ret3=DiagGetLastResponse(Phy_ReadDataByIdentifier_Req,Phy_ReadDataByIdentifier_Res); // Get the receveived response
+        if(ret3 == 0)
+        {
+           if(diagIsPositiveResponse(Phy_ReadDataByIdentifier_Res)) // Is it a positive response?
+           {
+             Response_size=diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Actual_response, elcount(Actual_response)); 
+             diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Diag_Resp, ExpectedResp_len);  // Retrieve the response in raw format
+         
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             
+            for(i=0;i<ExpectedResp_len;i++)
+            {
+              //write("Diag_Resp:%02X ExpectedResp_Buffer:%02X", Diag_Resp[i],ExpectedResp_Buffer[i]);
+             if(Diag_Resp[i] != ExpectedResp_Buffer[i])
+            {
+              Valid_Response_Flag = 1;
+             
+              break;
+            }
+             else
+            {
+              Valid_Response_Flag = 0;
+              
+             
+            }
+            
+            }
+  
+            
+            if(Valid_Response_Flag)           
+            {
+              Valid_Response_Flag=0;
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              Teststepfail("","Response received is invalid : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+            }
+            else
+            {
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              TeststepPass("","Response received is valid : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+            } 
+        }
+           else // It is a negative Response
+           {
+             ret4=diagGetResponseCode(Phy_ReadDataByIdentifier_Res);
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             Bytes_to_string(Actual_response,Response_size,Received_Response);
+             Teststepfail("","Negative response received : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+           }
+        }
+        else
+        {
+           Teststepfail("", "response not received" );
+
+        }
+        
+        
+     } 
+	 
+	 else if(strncmp(ExpectedResp," ",elCount(ExpectedResp)) == 0)
+	    {
+	       TeststepPass("","No Response received");
+	    }
+    else if(ret2==0) // Timeout. No response received
+      {
+         TeststepFail("", "response Timeout" );
+
+     }
+	 
+    else if(ret2<0) // Error e.g. transport protocol level
+     {
+	    
+        if(ret2==-92) // This is the error code for P2 or P2* timeouts
+        {
+           TeststepFail("", "P2 or p2*timeout" );
+
+        }
+        else
+        {
+           TeststepFail("", "Error %d in the diagnostic or transport layer" );
+      
+        }
+      }
+    
+   }
+  else if(ret==0)
+    {
+       TeststepFail("", "Timeout expired while trying to send request" );
+
+    }//else if(ret==0) // Request TX Timeout
+    else if(ret<0)
+    {
+      TeststepFail("","Internal error %d occured while trying to send request" );
+ 
+    }//else if(ret<0) Internal error      
+   testWaitForTimeout(100);
+}
+  
+void VerifyAnchorSoftware(char Qualifier[],char Diag_Request[], char ExpectedResp[])
+{
+  byte Valid_Response_Flag = 0,i=0;
+  char buffer[100];
+  long ret, ret2, ret3, ret4;
+  int ExpectedResp_len=0;
+  byte ExpectedResp_Buffer[4095];
+  char Received_Response[4095];
+  int Response_size=0;
+  
+  Diag_Req_len = string_To_Bytes(Diag_Request,Diag_Req); //_Str_To_Data_Bytes(Diag_Request, MAX_STR_REQ, tx_buffer, MAX_DATA);
+ 
+  ExpectedResp_len= string_To_Bytes(ExpectedResp,ExpectedResp_Buffer);//_Str_To_Data_Bytes(ExpectedResp, MAX_STR_REQ, ExpectedResp_Buffer, MAX_DATA);
+  diagSetTarget(Qualifier);
+    
+  DiagResize(Phy_ReadDataByIdentifier_Req,Diag_Req_len);
+  Phy_ReadDataByIdentifier_Req.SetPrimitiveData(Diag_Req,Diag_Req_len);
+  
+
+      
+  DiagSendRequest(Phy_ReadDataByIdentifier_Req);//Send Request
+
+  ret = testWaitForDiagRequestSent(Phy_ReadDataByIdentifier_Req, 2000); // Wait until the request has been completely sent
+  if(ret==1) // Request sent
+  {
+     TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Req); // Write the request-Object to the testreport
+
+     ret2=TestWaitForDiagResponse(Phy_ReadDataByIdentifier_Req, 5000); // Wait for a response, here for 5000ms. Note: This is no P2 timeout!
+        
+     if(ret2==1) // Response received
+     {
+        ret3=DiagGetLastResponse(Phy_ReadDataByIdentifier_Req,Phy_ReadDataByIdentifier_Res); // Get the receveived response
+        if(ret3 == 0)
+        {
+           if(diagIsPositiveResponse(Phy_ReadDataByIdentifier_Res)) // Is it a positive response?
+           {
+             Response_size=diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Actual_response, elcount(Actual_response)); 
+             diagGetPrimitiveData(Phy_ReadDataByIdentifier_Res, Diag_Resp, ExpectedResp_len);  // Retrieve the response in raw format
+         
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             
+            for(i=0;i<ExpectedResp_len;i++)
+            {
+              //write("Diag_Resp:%02X ExpectedResp_Buffer:%02X", Diag_Resp[i],ExpectedResp_Buffer[i]);
+             if(Diag_Resp[i] != ExpectedResp_Buffer[i])
+            {
+              Valid_Response_Flag = 1;
+             
+              break;
+            }
+             else
+            {
+              Valid_Response_Flag = 0;
+              
+             
+            }
+            
+            }
+  
+            
+            if(Valid_Response_Flag)           
+            {
+              Valid_Response_Flag=0;
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              testStep("","Response received is invalid : Actual Response = %s ",Received_Response);
+            }
+            else
+            {
+              Bytes_to_string(Actual_response,Response_size,Received_Response);
+              testStep("","Response received is valid : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+            } 
+        }
+           else // It is a negative Response
+           {
+             ret4=diagGetResponseCode(Phy_ReadDataByIdentifier_Res);
+             TestReportWriteDiagObject(Phy_ReadDataByIdentifier_Res); // Write the response-Object to the testreport
+             Bytes_to_string(Actual_response,Response_size,Received_Response);
+             testStep("","Negative response received : Actual Response = %s Expected Response = %s",Received_Response,ExpectedResp);
+           }
+        }
+        else
+        {
+           testCaseComment("", "response not received" );
+
+        }
+        
+        
+     } 
+	 
+	 else if(strncmp(ExpectedResp," ",elCount(ExpectedResp)) == 0)
+	    {
+	       testCaseComment("","No Response received");
+	    }
+    else if(ret2==0) // Timeout. No response received
+      {
+         testCaseComment("", "response Timeout" );
+
+     }
+	 
+    else if(ret2<0) // Error e.g. transport protocol level
+     {
+	    
+        if(ret2==-92) // This is the error code for P2 or P2* timeouts
+        {
+           testCaseComment("", "P2 or p2*timeout" );
+
+        }
+        else
+        {
+           testCaseComment("", "Error %d in the diagnostic or transport layer" );
+      
+        }
+      }
+    
+   }
+  else if(ret==0)
+    {
+       testCaseComment("", "Timeout expired while trying to send request" );
+
+    }//else if(ret==0) // Request TX Timeout
+    else if(ret<0)
+    {
+      testCaseComment("","Internal error %d occured while trying to send request" );
+ 
+    }//else if(ret<0) Internal error      
+   testWaitForTimeout(100);
+}
+  

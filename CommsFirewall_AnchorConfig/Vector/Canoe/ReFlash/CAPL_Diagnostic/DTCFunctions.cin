@@ -1,0 +1,253 @@
+/*@!Encoding:1252*/
+
+// $190A
+//----------------------------------------------------------------------------
+//! \brief  Retrives the status information of the supported DTCs
+//! 
+//----------------------------------------------------------------------------
+testcase ReportSupportedDTC( long expectedErrorCode                  //<! Expected Error Code
+                            ,int timeOutForResponse                  //<! Timeout for the response
+                            ,char identifier[]                       //<! testcase identifier)
+                            ,long & responseLength_Out               //<! Length of the response output
+                            ,byte ListOfDTCAndStatus_Out[]           //<! Array to store the list of DTCs and their status
+                            ,byte & AvailabilityMask_Out)            //<! Availability mask
+{
+  diagRequest FaultMemory_ReadAllSupported req;
+  diagResponse * response;
+  long returnVal;
+ 
+  returnVal = utility_SendRequestCheckResponseCode(req, response, expectedErrorCode, timeOutForResponse, identifier, 1 );
+
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, response);
+    responseLength_Out = DiagGetPrimitiveSize(response);
+    DiagGetParameterRaw(response, "ListOfDTCAndStatus", ListOfDTCAndStatus_Out, elcount(ListOfDTCAndStatus_Out));
+    AvailabilityMask_Out = DiagGetParameter(response, "DtcStatusbyte");
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+//----------------------------------------------------------------------------
+//! \brief  Retrives the status information of the supported DTCs
+//! 
+//----------------------------------------------------------------------------
+testcase RunDTC_TestLogicalBlock( byte logicalBlock_In[]                   //<! Runs the test for the required block
+                                 ,byte subValue_In                         //<! DTCs to be tested
+                                 ,byte & info_Out                           //<! Store the information of the block
+                                 ,byte & status_Out                         //<! Store the status of the block
+                                 ,long expectedErrorCode                   //<! Expected Error Code
+                                 ,int timeOutForResponse                   //<! Timeout for the response
+                                 ,char identifier[])                       //<! testcase identifier)
+{
+  //diagRequest Force_DTC_Tests_Start req;
+  diagRequest runDTCTest_Start req;
+  diagResponse * response;
+  long returnVal;
+ 
+  diagSetParameterRaw(req, "LogicalBlock" , logicalBlock_In, elcount(logicalBlock_In) );
+  diagSetParameter(req, "SubValue" , subValue_In );
+  returnVal = utility_SendRequestCheckResponseCode(req, response, expectedErrorCode, timeOutForResponse, identifier, 1 );
+
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, response);
+    info_Out = DiagGetParameter(response, "routine_info");
+    status_Out = DiagGetParameter(response, "routine_status");
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+
+// $1914
+//----------------------------------------------------------------------------
+//! \brief  Sends the counter request and gets its response
+//! 
+//----------------------------------------------------------------------------
+testcase ReportDTCFaultDetectionCounter( long expectedErrorCode                  //<! Expected Error Code
+                                        ,int timeOutForResponse                  //<! Timeout for the response
+                                        ,char identifier[]                       //<! testcase identifier)
+                                        ,long & responseLength_Out               //<! Length of the response output
+                                        ,byte ListOfDTCAndCounts_Out[])          //<! Array to store the list of DTCs and their status
+{
+  //TODO: This funciton needs TO BE FIXED according to the data comming back.
+  diagRequest FaultMemory_reportDTCFaultDetectionCounter req;
+  diagResponse * response;
+  long returnVal;
+ 
+  returnVal = utility_SendRequestCheckResponseCode(req, response, expectedErrorCode, timeOutForResponse, identifier, 1 );
+ 
+}
+
+// $1901
+//----------------------------------------------------------------------------
+//! \brief  Reads the DTC status
+//! 
+//----------------------------------------------------------------------------
+//TODO: The function is not returning anything
+testcase ReportNumberOfDTCByStatusMask(byte & responseLength_Out,
+                                       byte ReportNumberOfDtcByStatusMask_In,
+                                       byte DtcStatusbyte_In,
+                                       byte DtcCount_Out[],
+                                       byte DtcFormatIdentifier_Out[],
+                                       byte DtcStatusbyte_Out[],
+                                       byte ReportNumberOfDtcByStatusMask_Out[],
+                                       long expectedErrorCode,                  //<! Expected Error Code
+                                       int timeOutForResponse,                  //<! Timeout for the response
+                                       char identifier[]                       //<! testcase identifier)
+  )
+{
+  diagRequest FaultMemory_ReadNumber req;
+  diagResponse * response;
+  long returnVal;
+
+  
+  diagSetParameter(req, "ReportNumberOfDtcByStatusMask" , ReportNumberOfDtcByStatusMask_In );
+  diagSetParameter(req, "DtcStatusbyte" , DtcStatusbyte_In );
+  returnVal = utility_SendRequestCheckResponseCode(req, response, expectedErrorCode, timeOutForResponse, identifier , 1);
+
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, response);
+    responseLength_Out = DiagGetPrimitiveSize(response);
+    DiagGetParameterRaw(response, "DtcCount", DtcCount_Out, elcount(DtcCount_Out));
+    DiagGetParameterRaw(response, "DtcFormatIdentifier", DtcFormatIdentifier_Out, elcount(DtcFormatIdentifier_Out));
+    DiagGetParameterRaw(response, "DtcStatusbyte", DtcStatusbyte_Out, elcount(DtcStatusbyte_Out));
+    DiagGetParameterRaw(response, "ReportNumberOfDtcByStatusMask", ReportNumberOfDtcByStatusMask_Out, elcount(ReportNumberOfDtcByStatusMask_Out));
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+// $14vv
+//----------------------------------------------------------------------------
+//! \brief  Clears the corresponding group of DTCs
+//! 
+//----------------------------------------------------------------------------
+testcase ClearDTC(byte GroupOfDTC_In[],                    //<! Groups of DTCs to clear Three bytes, High Middle and Low
+                  long expectedErrorCode,                  //<! Expected Error Code
+                  int timeOutForResponse,                  //<! Timeout for the response
+                  char identifier[] )                      //<! testcase identifier
+{
+  diagRequest FaultMemory_Clear req;
+  diagResponse * response;
+  long returnVal;
+
+  
+  diagSetParameterRaw(req,      "GroupOfDtc" ,      GroupOfDTC_In, elcount(GroupOfDTC_In));
+  returnVal = utility_SendRequestCheckResponseCode(req, response, expectedErrorCode, timeOutForResponse, identifier , 1);
+}
+
+
+// $1902
+testcase ReportDTCbyStatusMask( byte Statusbyte_Out[]                   //<! Length of the response output
+                               ,byte ListOfDTC_Out[]                    //<! Array to store the list of DTCs and their status
+                               ,long & responseLength_Out               //<! Length of the response output
+                               ,byte DtcStatusbyte_In
+                               ,long expectedErrorCode                  //<! Expected Error Code
+                               ,int timeOutForResponse                  //<! Timeout for the response
+                               ,char identifier[] )                     //<! testcase identifier
+  
+  
+{
+  diagRequest FaultMemory_ReadAllIdentified req;
+  diagResponse * resp;
+  long returnVal;
+  
+  diagSetParameter(req, "DtcStatusbyte" , DtcStatusbyte_In );
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+    DiagGetParameterRaw(resp, "DtcStatusbyte", Statusbyte_Out, elcount(Statusbyte_Out));
+    DiagGetParameterRaw(resp, "ListOfDTCDtc", ListOfDTC_Out, elcount(ListOfDTC_Out));
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+
+// $1904
+testcase ReportDTCSnapshotRecordByDTCNumber(byte DTCMaskRecord_In[], byte DtcSnapshotRecordNumber_In, 
+  long & responseLength_Out               //<! Length of the response output
+                               
+                                           , byte DTC_Out[], byte & DtcStatusbyte_Out, byte ListOfDTC_Out[]
+                                           ,long expectedErrorCode                  //<! Expected Error Code
+                                           ,int timeOutForResponse                  //<! Timeout for the response
+                                           ,char identifier[] )                     //<! testcase identifier
+{
+  diagRequest FaultMemory_ReadEnvironmentData req;
+  diagResponse * resp;
+  long returnVal;
+
+  diagSetParameterRaw(req, "DTC" , DTCMaskRecord_In, elcount(DTCMaskRecord_In ));//DTCMaskRecord is 3 bytes long
+  diagSetParameter(req, "DtcSnapshotRecordNumber" , DtcSnapshotRecordNumber_In );
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+    DiagGetParameterRaw(resp, "DTC", DTC_Out, elcount(DTC_Out));
+    DtcStatusbyte_Out = DiagGetParameter(resp, "DtcStatusbyte");
+    DiagGetParameterRaw(resp, "ListOfDTC", ListOfDTC_Out, elcount(ListOfDTC_Out));
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+  
+  
+}
+
+// $1906
+testcase ReportDTCExtendedDataRecordByDTCNumber( byte Dtc_In[], 
+    long & responseLength_Out,               //<! Length of the response output
+                                                 byte DataRecordNumber_In,
+                                                 byte Dtc_Out[], byte & DtcStatusbyte_Out, byte & ExtendedDataRecord_Out,
+  byte & ExtendedDataRecordNumber_Out
+                                           ,long expectedErrorCode                  //<! Expected Error Code
+                                           ,int timeOutForResponse                  //<! Timeout for the response
+                                           ,char identifier[] )                     //<! testcase identifier
+  
+{
+  diagRequest FaultMemory_Read_extended req;
+  diagResponse * resp;
+  long returnVal;
+  
+  diagSetParameterRaw(req, "DTC" , Dtc_In, elcount(Dtc_In) ); //Dtc_In 3 bytes long
+  diagSetParameter(req, "DataRecordNumber" , DataRecordNumber_In );
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+    DiagGetParameterRaw(resp, "DTC", Dtc_Out, elcount(Dtc_Out));
+    DtcStatusbyte_Out = DiagGetParameter(resp, "DtcStatusbyte");
+    ExtendedDataRecord_Out = DiagGetParameter(resp, "ExtendedDataRecord");
+    ExtendedDataRecordNumber_Out = DiagGetParameter(resp, "ExtendedDataRecordNumber");
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}

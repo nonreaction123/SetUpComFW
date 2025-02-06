@@ -1,0 +1,2612 @@
+/*@!Encoding:1252*/
+includes
+{ 
+  #include "Lib\Diag_Req_Resp.cin"
+  #include "Lib\DiagUtilities_New.cin"
+  
+}
+
+variables
+{  
+  //const byte Bosch = 0x61;
+  Char LogfileName[1000];
+  Char TestcaseName[1000];
+  Char ECU_qualifier[1000] = "DiagAnchor5";
+  Char Pos_FED8[100] = "62 FE D8 05 00"; // Combi: 62 FE D8 07 00 - Uwb: 62 FE D8 05 00
+  Char Pos_FE09[100] = "62 FE 09 01"; //01: InField - 02: Analysis
+  Char Pos_F180[100] = "62 F1 80 01 46 30 30 35 56 54 32 32 35 36 30 30"; // ../Build/HGT_C2/SwProperties/SwVersion_merged.properties
+  Char Pos_F181[100] = "62 F1 81 02 46 30 30 35 56 54 32 32 35 35 30 30 46 30 30 35 56 54 32 32 35 34 30 30"; // ../Build/HGT_C2/SwProperties/SwVersion_merged.properties
+  Char Pos_F18C[100] = "62 F1 8C 54 48 49 52 54 59 43 48 41 52 48 4F 4E 44 41 53 45 52 49 41 4C 4E 55 4D 5F 30 30 30 30 31"; // Combi: ProdData_CC26x2_Anchor.bin, Uwb: ProdData_S32.bin
+  Char Pos_F192[100] = "62 F1 92 46 30 30 35 56 30 33 34 35 30 30 30"; // Combi: ProdData_CC26x2_Anchor.bin, Uwb: ProdData_S32.bin
+  Char Pos_F195[100] = "62 F1 95 02 06 00 04 06 00 04";
+  message Anchor1Nm Anchr1;
+  message Anchor2Nm Anchr2;
+  message Anchor3Nm Anchr3;
+  message Anchor4Nm Anchr4;
+  message Anchor5Nm Anchr5;
+  message Anchor6Nm Anchr6;
+  message Anchor7Nm Anchr7;
+  message Anchor8Nm Anchr8;
+  message Anchor9Nm Anchr9;
+}
+
+NM_Wakeup()
+{
+    output(Anchr1);
+    output(Anchr2);
+    output(Anchr3);
+    output(Anchr4);
+    output(Anchr5);
+    output(Anchr6);
+    output(Anchr7);
+    output(Anchr8);
+    output(Anchr9);
+    testwaitfortimeout(200);  
+}
+
+
+PreCondition()
+{
+    testCaseComment("Precondition");
+    Teststep("1","Start tester present");
+    diagStartTesterPresent(ECU_qualifier);
+    TestStep("2","Send request 10 01 to enter Diagnostic Default Session ");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+}
+
+PostCondition()
+{
+    testCaseComment("PostCondition");
+    TestStep("1","Send request 10 01 to enter Diagnostic Default Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Stop tester present");
+    StopTesterPresent();
+    testwaitfortimeout(500);
+}
+
+StartLogging_Anchor(Char UseCaseName[])
+{
+    Strncat(LogfileName, "Logs/", 6);
+    Strncat(LogfileName, UseCaseName, elcount(TestcaseName));
+    Strncat(LogfileName, ".asc", elcount(TestcaseName));
+    setLogFileName(LogfileName);
+    StartLogging();
+}
+
+///////////////////////////////4554_TSU_PK_HGT_R01_AnchorUDSServer_ReadDataByIdentifier///////////////////////////////////
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_BLEDIDs_App_ExtendedSession_0x61SecurityLevel_27068()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for BLE DID's on a UWB only anchor, while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_BLEDIDs_App_ExtendedSession_0x61SecurityLevel_27068");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Unlock 61 security level");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send 22 FE 03");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 03","7F 22 31");
+    TestStep("5","Send 22 FE 33");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 33","7F 22 31");
+    TestStep("6","Send 22 FE 34");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 34","7F 22 31");
+    TestStep("7","Send 22 FE 35");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 35","7F 22 31");
+    TestStep("8","Send 22 FE 42");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 42","7F 22 31");
+    TestStep("9","Send 22 FE 43");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 43","7F 22 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDF188_Fbl_DefaultSession_32389()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xF188 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDF188_VehicleManufacturerECUSoftwareNumberDataIdentifier_Fbl_DefaultSession_32389");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 F1 88");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 88","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDF188_Fbl_ProgrammingSession_NoSecurityLevel_32485()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xF188 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDF188_VehicleManufacturerECUSoftwareNumberDataIdentifier_Fbl_ProgrammingSession_NoSecurityLevel_32485");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 F1 88");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 88","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE03_BLEAddress_App_DefaultSession_32260()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE03 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE03_BLEAddress_App_DefaultSession_32260");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 03");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 03","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE03_BLEAddress_Fbl_DefaultSession_26649()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE03 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE03_BLEAddress_App_DefaultSession_32260");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 03");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 03","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE03_BLEAddress_Fbl_ExtendedSession_NoSecurityLevel_28201()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE03 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE03_BLEAddress_Fbl_ExtendedSession_NoSecurityLevel_28201");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 03");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 03","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE03_BLEAddress_Fbl_ProgrammingSession_NoSecurityLevel_31185()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE03 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE03_BLEAddress_Fbl_ProgrammingSession_NoSecurityLevel_31185");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 03");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 03","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE04_BoschEOLLock_App_DefaultSession_26217()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE04 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE04_BoschEOLLock_App_DefaultSession_26217");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 04");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 04","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE04_BoschEOLLock_Fbl_DefaultSession_30696()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE04 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE04_BoschEOLLock_Fbl_DefaultSession_30696");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 04");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 04","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE04_BoschEOLLock_Fbl_ExtendedSession_NoSecurity_32311()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE04 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE04_BoschEOLLock_Fbl_ExtendedSession_NoSecurity_32311");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 04");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 04","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE04_BoschEOLLock_Fbl_ProgrammingSession_NoSecurityLevel_29552()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE04 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE04_BoschEOLLock_Fbl_ProgrammingSession_NoSecurityLevel_29552");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 04");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 04","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE05_TimeSinceResetUWB_App_DefaultSession_29242()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE05 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE05_TimeSinceResetUWB_App_DefaultSession_29242");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 05");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 05","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE05_TimeSinceResetUWB_Fbl_DefaultSession_30375()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE05 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE05_TimeSinceResetUWB_Fbl_DefaultSession_30375");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 05");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 05","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE05_TimeSinceResetUWB_Fbl_ExtendedSession_NoSecurityLevel_31639()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE05 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE05_TimeSinceResetUWB_Fbl_ExtendedSession_NoSecurityLevel_31639");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 05");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 05","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE05_TimeSinceResetUWB_Fbl_ProgrammingSession_NoSecurityLevel_28838()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE05 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE05_TimeSinceResetUWB_Fbl_ProgrammingSession_NoSecurityLevel_28838");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 05");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 05","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE06_TimeSinceReset_App_DefaultSession_25820()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE06 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE06_TimeSinceReset_App_DefaultSession_25820");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 06");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 06","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE06_TimeSinceReset_Fbl_DefaultSession_29400()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE06 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE06_TimeSinceReset_Fbl_DefaultSession_29400");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 06");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 06","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE06_TimeSinceReset_Fbl_ExtendedSession_NoSecurityLevel_30474()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE06 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE06_TimeSinceReset_Fbl_ExtendedSession_NoSecurityLevel_30474");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 06");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 06","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE06_TimeSinceReset_Fbl_ProgrammingSession_NoSecurityLevel_26292()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE06 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE06_TimeSinceReset_Fbl_ProgrammingSession_NoSecurityLevel_26292");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 06");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 06","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE07_CANIdx_App_DefaultSession_30994()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE07 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE07_CANIdx_App_DefaultSession_30994");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 07");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 07","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE07_CANIdx_Fbl_DefaultSession_27218()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE07 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE07_CANIdx_Fbl_DefaultSession_27218");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 07");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 07","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE07_CANIdx_Fbl_ExtendedSession_NoSecurityLevel_27971()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE07 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE07_CANIdx_Fbl_ExtendedSession_NoSecurityLevel_27971");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 07");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 07","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE07_CANIdx_Fbl_ProgrammingSession_NoSecurityLevel_30968()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE07 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE07_CANIdx_Fbl_ProgrammingSession_NoSecurityLevel_30968");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 07");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 07","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE09_PrimaryChipLifeCycle_App_DefaultSession_26708()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE09 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE09_PrimaryChipLifeCycle_App_DefaultSession_26708");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 09");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 09","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE09_PrimaryChipLifeCycle_Fbl_DefaultSession_32635()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE09 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE09_PrimaryChipLifeCycle_Fbl_DefaultSession_32635");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 09");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 09","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE09_PrimaryChipLifeCycle_Fbl_ExtendedSession_NoSecurityLevel_25902()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE09 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE09_PrimaryChipLifeCycle_Fbl_ExtendedSession_NoSecurityLevel_25902");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 09");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 09","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE09_PrimaryChipLifeCycle_Fbl_ProgrammingSession_NoSecurityLevel_27695()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE09 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE09_PrimaryChipLifeCycle_Fbl_ProgrammingSession_NoSecurityLevel_27695");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 09");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 09","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0B_R4ExtUwbDiag_App_DefaultSession_25863()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0B while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0B_R4ExtUwbDiag_App_DefaultSession_25863");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 0B");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0B","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0B_R4ExtUwbDiag_Fbl_DefaultSession_30563()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0B while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0B_R4ExtUwbDiag_Fbl_DefaultSession_30563");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 0B");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0B","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0B_R4ExtUwbDiag_Fbl_ExtendedSession_NoSecurityLevel_31621()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0B while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0B_R4ExtUwbDiag_Fbl_ExtendedSession_NoSecurityLevel_31621");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 0B");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0B","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0B_R4ExtUwbDiag_Fbl_ProgrammingSession_NoSecurityLevel_26978()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0B while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0B_R4ExtUwbDiag_Fbl_ProgrammingSession_NoSecurityLevel_26978");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 0B");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0B","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0E_SupplyVoltage_App_DefaultSession_30937()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0E while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0E_SupplyVoltage_App_DefaultSession_30937");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 0E");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0E","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0E_SupplyVoltage_Fbl_ExtendedSession_NoSecurityLevel_29335()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0E while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0E_SupplyVoltage_Fbl_ExtendedSession_NoSecurityLevel_29335");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 0E");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0E","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0E_SupplyVoltage_Fbl_ProgrammingSession_NoSecurityLevel_30974()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0E while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0E_SupplyVoltage_Fbl_ProgrammingSession_NoSecurityLevel_30974");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 0E");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0E","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0E_BLEAddress_Fbl_ProgrammingSession_NoSecurityLevel_31185()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0E while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0E_BLEAddress_Fbl_ProgrammingSession_NoSecurityLevel_31185");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 0E");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0E","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0F_TotalNumDETErrors_App_DefaultSession_28858()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0F while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0F_TotalNumDETErrors_App_DefaultSession_28858");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 0F");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0F","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0F_TotalNumDETErrors_Fbl_DefaultSession_33012()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0F while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0F_TotalNumDETErrors_Fbl_DefaultSession_33012");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 0F");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0F","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0F_TotalNumDETErrors_Fbl_ExtendedSession_NoSecurityLevel_26242()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0F while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0F_TotalNumDETErrors_Fbl_ExtendedSession_NoSecurityLevel_26242");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 0F");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0F","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0F_TotalNumDETErrors_Fbl_ProgrammingSession_NoSecurityLevel_29553()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE0F while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE0F_TotalNumDETErrors_Fbl_ProgrammingSession_NoSecurityLevel_29553");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 0F");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 0F","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE11_SWInformation_App_DefaultSession_30956()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE11 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE11_SWInformation_App_DefaultSession_30956");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 11");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 11","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE11_SWInformation_Fbl_DefaultSession_29759()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE11 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE11_SWInformation_Fbl_DefaultSession_29759");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 11");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 11","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE13_UWBChipVersion_App_DefaultSession_30950()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE13 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE13_UWBChipVersion_App_DefaultSession_30950");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 13");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 13","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE13_UWBChipVersion_Fbl_DefaultSession_25695()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE13 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE13_UWBChipVersion_Fbl_DefaultSession_25695");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 13");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 13","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE13_UWBChipVersion_Fbl_ExtendedSession_NoSecurityLevel_25845()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE13 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE13_UWBChipVersion_Fbl_ExtendedSession_NoSecurityLevel_25845");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 13");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 13","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE13_UWBChipVersion_Fbl_ProgrammingSession_NoSecurityLevel_30943()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE13 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE13_UWBChipVersion_Fbl_ProgrammingSession_NoSecurityLevel_30943");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 13");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 13","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE14_SourceControlCommitID_App_DefaultSession_30906()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE14 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE14_SourceControlCommitID_App_DefaultSession_30906");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 14");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 14","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE14_SourceControlCommitID_Fbl_DefaultSession_28304()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE14 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE14_SourceControlCommitID_Fbl_DefaultSession_28304");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 14");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 14","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE14_SourceControlCommitID_Fbl_ProgrammingSession_NoSecurityLevel_30919()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE14 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE14_SourceControlCommitID_Fbl_ProgrammingSession_NoSecurityLevel_30919");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 14");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 14","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE19_UWBChipLifeCycle_App_DefaultSession_26990()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE19 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE19_UWBChipLifeCycle_App_DefaultSession_26990");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 19");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 19","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE19_UWBChipLifeCycle_Fbl_DefaultSession_27052()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE19 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE19_UWBChipLifeCycle_Fbl_DefaultSession_27052");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 19");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 19","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE19_UWBChipLifeCycle_Fbl_ExtendedSession_NoSecurityLevel_27116()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE19 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE19_UWBChipLifeCycle_Fbl_ExtendedSession_NoSecurityLevel_27116");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 19");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 19","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE19_UWBChipLifeCycle_Fbl_ProgrammingSession_NoSecurityLevel_27080()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE19 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE19_UWBChipLifeCycle_Fbl_ProgrammingSession_NoSecurityLevel_27080");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 19");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 19","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1A_BLEorMiniMCURuntimeStats_App_DefaultSession_32292()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE1A while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1A_BLEorMiniMCURuntimeStats_App_DefaultSession_32292");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 1A");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 1A","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1A_BLEorMiniMCURuntimeStats_Fbl_DefaultSession_32416()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE1A while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1A_BLEorMiniMCURuntimeStats_Fbl_DefaultSession_32416");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 1A");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 1A","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1A_BLEorMiniMCURuntimeStats_Fbl_ExtendedSession_NoSecurityLevel_32623()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE1A while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1A_BLEorMiniMCURuntimeStats_Fbl_ExtendedSession_NoSecurityLevel_32623");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 1A");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 1A","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1A_BLEorMiniMCURuntimeStats_Fbl_ProgrammingSession_NoSecurityLevel_25740()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE1A while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1A_BLEorMiniMCURuntimeStats_Fbl_ProgrammingSession_NoSecurityLevel_25740");  
+    PreCondition();
+  
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 1A");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 1A","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1C_UWBRuntimeStats_App_DefaultSession_26058()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE1C while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1C_UWBRuntimeStats_App_DefaultSession_26058");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 1C");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 1C","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1C_UWBRuntimeStats_Fbl_DefaultSession_30387()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE1C while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1C_UWBRuntimeStats_Fbl_DefaultSession_30387");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 1C");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 1C","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1C_UWBRuntimeStats_Fbl_ExtendedSession_NoSecurityLevel_30544()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE1C while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1C_UWBRuntimeStats_Fbl_ExtendedSession_NoSecurityLevel_30544");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 1C");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 1C","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1C_UWBRuntimeStats_Fbl_ProgrammingSession_NoSecurityLevel_26947()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE1C while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE1C_UWBRuntimeStats_Fbl_ProgrammingSession_NoSecurityLevel_26947");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 1C");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 1C","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE25_SwupStatus_App_DefaultSession_28351()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE25 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE25_SwupStatus_App_DefaultSession_28351");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 25");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 25","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE25_SwupStatus_Fbl_DefaultSession_26316()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE25 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE25_SwupStatus_Fbl_DefaultSession_26316");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 25");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 25","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE26_R4AppSignature_App_DefaultSession_29347()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE26 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE26_R4AppSignature_App_DefaultSession_29347");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 26");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 26","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE26_R4AppSignature_Fbl_DefaultSession_28244()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE26 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE26_R4AppSignature_Fbl_DefaultSession_28244");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 26");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 26","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE27_R4DspSignature_App_DefaultSession_30232()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE27 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE27_R4DspSignature_App_DefaultSession_30232");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 27");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 27","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE27_R4DspSignature_Fbl_DefaultSession_32945()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE27 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE27_R4DspSignature_Fbl_DefaultSession_32945");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 27");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 27","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE33_BLEChipTemp_App_DefaultSession_27787()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE33 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE33_BLEChipTemp_App_DefaultSession_27787");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 33");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 33","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE33_BLEChipTemp_Fbl_DefaultSession_32497()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE33 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE33_BLEChipTemp_Fbl_DefaultSession_32497");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 33");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 33","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE33_BLEChipTemp_Fbl_ExtendedSession_NoSecurityLevel_32559()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE33 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE33_BLEChipTemp_Fbl_ExtendedSession_NoSecurityLevel_32559");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 33");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 33","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE33_BLEChipTemp_Fbl_ProgrammingSession_NoSecurityLevel_29159()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE33 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE33_BLEChipTemp_Fbl_ProgrammingSession_NoSecurityLevel_29159");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 33");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 33","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE34_BLEResetCount_App_DefaultSession_30400()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE34 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE34_BLEResetCount_App_DefaultSession_30400");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 34");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 34","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE34_BLEResetCount_Fbl_DefaultSession_29722()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE34 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE34_BLEResetCount_Fbl_DefaultSession_29722");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 34");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 34","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE34_BLEResetCount_Fbl_ExtendedSession_NoSecurityLevel_29520()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE34 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE34_BLEResetCount_Fbl_ExtendedSession_NoSecurityLevel_29520");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 34");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 34","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE34_BLEResetCount_Fbl_ProgrammingSession_NoSecurityLevel_31603()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE34 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE34_BLEAddress_Fbl_ProgrammingSession_NoSecurityLevel_31185");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 34");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 34","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE35_BLEResetCause_App_DefaultSession_30036()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE35 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE35_BLEResetCause_App_DefaultSession_30036");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 35");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 35","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE35_BLEResetCause_Fbl_DefaultSession_33038()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE35 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE35_BLEResetCause_Fbl_DefaultSession_33038");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 35");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 35","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE35_BLEResetCause_Fbl_ExtendedSession_NoSecurityLevel_33149()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE35 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE35_BLEResetCause_Fbl_ExtendedSession_NoSecurityLevel_33149");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 35");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 35","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE35_BLEResetCause_Fbl_ProgrammingSession_NoSecurityLevel_30438()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE35 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE35_BLEResetCause_Fbl_ProgrammingSession_NoSecurityLevel_30438");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 35");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 35","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE40_FirstFourBytesOfPublicKeys_App_DefaultSession_30912()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE40 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE40_FirstFourBytesOfPublicKeys_App_DefaultSession_30912");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 40");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 40","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE40_FirstFourBytesOfPublicKeys_Fbl_DefaultSession_28291()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE40 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE40_FirstFourBytesOfPublicKeys_Fbl_DefaultSession_28291");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 40");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 40","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE40_FirstFourBytesOfPublicKeys_Fbl_ExtendedSession_NoSecurityLevel_28433()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE40 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE40_FirstFourBytesOfPublicKeys_Fbl_ExtendedSession_NoSecurityLevel_28433");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 40");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 40","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE40_FirstFourBytesOfPublicKeys_Fbl_ProgrammingSession_NoSecurityLevel_30892()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE40 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE40_FirstFourBytesOfPublicKeys_Fbl_ProgrammingSession_NoSecurityLevel_30892");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 40");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 40","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE43_BLEResolvablePrivateAddress_App_DefaultSession_27161()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE43 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE43_BLEResolvablePrivateAddress_App_DefaultSession_27161");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 43");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 43","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE43_BLEResolvablePrivateAddress_Fbl_DefaultSession_26278()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE43 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE43_BLEResolvablePrivateAddress_Fbl_DefaultSession_26278");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 43");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 43","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE43_BLEResolvablePrivateAddress_Fbl_ExtendedSession_NoSecurityLevel_26347()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE43 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE43_BLEResolvablePrivateAddress_Fbl_ExtendedSession_NoSecurityLevel_26347");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 43");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 43","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE43_BLEResolvablePrivateAddress_Fbl_ProgrammingSession_NoSecurityLevel_27948()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFE43 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFE43_BLEResolvablePrivateAddress_Fbl_ProgrammingSession_NoSecurityLevel_27948");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 43");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 43","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEA4_RFTestMode_App_DefaultSession_30900()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEA4 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEA4_RFTestMode_App_DefaultSession_30900");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE A4");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE A4","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEA4_RFTestMode_Fbl_DefaultSession_27061()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEA4 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEA4_RFTestMode_Fbl_DefaultSession_27061");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE A4");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE A4","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEA4_RFTestMode_Fbl_ExtendedSession_NoSecurityLevel_27104()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEA4 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEA4_RFTestMode_Fbl_ExtendedSession_NoSecurityLevel_27104");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE A4");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE A4","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEA4_RFTestMode_Fbl_ProgrammingSession_NoSecurityLevel_30886()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEA4 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEA4_RFTestMode_Fbl_ProgrammingSession_NoSecurityLevel_30886");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE A4");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE A4","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB0_UWBPropagationDelayCalibration_App_DefaultSession_30880()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB0 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB0_UWBPropagationDelayCalibration_App_DefaultSession_30880");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE B0");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B0","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB0_UWBPropagationDelayCalibration_Fbl_DefaultSession_30030()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB0 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB0_UWBPropagationDelayCalibration_Fbl_DefaultSession_30030");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE B0");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B0","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB0_UWBPropagationDelayCalibration_Fbl_ExtendedSession_NoSecurityLevel_30067()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB0 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB0_UWBPropagationDelayCalibration_Fbl_ExtendedSession_NoSecurityLevel_30067");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE B0");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B0","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB0_UWBPropagationDelayCalibration_Fbl_ProgrammingSession_NoSecurityLevel_30873()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB0 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB0_UWBPropagationDelayCalibration_Fbl_ProgrammingSession_NoSecurityLevel_30873");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE B0");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B0","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB1_UWBRadioTXPower_App_DefaultSession_30867()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB1 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB1_UWBRadioTXPower_App_DefaultSession_30867");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE B1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B1","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB1_UWBRadioTXPower_Fbl_DefaultSession_25851()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB1 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB1_UWBRadioTXPower_Fbl_DefaultSession_25851");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE B1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B1","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB1_UWBRadioTXPower_Fbl_ExtendedSession_NoSecurityLevel_25807()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB1 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB1_UWBRadioTXPower_Fbl_ExtendedSession_NoSecurityLevel_25807");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE B1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B1","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB1_UWBRadioTXPower_Fbl_ProgrammingSession_NoSecurityLevel_30860()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB1 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB1_UWBRadioTXPower_Fbl_ProgrammingSession_NoSecurityLevel_30860");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE B1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B1","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB2_UWBCentreFrequencyCalibrationBaseOffset_App_DefaultSession_30830()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB2 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB2_UWBCentreFrequencyCalibrationBaseOffset_App_DefaultSession_30830");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE B2");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B2","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB2_UWBCentreFrequencyCalibrationBaseOffset_Fbl_DefaultSession_29953()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB2 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB2_UWBCentreFrequencyCalibrationBaseOffset_Fbl_DefaultSession_29953");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE B2");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B2","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB2_UWBCentreFrequencyCalibrationBaseOffset_Fbl_ExtendedSession_NoSecurityLevel_30098()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB2 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB2_UWBCentreFrequencyCalibrationBaseOffset_Fbl_ExtendedSession_NoSecurityLevel_30098");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE B2");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B2","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB2_UWBCentreFrequencyCalibrationBaseOffset_Fbl_ProgramminSession_NoSecurityLevel_30854()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEB2 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEB2_UWBCentreFrequencyCalibrationBaseOffset_Fbl_ProgramminSession_NoSecurityLevel_30854");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE B2");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE B2","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED8_ECUType_App_DefaultSession_30842()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFED8 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED8_ECUType_App_DefaultSession_30842");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE D8");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE D8","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED8_ECUType_Fbl_DefaultSession_28530()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFED8 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED8_ECUType_Fbl_DefaultSession_28530");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE D8");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE D8","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED8_ECUType_Fbl_ExtendedSession_NoSecurityLevel_28593()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFED8 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED8_ECUType_Fbl_ExtendedSession_NoSecurityLevel_28593");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE D8");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE D8","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED8_ECUType_Fbl_ProgrammingSession_NoSecurityLevel_30836()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFED8 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED8_ECUType_Fbl_ProgrammingSession_NoSecurityLevel_30836");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE D8");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE D8","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED9_AnchorPositionIdx_App_DefaultSession_30824()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFED9 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED9_AnchorPositionIdx_App_DefaultSession_30824");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE D9");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE D9","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED9_AnchorPositionIdx_Fbl_DefaultSession_32703()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFED9 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED9_AnchorPositionIdx_Fbl_DefaultSession_32703");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE D9");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE D9","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED9_AnchorPositionIdx_Fbl_ExtendedSession_NoSecurityLevel_32753()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFED9 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED9_AnchorPositionIdx_Fbl_ExtendedSession_NoSecurityLevel_32753");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE D9");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE D9","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED9_AnchorPositionIdx_Fbl_ProgrammingSession_NoSecurityLevel_30818()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFED9 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFED9_AnchorPositionIdx_Fbl_ProgrammingSession_NoSecurityLevel_30818");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE D9");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE D9","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE0_ECUCompatibilityNumber_App_DefaultSession_30785()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEE0 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE0_ECUCompatibilityNumber_App_DefaultSession_30785");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE E0");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE E0","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE0_ECUCompatibilityNumber_Fbl_DefaultSession_27941()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEE0 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE0_ECUCompatibilityNumber_Fbl_DefaultSession_27941");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE E0");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE E0","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE0_ECUCompatibilityNumber_Fbl_ExtendedSession_NoSecurityLevel_28269()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEE0 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE0_ECUCompatibilityNumber_Fbl_ExtendedSession_NoSecurityLevel_28269");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Programming diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE E0");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE E0","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE0_ECUCompatibilityNumber_Fbl_ProgrammingSession_NoSecurityLevel_30811()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEE0 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE0_ECUCompatibilityNumber_Fbl_ProgrammingSession_NoSecurityLevel_30811");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE E0");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE E0","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE1_ECUChipData_App_DefaultSession_29266()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEE1 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE1_ECUChipData_App_DefaultSession_29266");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE E1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE E1","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE1_ECUChipData_Fbl_DefaultSession_31407()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEE1 while in bootloader default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE1_ECUChipData_Fbl_DefaultSession_31407");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE E1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE E1","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE1_ECUChipData_Fbl_ProgrammingSession_NoSecurityLevel_31828()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID 0xFEE1 while in bootloader programming session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_DIDFEE1_ECUChipData_Fbl_ProgrammingSession_NoSecurityLevel_31828");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request Default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE E1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE E1","7F 22 31");
+    
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_NotImplementedDIDs_App_DefaultSession_32104()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID's not implemented in HGT while in application default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_NotImplementedDIDs_App_DefaultSession_32104");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 08");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 08","7F 22 31");
+    TestStep("3","Send 22 FE A1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE A1","7F 22 31");
+    TestStep("4","Send 22 FE FF");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE FF","7F 22 31");
+    TestStep("5","Send 22 F1 32");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 32","7F 22 31");
+    TestStep("6","Send 22 F1 93");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 93","7F 22 31");
+    TestStep("9","Send 22 F1 94");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 94","7F 22 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_NotImplementedDIDs_App_ExtendedSession_NoSecurityLevel_29489()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for BLE DID's on a UWB only anchor, while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_NotImplementedDIDs_App_ExtendedSession_NoSecurityLevel_29489");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2","Send 22 FE 08");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 08","7F 22 31");
+    TestStep("3","Send 22 FE A1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE A1","7F 22 31");
+    TestStep("4","Send 22 FE FF");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE FF","7F 22 31");
+    TestStep("5","Send 22 F1 32");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 32","7F 22 31");
+    TestStep("6","Send 22 F1 93");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 93","7F 22 31");
+    TestStep("9","Send 22 F1 94");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 94","7F 22 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_NotImplementedDIDs_Fbl_DefaultSession_28524()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID's not implemented in HGT while in application default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_NotImplementedDIDs_Fbl_DefaultSession_28524");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 FE 08");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 08","7F 22 31");
+    TestStep("3","Send 22 FE A1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE A1","7F 22 31");
+    TestStep("4","Send 22 FE FF");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE FF","7F 22 31");
+    TestStep("5","Send 22 F1 32");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 32","7F 22 31");
+    TestStep("6","Send 22 F1 93");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 93","7F 22 31");
+    TestStep("9","Send 22 F1 94");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 94","7F 22 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_NotImplementedDIDs_Fbl_ExtendedSession_NoSecurityLevel_28469()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for BLE DID's on a UWB only anchor, while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_NotImplementedDIDs_Fbl_ExtendedSession_NoSecurityLevel_28469");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programing diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 FE 08");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 08","7F 22 31");
+    TestStep("4","Send 22 FE A1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE A1","7F 22 31");
+    TestStep("5","Send 22 FE FF");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE FF","7F 22 31");
+    TestStep("6","Send 22 F1 32");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 32","7F 22 31");
+    TestStep("7","Send 22 F1 93");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 93","7F 22 31");
+    TestStep("8","Send 22 F1 94");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 94","7F 22 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_NotImplementedDIDs_Fbl_ProgrammingSession_NoSecurityLevel_27257()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for BLE DID's on a UWB only anchor, while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_NotImplementedDIDs_Fbl_ProgrammingSession_NoSecurityLevel_27257");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programing diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request programing diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 FE 08");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE 08","7F 22 31");
+    TestStep("4","Send 22 FE A1");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE A1","7F 22 31");
+    TestStep("5","Send 22 FE FF");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE FF","7F 22 31");
+    TestStep("6","Send 22 F1 32");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 32","7F 22 31");
+    TestStep("7","Send 22 F1 93");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 93","7F 22 31");
+    TestStep("8","Send 22 F1 94");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 F1 94","7F 22 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_UnsupportedDID_App_DefaultSession_31006()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID's not implemented in HGT while in application default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_UnsupportedDID_App_DefaultSession_31006");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 00 00");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 00 00","7F 22 31");
+    TestStep("3","Send 22 AA AA");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 AA AA","7F 22 31");
+    TestStep("4","Send 22 FF FF");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FF FF","7F 22 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_UnsupportedDID_App_ExtendedSession_NoSecurityLevel_30803()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for BLE DID's on a UWB only anchor, while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_UnsupportedDID_App_ExtendedSession_NoSecurityLevel_30803");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2","Send 22 00 00");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 00 00","7F 22 31");
+    TestStep("3","Send 22 AA AA");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 AA AA","7F 22 31");
+    TestStep("4","Send 22 FF FF");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FF FF","7F 22 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_UnsupportedDID_Fbl_DefaultSession_32659()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for DID's not implemented in HGT while in application default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_UnsupportedDID_Fbl_DefaultSession_32659");  
+    PreCondition();
+    
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 01) to request default diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send 22 00 00");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 00 00","7F 22 31");
+    TestStep("3","Send 22 AA AA");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 AA AA","7F 22 31");
+    TestStep("4","Send 22 FF FF");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FF FF","7F 22 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_UnsupportedDID_Fbl_ExtendedSession_NoSecurityLevel_32784()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for BLE DID's on a UWB only anchor, while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_UnsupportedDID_Fbl_ExtendedSession_NoSecurityLevel_32784");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programing diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 03) to request extended diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send 22 00 00");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 00 00","7F 22 31");
+    TestStep("4","Send 22 AA AA");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 AA AA","7F 22 31");
+    TestStep("5","Send 22 FF FF");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FF FF","7F 22 31");
+    PostCondition();
+    stopLogging();      
+}
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_UnsupportedDID_Fbl_ProgrammingSession_NoSecurityLevel_30797()
+{
+    testCaseDescription("Verify that NRC 0x31 (ROOR) is returned when a ReadDataByIdentifier request is sent for BLE DID's on a UWB only anchor, while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_NRC31_UnsupportedDID_Fbl_ProgrammingSession_NoSecurityLevel_30797");  
+    PreCondition();
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    
+    testCaseComment("Actions");
+    TestStep("1","Send (10 02) to request programing diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("2","Send (10 02) to request programing diagnostic session.");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("3","Send 22 00 00");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 00 00","7F 22 31");
+    TestStep("4","Send 22 AA AA");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 AA AA","7F 22 31");
+    TestStep("5","Send 22 FF FF");  
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FF FF","7F 22 31");
+    PostCondition();
+    stopLogging();      
+}

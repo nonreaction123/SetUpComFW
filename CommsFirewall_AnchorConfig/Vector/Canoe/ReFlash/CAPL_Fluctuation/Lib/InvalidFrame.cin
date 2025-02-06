@@ -1,0 +1,279 @@
+/*@!Encoding:1252*/
+includes
+{
+}
+
+variables
+{
+  msTimer Invalid_Single_Frame_CAN_ID_11bits_Timer; // for delay 100ms
+  msTimer Invalid_Single_Frame_CAN_Data_11bits_Timer; // for delay 100ms
+  msTimer Invalid_Single_Frame_CAN_ID_29bits_Timer; // for delay 100ms
+  msTimer Invalid_Single_Frame_CAN_Data_29bits_Timer; // for delay 100ms
+  msTimer Invalid_Multiple_Frame_1_ms_100; // for delay 100ms 
+  msTimer Invalid_Multiple_Frame_2_ms_100; // for delay 100ms 
+  msTimer Invalid_Sequence_1_ms_100; // for delay 100ms 
+  msTimer Invalid_Sequence_2_ms_100; // for delay 100ms 
+  msTimer Invalid_Sequence_3_ms_100; // for delay 100ms 
+  
+  
+  message 0x100 Invalid_Single_Frame_CAN_ID_Standard;  // Wrong CAN ID
+  message 0x702 Invalid_Single_Frame_CAN_Data_Standard;  // Wrong CAN Data
+  message *Invalid_Single_Frame_CAN_ID_Extended;  // Wrong CAN ID
+  message *Invalid_Single_Frame_CAN_Data_Extended;  // Wrong CAN Data
+  message 0x702 Invalid_Multiple_Frame_1;  // Wrong Multiple Frame (701 due to Anchor 1)
+  message 0x702 Invalid_Multiple_Frame_2;  // Wrong Multiple Frame (701 due to Anchor 1)
+  message 0x702 Invalid_Sequence_1;  // Wrong Multiple Frame (701 due to Anchor 1)
+  message 0x702 Invalid_Sequence_2;  // Wrong Multiple Frame (701 due to Anchor 1)
+  message 0x702 Invalid_Sequence_3;  // Wrong Multiple Frame (701 due to Anchor 1)
+  
+  int duration;
+  byte check_byte0;
+  dword Valid_Ext_ID;
+  dword Invalid_Ext_ID;
+  
+  
+}
+
+
+
+
+//////////////////////////////////////////
+on timer Invalid_Single_Frame_CAN_ID_11bits_Timer
+{
+  output(Invalid_Single_Frame_CAN_ID_Standard);
+  setTimer(Invalid_Single_Frame_CAN_ID_11bits_Timer, 100);
+  @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times += 1;
+  
+}
+
+testfunction Send_Invalid_CAN_ID_Standard_CAN_Single_Frame ()
+{
+  Invalid_Single_Frame_CAN_ID_Standard.DLC = 8; // set DLC for Invalid message
+  Invalid_Single_Frame_CAN_ID_Standard.byte(0) = 0x02;
+  Invalid_Single_Frame_CAN_ID_Standard.byte(1) = 0x10;
+  Invalid_Single_Frame_CAN_ID_Standard.byte(2) = 0x03;
+  Invalid_Single_Frame_CAN_ID_Standard.byte(3) = 0xCC;
+  Invalid_Single_Frame_CAN_ID_Standard.byte(4) = 0xCC;
+  Invalid_Single_Frame_CAN_ID_Standard.byte(5) = 0xCC;
+  Invalid_Single_Frame_CAN_ID_Standard.byte(6) = 0xCC;
+  Invalid_Single_Frame_CAN_ID_Standard.byte(7) = 0xCC;
+  Invalid_Single_Frame_CAN_ID_Standard.CAN = 2;
+  output(Invalid_Single_Frame_CAN_ID_Standard);
+  setTimer(Invalid_Single_Frame_CAN_ID_11bits_Timer,100); 
+  TeststepPass("SEND","CAN FRAME ID: 0x100; CAN DATA:02 10 03 CC CC CC CC CC");
+}
+
+void Stop_Send_Invalid_CAN_ID_Standard_CAN_Single_Frame ()
+{
+  cancelTimer(Invalid_Single_Frame_CAN_ID_11bits_Timer); 
+  TeststepPass("","No Response received");
+  
+  TeststepPass("CONCLUSIONS","Invalid_CAN_Frame: %d times \n Times: %d ms", @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times, 100*@sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times);
+}
+/////////////////////////////////////////////
+on timer Invalid_Single_Frame_CAN_ID_29bits_Timer
+{ 
+  
+  output(Invalid_Single_Frame_CAN_ID_Extended);
+  setTimer(Invalid_Single_Frame_CAN_ID_29bits_Timer, 100);
+  @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times += 1;
+}
+
+testfunction Send_Invalid_CAN_ID_Extended_CAN_Single_Frame ()
+{
+  Invalid_Ext_ID= mkExtId(0x14000000); //ID for Invalid ID
+  Invalid_Single_Frame_CAN_ID_Extended.id = Invalid_Ext_ID;
+  Invalid_Single_Frame_CAN_ID_Extended.DLC = 8; // set DLC for Invalid message
+  Invalid_Single_Frame_CAN_ID_Extended.byte(0) = 0x02;
+  Invalid_Single_Frame_CAN_ID_Extended.byte(1) = 0x10;
+  Invalid_Single_Frame_CAN_ID_Extended.byte(2) = 0x03;
+  Invalid_Single_Frame_CAN_ID_Extended.byte(3) = 0xCC;
+  Invalid_Single_Frame_CAN_ID_Extended.byte(4) = 0xCC;
+  Invalid_Single_Frame_CAN_ID_Extended.byte(5) = 0xCC;
+  Invalid_Single_Frame_CAN_ID_Extended.byte(6) = 0xCC;
+  Invalid_Single_Frame_CAN_ID_Extended.byte(7) = 0xCC;
+  Invalid_Single_Frame_CAN_ID_Extended.CAN = 2;
+  output(Invalid_Single_Frame_CAN_ID_Extended);
+  setTimer(Invalid_Single_Frame_CAN_ID_29bits_Timer,10); 
+  TeststepPass("SEND","CAN FRAME ID: 0x14000000; CAN DATA:02 10 03 CC CC CC CC CC");
+}
+
+void Stop_Send_Invalid_CAN_ID_Extended_CAN_Single_Frame ()
+{
+  cancelTimer(Invalid_Single_Frame_CAN_ID_29bits_Timer); 
+  TeststepPass("","No Response received");
+  TeststepPass("CONCLUSIONS","Invalid_CAN_Frame: %d times \n Times: %d ms", @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times, 100*@sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times);
+}
+
+
+/////////////////////////////////////////////
+on timer Invalid_Single_Frame_CAN_Data_11bits_Timer
+{
+  output(Invalid_Single_Frame_CAN_Data_Standard);
+  setTimer(Invalid_Single_Frame_CAN_Data_11bits_Timer, 100);
+  
+}
+
+testfunction Send_Invalid_CAN_Data_Standard_Single_Frame ()
+{
+  
+  Invalid_Single_Frame_CAN_Data_Standard.DLC = 8; // set DLC for Invalid message
+  Invalid_Single_Frame_CAN_Data_Standard.byte(0) = 0x90;
+  Invalid_Single_Frame_CAN_Data_Standard.byte(1) = 0x00;
+  Invalid_Single_Frame_CAN_Data_Standard.byte(2) = 0x00;
+  Invalid_Single_Frame_CAN_Data_Standard.byte(3) = 0xCC;
+  Invalid_Single_Frame_CAN_Data_Standard.byte(4) = 0xCC;
+  Invalid_Single_Frame_CAN_Data_Standard.byte(5) = 0xCC;
+  Invalid_Single_Frame_CAN_Data_Standard.byte(6) = 0xCC;
+  Invalid_Single_Frame_CAN_Data_Standard.byte(7) = 0xCC;
+  Invalid_Single_Frame_CAN_Data_Standard.CAN = 2;
+  output(Invalid_Single_Frame_CAN_Data_Standard);
+  setTimer(Invalid_Single_Frame_CAN_Data_11bits_Timer,100); 
+
+  TeststepPass("SEND","CAN FRAME ID: 0x701; CAN DATA:90 00 00 CC CC CC CC CC");
+}
+
+void Stop_Send_Invalid_CAN_Data_Standard_Single_Frame ()
+{
+  cancelTimer(Invalid_Single_Frame_CAN_Data_11bits_Timer); 
+  TeststepPass("","No Response received");
+  TeststepPass("CONCLUSIONS","Invalid_CAN_Frame: %d times \n Times: %d ms", @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times, 100*@sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times);
+}
+
+/////////////////////////////////////////////
+on timer Invalid_Single_Frame_CAN_Data_29bits_Timer
+{
+  output(Invalid_Single_Frame_CAN_Data_Extended);
+  setTimer(Invalid_Single_Frame_CAN_Data_29bits_Timer, 100);
+  
+}
+
+
+testfunction Send_Invalid_CAN_Data_Extended_Single_Frame ()
+{
+  Valid_Ext_ID= mkExtId(0x14003802x);//ID for Valid ID
+  Invalid_Single_Frame_CAN_Data_Extended.id = Valid_Ext_ID;
+  Invalid_Single_Frame_CAN_Data_Extended.DLC = 8; // set DLC for Invalid message
+  Invalid_Single_Frame_CAN_Data_Extended.byte(0) = 0x90;
+  Invalid_Single_Frame_CAN_Data_Extended.byte(1) = 0x00;
+  Invalid_Single_Frame_CAN_Data_Extended.byte(2) = 0x00;
+  Invalid_Single_Frame_CAN_Data_Extended.byte(3) = 0xCC;
+  Invalid_Single_Frame_CAN_Data_Extended.byte(4) = 0xCC;
+  Invalid_Single_Frame_CAN_Data_Extended.byte(5) = 0xCC;
+  Invalid_Single_Frame_CAN_Data_Extended.byte(6) = 0xCC;
+  Invalid_Single_Frame_CAN_Data_Extended.byte(7) = 0xCC;
+  Invalid_Single_Frame_CAN_Data_Extended.CAN = 2;
+  output(Invalid_Single_Frame_CAN_Data_Extended);
+  setTimer(Invalid_Single_Frame_CAN_Data_29bits_Timer,100); 
+  TeststepPass("SEND","CAN FRAME ID: 0x1400381; CAN DATA:90 00 00 CC CC CC CC CC");
+
+}
+
+void Stop_Send_Invalid_CAN_Data_Extended_Single_Frame ()
+{
+  cancelTimer(Invalid_Single_Frame_CAN_Data_29bits_Timer); 
+  TeststepPass("","No Response received");
+  TeststepPass("CONCLUSIONS","Invalid_CAN_Frame: %d times \n Times: %d ms", @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times, 100*@sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times);
+}
+///////////////////////////////////////////////////
+on timer Invalid_Multiple_Frame_1_ms_100
+{
+  output(Invalid_Multiple_Frame_1);
+  setTimer(Invalid_Multiple_Frame_2_ms_100, 500);
+  
+  
+}
+
+on timer Invalid_Multiple_Frame_2_ms_100
+{
+  output(Invalid_Multiple_Frame_2);
+  setTimer(Invalid_Multiple_Frame_1_ms_100, 500);
+  
+}
+
+testfunction Send_Invalid_CAN_Data_Multiple_Frame  ()
+{ 
+  Invalid_Multiple_Frame_1.byte(0) = 0x10; // Define First Frame for Multiple Frame
+  Invalid_Multiple_Frame_1.byte(1) = 0x40; // Define First Frame for Multiple Frame
+  Invalid_Multiple_Frame_1.can = 2; 
+  Invalid_Multiple_Frame_1.DLC = 15; 
+  Invalid_Multiple_Frame_2.byte(0) = 0x20; // Define First Frame for Multiple Frame
+  Invalid_Multiple_Frame_2.byte(1) = 0x00; // Define First Frame for Multiple Frame
+  Invalid_Multiple_Frame_2.can = 2; 
+  Invalid_Multiple_Frame_2.DLC = 8; 
+  setTimer(Invalid_Multiple_Frame_1_ms_100,100); 
+  TeststepPass("SEND","CAN FRAME ID: 0x702; CAN DATA:10 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00");
+  TeststepPass("SEND","CAN FRAME ID: 0x702; CAN DATA:20 00 00 00 00 00 00 00");
+}
+
+void Stop_Send_Invalid_Multiple_Frame ()
+{
+  cancelTimer(Invalid_Multiple_Frame_1_ms_100); 
+  TeststepPass("","No Response received");
+  TeststepPass("CONCLUSIONS","Invalid_CAN_Frame: %d times \n Times: %d ms", @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times, 100*@sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times);
+}
+
+
+///////////////////////////////////////////////////
+on timer Invalid_Sequence_1_ms_100
+{
+  output(Invalid_Sequence_1);
+  setTimer(Invalid_Sequence_2_ms_100, 500);
+  
+}
+
+on timer Invalid_Sequence_2_ms_100
+{
+  output(Invalid_Sequence_2);
+  setTimer(Invalid_Sequence_3_ms_100, 500);
+  
+}
+
+on timer Invalid_Sequence_3_ms_100
+{
+  output(Invalid_Sequence_3);
+  setTimer(Invalid_Sequence_1_ms_100, 500);
+  
+}
+
+testfunction Send_Invalid_CAN_Data_Sequence  ()
+{ 
+  Invalid_Sequence_1.byte(0) = 0x02; // Define First Frame for Multiple Frame
+  Invalid_Sequence_1.byte(1) = 0x27; // Define First Frame for Multiple Frame
+  Invalid_Sequence_1.byte(2) = 0x61; // Define First Frame for Multiple Frame
+  Invalid_Sequence_1.byte(3) = 0xCC; // Define First Frame for Multiple Frame
+  Invalid_Sequence_1.byte(4) = 0xCC; // Define First Frame for Multiple Frame
+  Invalid_Sequence_1.byte(5) = 0xCC; // Define First Frame for Multiple Frame
+  Invalid_Sequence_1.byte(6) = 0xCC; // Define First Frame for Multiple Frame
+  Invalid_Sequence_1.byte(7) = 0xCC; // Define First Frame for Multiple Frame
+  Invalid_Sequence_1.can = 2; 
+  Invalid_Sequence_1.DLC = 8; 
+  Invalid_Sequence_2.byte(0) = 0x10; // Define First Frame for Multiple Frame
+  Invalid_Sequence_2.byte(1) = 0x42; // Define First Frame for Multiple Frame
+  Invalid_Sequence_2.byte(2) = 0x27; // Define First Frame for Multiple Frame
+  Invalid_Sequence_2.byte(3) = 0x62; // Define First Frame for Multiple Frame
+  Invalid_Sequence_2.can = 2; 
+  Invalid_Sequence_2.DLC = 15; 
+  Invalid_Sequence_3.byte(0) = 0x20; // Define First Frame for Multiple Frame
+  Invalid_Sequence_3.byte(1) = 0x00; // Define First Frame for Multiple Frame
+  Invalid_Sequence_3.byte(2) = 0x00; // Define First Frame for Multiple Frame
+  Invalid_Sequence_3.byte(3) = 0x00; // Define First Frame for Multiple Frame
+  Invalid_Sequence_3.byte(4) = 0x00; // Define First Frame for Multiple Frame
+  Invalid_Sequence_3.byte(5) = 0xCc; // Define First Frame for Multiple Frame
+  Invalid_Sequence_3.byte(6) = 0xCC; // Define First Frame for Multiple Frame
+  Invalid_Sequence_3.byte(7) = 0xCC; // Define First Frame for Multiple Frame
+  Invalid_Sequence_3.can = 2; 
+  Invalid_Sequence_3.DLC = 8; 
+  setTimer(Invalid_Sequence_1_ms_100,100); 
+  TeststepPass("","Send Invalid Multiple Frame");
+  TeststepPass("SEND","CAN FRAME ID: 0x702; CAN DATA:02 27 61 CC CC CC CC CC");
+  TeststepPass("SEND","CAN FRAME ID: 0x702; CAN DATA:10 40 27 62 00 00 00 00");
+  TeststepPass("SEND","CAN FRAME ID: 0x702; CAN DATA:20 00 00 00 00 CC CC CC");
+}
+
+void Stop_Send_Invalid_Sequence ()
+{
+  cancelTimer(Invalid_Sequence_1_ms_100); 
+  TeststepPass("","No Response received");
+  TeststepPass("CONCLUSIONS","Invalid_CAN_Frame: %d times \n Times: %d ms", @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times, 100*@sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times);
+}

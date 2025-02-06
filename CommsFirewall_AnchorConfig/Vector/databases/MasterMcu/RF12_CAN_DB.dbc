@@ -1,0 +1,152 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: Gateway BCM PK_ECU
+VAL_TABLE_ VT_DemoTagZone 128 "reserved" 64 "reserved" 32 "INSIDE_VEHICLE" 16 "OUTSIDE_TRUNK" 8 "RIGHT_DOOR" 4 "LEFT_DOOR" 2 "WELCOME_LIGHT" 1 "NO_ZONE" ;
+VAL_TABLE_ VT_DemoTagValidCoord 1 "VALID" 0 "NOT_VALID" ;
+VAL_TABLE_ VT_DemoTagConn 1 "CONNECTED" 0 "NOT_CONNECTED" ;
+VAL_TABLE_ VT_DemoTagBitmap 8 "Tag_3" 4 "Tag_2" 2 "Tag_1" 1 "Tag_0" ;
+VAL_TABLE_ VT_DemoBcmCmd 7 "CMD_RKE_TRUNK_OPEN" 6 "CMD_RKE_WINDOWS_OPEN" 5 "CMD_RKE_WINDOWS_CLOSE" 4 "CMD_RKE_UNLOCK" 3 "CMD_RKE_LOCK" 2 "CMD_AUTO_UNLOCK" 1 "CMD_AUTO_LOCK" 0 "CMD_NONE" ;
+VAL_TABLE_ VT_DemoIsTrunkOpen 1 "open" 0 "closed" ;
+VAL_TABLE_ VT_DemoIsWindowOpen 1 "open" 0 "closed" ;
+VAL_TABLE_ VT_DemoIsUnlocked 1 "unlocked" 0 "locked" ;
+
+
+BO_ 1536 FUNC_REQ_ALL: 8 Gateway
+ SG_ DemoIsoFuncReqAll : 0|64@1+ (1,0) [0|1.84467440737096E+019] ""  BCM,PK_ECU
+
+BO_ 1538 PKM_PHY_RES: 8 PK_ECU
+ SG_ DemoIsoPkRes : 0|64@1+ (1,0) [0|1.84467440737096E+019] ""  Gateway
+
+BO_ 1537 PKM_PHY_REQ: 8 Gateway
+ SG_ DemoIsoPkReq : 0|64@1+ (1,0) [0|1.84467440737096E+019] ""  PK_ECU
+
+BO_ 1281 NM_BCM: 8 BCM
+ SG_ DemoNmCbvAwb : 12|1@1+ (1,0) [0|1] ""  Gateway,PK_ECU
+
+
+
+BA_DEF_ SG_  "GenSigStartValue" FLOAT 0 100000000000;
+BA_DEF_ SG_  "GenSigSendType" ENUM  "Cyclic","OnWrite","OnWriteWithRepetition","OnChange","OnChangeWithRepetition","IfActive","IfActiveWithRepetition","NoSigSendType";
+BA_DEF_ SG_  "GenSigInactiveValue" INT 0 100000;
+BA_DEF_ SG_  "NWM_WakeupAllowed" ENUM  "No","Yes";
+BA_DEF_ BO_  "VFrameFormat" ENUM  "StandardCAN","ExtendedCAN","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","StandardCAN_FD","ExtendedCAN_FD";
+BA_DEF_ BO_  "CANFD_BRS" ENUM  "0","1";
+BA_DEF_ BO_  "GenMsgStartDelayTime" INT 0 100000;
+BA_DEF_ BO_  "GenMsgILSupport" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgFastOnStart" INT 0 100000;
+BA_DEF_ BO_  "GenMsgNrOfRepetition" INT 0 999999;
+BA_DEF_ BO_  "GenMsgDelayTime" INT 0 1000;
+BA_DEF_ BO_  "GenMsgCycleTime" INT 2 50000;
+BA_DEF_ BO_  "GenMsgCycleTimeFast" INT 2 50000;
+BA_DEF_ BO_  "NmMessage" ENUM  "no","yes";
+BA_DEF_ BO_  "DiagResponse" ENUM  "No","Yes";
+BA_DEF_ BO_  "DiagRequest" ENUM  "No","Yes";
+BA_DEF_ BO_  "GenMsgSendType" ENUM  "Cyclic","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","NotUsed","IfActive","NoMsgSendType";
+BA_DEF_ BO_  "MsgType" ENUM  "Application","NM","ISO-TP";
+BA_DEF_ BU_  "CANoeStartDelay" INT 0 0;
+BA_DEF_ BU_  "CANoeDrift" INT 0 0;
+BA_DEF_ BU_  "CANoeJitterMin" INT 0 0;
+BA_DEF_ BU_  "CANoeJitterMax" INT 0 0;
+BA_DEF_ BU_  "ECU" STRING ;
+BA_DEF_ BU_  "ILUsed" ENUM  "No","Yes";
+BA_DEF_ BU_  "NodeLayerModules" STRING ;
+BA_DEF_ BU_  "NmStationAddress" INT 0 63;
+BA_DEF_ BU_  "NmNode" ENUM  "no","yes";
+BA_DEF_ BU_  "GenNodSleepTime" INT 0 1000000;
+BA_DEF_  "BusType" STRING ;
+BA_DEF_  "Manufacturer" STRING ;
+BA_DEF_  "VersionNumber" INT 1 999;
+BA_DEF_  "NmBaseAddress" HEX 1280 1407;
+BA_DEF_  "GenNWMSleepTime" INT 0 1000000;
+BA_DEF_  "NmMessageCount" INT 1 255;
+BA_DEF_  "DBName" STRING ;
+BA_DEF_DEF_  "GenSigStartValue" 0;
+BA_DEF_DEF_  "GenSigSendType" "Cyclic";
+BA_DEF_DEF_  "GenSigInactiveValue" 0;
+BA_DEF_DEF_  "NWM_WakeupAllowed" "";
+BA_DEF_DEF_  "VFrameFormat" "StandardCAN_FD";
+BA_DEF_DEF_  "CANFD_BRS" "1";
+BA_DEF_DEF_  "GenMsgStartDelayTime" 0;
+BA_DEF_DEF_  "GenMsgILSupport" "Yes";
+BA_DEF_DEF_  "GenMsgFastOnStart" 0;
+BA_DEF_DEF_  "GenMsgNrOfRepetition" 0;
+BA_DEF_DEF_  "GenMsgDelayTime" 0;
+BA_DEF_DEF_  "GenMsgCycleTime" 100;
+BA_DEF_DEF_  "GenMsgCycleTimeFast" 100;
+BA_DEF_DEF_  "NmMessage" "no";
+BA_DEF_DEF_  "DiagResponse" "No";
+BA_DEF_DEF_  "DiagRequest" "No";
+BA_DEF_DEF_  "GenMsgSendType" "Cyclic";
+BA_DEF_DEF_  "MsgType" "Application";
+BA_DEF_DEF_  "CANoeStartDelay" 0;
+BA_DEF_DEF_  "CANoeDrift" 0;
+BA_DEF_DEF_  "CANoeJitterMin" 0;
+BA_DEF_DEF_  "CANoeJitterMax" 0;
+BA_DEF_DEF_  "ECU" "";
+BA_DEF_DEF_  "ILUsed" "Yes";
+BA_DEF_DEF_  "NodeLayerModules" "dmoseknm.dll, CANoeILNLVector.dll";
+BA_DEF_DEF_  "NmStationAddress" 0;
+BA_DEF_DEF_  "NmNode" "no";
+BA_DEF_DEF_  "GenNodSleepTime" 0;
+BA_DEF_DEF_  "BusType" "CAN FD";
+BA_DEF_DEF_  "Manufacturer" "Bosch";
+BA_DEF_DEF_  "VersionNumber" 1;
+BA_DEF_DEF_  "NmBaseAddress" 1280;
+BA_DEF_DEF_  "GenNWMSleepTime" 0;
+BA_DEF_DEF_  "NmMessageCount" 128;
+BA_DEF_DEF_  "DBName" "";
+BA_ "DBName" "DEMO_CAN";
+BA_ "MsgType" BO_ 1536 2;
+BA_ "VFrameFormat" BO_ 1536 0;
+BA_ "GenMsgSendType" BO_ 1536 8;
+BA_ "MsgType" BO_ 1538 2;
+BA_ "VFrameFormat" BO_ 1538 0;
+BA_ "GenMsgSendType" BO_ 1538 8;
+BA_ "MsgType" BO_ 1537 2;
+BA_ "VFrameFormat" BO_ 1537 0;
+BA_ "GenMsgSendType" BO_ 1537 8;
+BA_ "NmMessage" BO_ 1281 1;
+BA_ "MsgType" BO_ 1281 1;
+BA_ "VFrameFormat" BO_ 1281 0;
+BA_ "GenMsgCycleTime" BO_ 1281 200;
+BA_ "GenMsgCycleTimeFast" BO_ 1281 200;
+BA_ "GenMsgSendType" BO_ 1281 8;
+BA_ "GenSigSendType" SG_ 1536 DemoIsoFuncReqAll 7;
+BA_ "GenSigSendType" SG_ 1538 DemoIsoPkRes 7;
+BA_ "GenSigSendType" SG_ 1537 DemoIsoPkReq 7;
+BA_ "GenSigSendType" SG_ 1281 DemoNmCbvAwb 7;
+VAL_ 1281 DemoNmCbvAwb 1 "Active Wakeup" 0 "Passiv Wakeup" ;
+

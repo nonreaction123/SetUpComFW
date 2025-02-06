@@ -1,0 +1,98 @@
+/*@!Encoding:1252*/
+variables
+{
+  //Hardware
+  // Bytes per Transfer request
+  // Must be 16byte aligned for Flash ECC
+  // 4095 is the configured UDS buffer size.
+  // Request download response is giving 4080 + 2 (for size, SID).
+  long TRANSFER_LENGTH         = 0xFF0;
+  long BLE_TRANSFER_LENGTH     = 0x82;
+  dword START_ADDRESS_APP      = 0x0FF0000;
+  dword START_ADDRESS_CAL      = 0x1100000;
+  dword START_ADDRESS_APP_B21  = 0x01200000;
+  dword START_ADDRESS_CAL_B21  = 0x00FD8000;
+  dword START_ADDRESS_BLE_B21  = 0x01100000;
+  dword START_ADDRESS_UWB_B21  = 0x01000000;
+  
+  
+  dword START_ADDRESS_MASTER_BLE[ char[] ];
+  dword START_ADDRESS_ANCHOR_BLE[ char[] ];
+  
+  //Constants
+  const int HASH_TYPE_GOOD                          = 0;
+  const int HASH_TYPE_BAD                           = 1;
+  const int HASH_LENGTH                             = 256;
+  const int LOGICAL_BLOCKS_MAX                      = 1;
+  const int NUMBER_DTC_MAX                          = 3;
+  const int REPORT_SUPPORTED_DTC_ENCODING_LENGTH    = 4;
+  const int FINGERPRINT_LENGTH_MAX                  = 16;
+  const int SEED_LENGTH_MAX                         = 32;
+  const int KEY_LENGTH_MAX                          = 32;
+
+  byte LOGICAL_BLOCK1[2] = {0xFD, 0x01}; 
+  byte LOGICAL_BLOCK2[2] = {0xFD, 0x02};
+  byte LOGICAL_BLOCK3[2] = {0xFD, 0x03};
+  byte LOGICAL_BLOCK4[2] = {0xFD, 0x04};
+  
+  //UDS Error Codes
+  const long UDS_ERROR_CODE_OK      = -1;   //Positive response
+  const long UDS_ERROR_CODE_IMLOIF  = 0x13; //Incorrect message length or invalid format
+  const long UDS_ERROR_CODE_SFNS    = 0x12; //Subfunction not supported
+  const long UDS_ERROR_CODE_CNC     = 0x22; //Conditions not correct
+  const long UDS_ERROR_CODE_ROOR    = 0x31; //Request out of range
+  const long UDS_ERROR_CODE_SAD     = 0x33; //Security Access denied
+  const long UDS_ERROR_CODE_IK      = 0x35; //Invalid Key
+  const long UDS_ERROR_CODE_RSE     = 0x24; //Request sequence error
+  const long UDS_ERROR_CODE_FPEORA  = 0x26; //failure prevents execution of requested action
+  const long UDS_ERROR_CODE_SNS     = 0x11;
+  const long UDS_ERROR_CODE_SNSIAS  = 0x7E;
+
+  //DTCs
+  const byte LIST_DTC_BLOCK_MSB_INDEX   = 0;
+  const byte LIST_DTC_BLOCK_LSB_INDEX   = 1;
+  const byte LIST_DTC_NUMBER_INDEX      = 2;
+  const byte LIST_DTC_STATUS_INDEX      = 3;
+  const byte DTC_PROG_FAIL              = 0x51;
+  const byte DTC_INTERNAL_FAIL          = 0x42;
+  const byte DTC_ALGORITHM_FAIL         = 0x06;
+  const byte DTC_ALL                    = 0xFF;
+  const byte LIST_DTC_ORDER_0X06        = 0; 
+  const byte LIST_DTC_ORDER_0X42        = 1; 
+  const byte LIST_DTC_ORDER_0X51        = 2;
+
+  const byte DTC_STATUS_OK          = 0x00;
+  const byte DTC_STATUS_FAIL        = 0x01;
+  const byte DTC_STATUS_NOT_TESTED  = 0x10;
+
+  //Download
+  const byte RQST_DOWNLOAD_DATA_FORMAT            = 0x00;  //No encryption, no compression
+  const byte RQST_DOWNLOAD_ADDRESS_LENGTH_FORMAT  = 0x34; //4 bytes address, 3 bytes length
+
+  const long RESPONSE_CHECK_IS_OK   = 1;
+  const long RESPONSE_CHECK_IS_NOK  = 0;
+
+  //Hash
+  byte HASH[HASH_LENGTH];
+
+  //Downloadable code
+  dword fileFwHandle;
+  long  dataLength;
+}
+
+void Configuration_Init(void)
+{
+  START_ADDRESS_MASTER_BLE["C1"] = 0x00000000;
+  START_ADDRESS_MASTER_BLE["C1dev"] = 0x00000000;
+  START_ADDRESS_MASTER_BLE["C2"] = 0x00000000;
+  START_ADDRESS_MASTER_BLE["C2dev"] = 0x00000000;
+  START_ADDRESS_MASTER_BLE["C1_uaes"] = 0x00000000;
+  
+  START_ADDRESS_ANCHOR_BLE["C1"] = 0x00000000;
+  START_ADDRESS_ANCHOR_BLE["C1dev"] = 0x00000000;
+  START_ADDRESS_ANCHOR_BLE["C2"] = 0x00000000;
+  START_ADDRESS_ANCHOR_BLE["C2dev"] = 0x00000000;
+  START_ADDRESS_ANCHOR_BLE["C1_uaes"] = 0x00000000;
+  
+}
+

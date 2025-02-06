@@ -1,0 +1,131 @@
+/*@!Encoding:1252*/
+includes
+{
+}
+
+variables
+{
+  msTimer Inject_CPU_HighLoad_1_100ms; // for delay 100ms
+//  msTimer Inject_CPU_HighLoad_2_100ms; // for delay 100ms
+//  msTimer Inject_CPU_HighLoad_3_100ms; // for delay 100ms
+//  msTimer Inject_CPU_HighLoad_4_100ms; // for delay 100ms
+//  msTimer Inject_CPU_HighLoad_5_100ms; // for delay 100ms
+  
+
+
+  message 0x706 Send_DID_FE03;  // Wrong Multiple Frame (701 due to Anchor 1)
+  message 0x706 Send_DID_FE11;  // Wrong Multiple Frame (701 due to Anchor 1)
+  message 0x706 Send_DID_F110;  // Wrong Multiple Frame (701 due to Anchor 1)
+  message 0x706 Send_DID_F112;  // Wrong Multiple Frame (701 due to Anchor 1)
+  message 0x706 Send_DID_F180;  // Wrong Multiple Frame (701 due to Anchor 1)
+  
+
+  
+  
+}
+
+
+
+
+//////////////////////////////////////////
+on timer Inject_CPU_HighLoad_1_100ms
+{
+  
+  
+  output(Send_DID_FE03);
+  output(Send_DID_FE11);
+  output(Send_DID_F110);
+  output(Send_DID_F112);
+  output(Send_DID_F180);
+  setTimer(Inject_CPU_HighLoad_1_100ms, 10);
+  
+}
+
+//on timer Inject_CPU_HighLoad_2_100ms
+//{
+//  
+//  output(Send_DID_FE03);
+//  output(Send_DID_FE11);
+//  setTimer(Inject_CPU_HighLoad_2_100ms, 100);
+//
+//}
+
+testfunction Function_CPU_High_Load ()
+{
+  Send_DID_FE03.DLC = 8; // set DLC for fe
+  Send_DID_FE03.byte(0) = 0x03;
+  Send_DID_FE03.byte(1) = 0x22;
+  Send_DID_FE03.byte(2) = 0xFE;
+  Send_DID_FE03.byte(3) = 0x03;
+  Send_DID_FE03.byte(4) = 0xCC;
+  Send_DID_FE03.byte(5) = 0xCC;
+  Send_DID_FE03.byte(6) = 0xCC;
+  Send_DID_FE03.byte(7) = 0xCC;
+  Send_DID_FE03.CAN = 2;
+
+  Send_DID_FE11.DLC = 8; // set DLC for fe
+  Send_DID_FE11.byte(0) = 0x03;
+  Send_DID_FE11.byte(1) = 0x22;
+  Send_DID_FE11.byte(2) = 0xFE;
+  Send_DID_FE11.byte(3) = 0x11;
+  Send_DID_FE11.byte(4) = 0xCC;
+  Send_DID_FE11.byte(5) = 0xCC;
+  Send_DID_FE11.byte(6) = 0xCC;
+  Send_DID_FE11.byte(7) = 0xCC;
+  Send_DID_FE11.CAN = 2;
+  
+  Send_DID_F110.DLC = 8; // set DLC for fe
+  Send_DID_F110.byte(0) = 0x03;
+  Send_DID_F110.byte(1) = 0x22;
+  Send_DID_F110.byte(2) = 0xF1;
+  Send_DID_F110.byte(3) = 0x10;
+  Send_DID_F110.byte(4) = 0xCC;
+  Send_DID_F110.byte(5) = 0xCC;
+  Send_DID_F110.byte(6) = 0xCC;
+  Send_DID_F110.byte(7) = 0xCC;
+  Send_DID_F110.CAN = 2;
+  
+  
+  Send_DID_F112.DLC = 8; // set DLC for fe
+  Send_DID_F112.byte(0) = 0x03;
+  Send_DID_F112.byte(1) = 0x22;
+  Send_DID_F112.byte(2) = 0xF1;
+  Send_DID_F112.byte(3) = 0x12;
+  Send_DID_F112.byte(4) = 0xCC;
+  Send_DID_F112.byte(5) = 0xCC;
+  Send_DID_F112.byte(6) = 0xCC;
+  Send_DID_F112.byte(7) = 0xCC;
+  Send_DID_F112.CAN = 2;
+  
+  
+  Send_DID_F180.DLC = 8; // set DLC for fe
+  Send_DID_F180.byte(0) = 0x03;
+  Send_DID_F180.byte(1) = 0x22;
+  Send_DID_F180.byte(2) = 0xF1;
+  Send_DID_F180.byte(3) = 0x80;
+  Send_DID_F180.byte(4) = 0xCC;
+  Send_DID_F180.byte(5) = 0xCC;
+  Send_DID_F180.byte(6) = 0xCC;
+  Send_DID_F180.byte(7) = 0xCC;
+  Send_DID_F180.CAN = 2;
+  
+  output(Send_DID_FE03);
+  output(Send_DID_FE11);
+  output(Send_DID_F110);
+  output(Send_DID_F112);
+  output(Send_DID_F180);
+  setTimer(Inject_CPU_HighLoad_1_100ms,100); 
+//  setTimer(Inject_CPU_HighLoad_2_100ms,100); 
+//  setTimer(Inject_CPU_HighLoad_3_100ms,100); 
+//  setTimer(Inject_CPU_HighLoad_4_100ms,100); 
+//  setTimer(Inject_CPU_HighLoad_5_100ms,100); 
+ 
+}
+
+void Stop_Fuction_CPU_High_Load ()
+{
+  cancelTimer(Inject_CPU_HighLoad_1_100ms); 
+
+  
+  TeststepPass("CONCLUSIONS","CPU_High_Load_times: %d times \n Times: %d ms", @sysvar::HighCPULoad::InjectLoad::Times, 100*@sysvar::HighCPULoad::InjectLoad::Times);
+}

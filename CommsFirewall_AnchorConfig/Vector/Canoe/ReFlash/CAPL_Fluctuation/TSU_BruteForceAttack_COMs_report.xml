@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<testmodule starttime="2024-12-10 15:13:44" timestamp=" 936.261689" verdicts="2_basic">
+  <testgroup>
+    <skipped starttime="2024-12-10 15:13:44" timestamp=" 936.261689">
+      <title>TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235</title>
+    </skipped>
+    <skipped starttime="2024-12-10 15:13:44" timestamp=" 936.261689">
+      <title>TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_InCar1SecurityAccess_231239</title>
+    </skipped>
+    <skipped starttime="2024-12-10 15:13:44" timestamp=" 936.261689">
+      <title>TCS_PK_HGT_COMFW_PowerFluctuationHtoL_BruteForceAttack_InvalidKey_SecOCexchangeKey_231243</title>
+    </skipped>
+    <skipped starttime="2024-12-10 15:13:44" timestamp=" 936.261689">
+      <title>TCS_PK_HGT_COMFW_ControlStageBySignal_BruteForceAttack_InvalidKey_InCar1SecurityAccess_231241</title>
+    </skipped>
+    <skipped starttime="2024-12-10 15:13:44" timestamp=" 936.261689">
+      <title>TCS_PK_HGT_COMFW_ControlStageBySignal_BruteForceAttack_InvalidKey_SecOCexchangeKey_231244</title>
+    </skipped>
+    <skipped starttime="2024-12-10 15:13:44" timestamp=" 936.261689">
+      <title>TCS_PK_HGT_COMFW_PowerFluctuationHtoL_BruteForceAttack_InvalidKey_BoschSecurityAccess_231236</title>
+    </skipped>
+    <testcase starttime="2024-12-10 15:13:44" timestamp=" 936.261689">
+      <comment timestamp=" 936.261689">
+        <text>Precondition</text>
+      </comment>
+      <teststep timestamp=" 936.261689" level="0" type="user" ident="1" result="na">Start tester present</teststep>
+      <teststep timestamp=" 936.261689" level="0" type="user" ident="2" result="na">Send request 10 01 to enter Diagnostic Default Session </teststep>
+      <teststep timestamp=" 936.265580" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=3.89159ms (max=2000ms)</teststep>
+      <teststep timestamp=" 936.265580" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_RQ</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-RQ</cell>
+            <cell>0x10</cell>
+            <cell>10 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x01</cell>
+            <cell>01 </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp=" 936.268117" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=2.53641ms (max=5000ms)</teststep>
+      <teststep timestamp=" 936.268117" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_PR</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-PR</cell>
+            <cell>0x50</cell>
+            <cell>50 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x01</cell>
+            <cell>01 </cell>
+          </row>
+          <row level="0">
+            <cell>P2</cell>
+            <cell>50 ms</cell>
+            <cell>00 32 </cell>
+          </row>
+          <row level="0">
+            <cell>P2Ex</cell>
+            <cell>5000 ms</cell>
+            <cell>01 f4 </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp=" 936.268117" level="0" type="user" ident="" result="pass">Response received is valid : Actual Response = 50 1 0 32 1 f4  Expected Response = 50 01 00 32 01 F4</teststep>
+      <teststep timestamp=" 936.368117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+      <comment timestamp=" 936.368117">
+        <text>Actions</text>
+      </comment>
+      <teststep timestamp=" 936.368117" level="0" type="user" ident="1" result="na">Inject Power Fluctuation</teststep>
+      <testpattern timestamp=" 936.368117" name="PowerFluctuationLowtoHigh" type="testpattern">
+        <title>PowerFluctuationLowtoHigh</title>
+        <teststep timestamp=" 936.393117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.418117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.443117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.468117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.493117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.518117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.543117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.568117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.593117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.618117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.643117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.668117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.693117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.718117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.743117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.768117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.793117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.818117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.843117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.868117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.893117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.918117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.943117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.968117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 936.993117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.018117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.043117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.068117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.093117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.118117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.143117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.168117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.193117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.218117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.243117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.268117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.293117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.318117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.343117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.368117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.393117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.418117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.443117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.468117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.493117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.518117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.543117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.568117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.593117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.618117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.643117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.668117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.693117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.718117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.743117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.768117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.793117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.818117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.843117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.868117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.893117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.918117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.943117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.968117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 937.993117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.018117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.043117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.068117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.093117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.118117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.143117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.168117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.193117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.218117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.243117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.268117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.293117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.318117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.343117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.368117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.393117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.418117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.443117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.468117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.493117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.518117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.543117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.568117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.593117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.618117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.643117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.668117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.693117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.718117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.743117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.768117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.793117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.818117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.843117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.868117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.893117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.918117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.943117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.968117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 938.993117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.018117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.043117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.068117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.093117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.118117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.143117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.168117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.193117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.218117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.243117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.268117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.293117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.318117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.343117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.368117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.393117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.418117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.443117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.468117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.493117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.518117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.543117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.568117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.593117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.618117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.643117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.668117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.693117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.718117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.743117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.768117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.793117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.818117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.843117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.868117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.893117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.918117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.943117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.968117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 939.993117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.018117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.043117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.068117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.093117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.118117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.143117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.168117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.193117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.218117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.243117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.268117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.293117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.318117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.343117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.368117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <teststep timestamp=" 940.393117" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=25ms (max=25ms)</teststep>
+        <result timestamp=" 940.393117" result="pass"/>
+      </testpattern>
+      <teststep timestamp=" 940.393117" level="0" type="user" ident="2" result="na">Request Extended Diagnostic Session</teststep>
+      <testpattern timestamp=" 940.393117" name="SendDiag_Request_Verify_Response" type="testpattern">
+        <title>SendDiag_Request_Verify_Response</title>
+        <teststep timestamp=" 940.394529" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=1.412ms (max=2000ms)</teststep>
+        <teststep timestamp=" 940.394529" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/ExtendedDiagnosticSession_Start/STDS_RQ</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-RQ</cell>
+              <cell>0x10</cell>
+              <cell>10 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x03</cell>
+              <cell>03 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp=" 940.396201" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=1.67206ms (max=5000ms)</teststep>
+        <teststep timestamp=" 940.396201" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/ExtendedDiagnosticSession_Start/STDS_PR</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-PR</cell>
+              <cell>0x50</cell>
+              <cell>50 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x03</cell>
+              <cell>03 </cell>
+            </row>
+            <row level="0">
+              <cell>P2</cell>
+              <cell>50 ms</cell>
+              <cell>00 32 </cell>
+            </row>
+            <row level="0">
+              <cell>P2Ex</cell>
+              <cell>5000 ms</cell>
+              <cell>01 f4 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp=" 940.396201" level="0" type="user" ident="" result="pass">Response received is valid : Actual Response = 50 3 0 32 1 f4  Expected Response = 50 03 00 32 01 F4</teststep>
+        <teststep timestamp=" 940.496201" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp=" 940.496201" result="pass"/>
+      </testpattern>
+      <teststep timestamp=" 940.496201" level="0" type="user" ident="3" result="na">Inject Brute Force Attack</teststep>
+      <testpattern timestamp=" 940.496201" name="Brute_Force_Attack_Exchange_Keys_2_Security_Function" type="testpattern">
+        <title>Brute_Force_Attack_Exchange_Keys_2_Security_Function</title>
+        <teststep timestamp="1040.496201" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100000ms (max=100000ms)</teststep>
+        <result timestamp="1040.496201" result="pass"/>
+      </testpattern>
+      <teststep timestamp="1040.496201" level="0" type="user" ident="CONCLUSIONS" result="pass">Brute Force Attack Counts: 39 times.\n Times: 100000 ms</teststep>
+      <comment timestamp="1040.496201">
+        <text>PostCondition</text>
+      </comment>
+      <teststep timestamp="1040.496201" level="0" type="user" ident="1" result="na">Send request 10 01 to enter Diagnostic Default Session</teststep>
+      <teststep timestamp="1040.497477" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=1.27614ms (max=2000ms)</teststep>
+      <teststep timestamp="1040.497477" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_RQ</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-RQ</cell>
+            <cell>0x10</cell>
+            <cell>10 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x01</cell>
+            <cell>01 </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp="1040.502270" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=4.79291ms (max=5000ms)</teststep>
+      <teststep timestamp="1040.502270" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_PR</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-PR</cell>
+            <cell>0x50</cell>
+            <cell>50 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x01</cell>
+            <cell>01 </cell>
+          </row>
+          <row level="0">
+            <cell>P2</cell>
+            <cell>50 ms</cell>
+            <cell>00 32 </cell>
+          </row>
+          <row level="0">
+            <cell>P2Ex</cell>
+            <cell>5000 ms</cell>
+            <cell>01 f4 </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp="1040.502270" level="0" type="user" ident="" result="pass">Response received is valid : Actual Response = 50 1 0 32 1 f4  Expected Response = 50 01 00 32 01 F4</teststep>
+      <teststep timestamp="1040.602270" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+      <teststep timestamp="1040.602270" level="0" type="user" ident="2" result="na">Stop tester present</teststep>
+      <teststep timestamp="1041.102270" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=500ms (max=500ms)</teststep>
+      <teststep timestamp="1051.102270" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=10000ms (max=10000ms)</teststep>
+      <verdict time="2024-12-10 15:15:39" timestamp="1051.102270" endtime="2024-12-10 15:15:39" endtimestamp="1051.102270" result="pass" />
+      <title>TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_SecOCexchangeKey_231242</title>
+      <description>Verify Anchor doesn&apos;t unlock when receiving Invalid Keys through SecurityAccess (0x27) during Power Fluctuation Low to High (LtoH) pattern.</description>
+    </testcase>
+    <testcase starttime="2024-12-10 15:15:39" timestamp="1051.102270">
+      <comment timestamp="1051.102270">
+        <text>Precondition</text>
+      </comment>
+      <teststep timestamp="1051.102270" level="0" type="user" ident="1" result="na">Start tester present</teststep>
+      <teststep timestamp="1051.102270" level="0" type="user" ident="2" result="na">Send request 10 01 to enter Diagnostic Default Session </teststep>
+      <teststep timestamp="1051.107826" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=5.55611ms (max=2000ms)</teststep>
+      <teststep timestamp="1051.107826" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_RQ</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-RQ</cell>
+            <cell>0x10</cell>
+            <cell>10 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x01</cell>
+            <cell>01 </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp="1051.110260" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=2.43441ms (max=5000ms)</teststep>
+      <teststep timestamp="1051.110260" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_PR</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-PR</cell>
+            <cell>0x50</cell>
+            <cell>50 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x01</cell>
+            <cell>01 </cell>
+          </row>
+          <row level="0">
+            <cell>P2</cell>
+            <cell>50 ms</cell>
+            <cell>00 32 </cell>
+          </row>
+          <row level="0">
+            <cell>P2Ex</cell>
+            <cell>5000 ms</cell>
+            <cell>01 f4 </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp="1051.110260" level="0" type="user" ident="" result="pass">Response received is valid : Actual Response = 50 1 0 32 1 f4  Expected Response = 50 01 00 32 01 F4</teststep>
+      <teststep timestamp="1051.210260" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+      <comment timestamp="1051.210260">
+        <text>Actions</text>
+      </comment>
+      <teststep timestamp="1051.210260" level="0" type="user" ident="1" result="na">Inject Power Fluctuation</teststep>
+      <testpattern timestamp="1051.210260" name="ControlStageBySignal" type="testpattern">
+        <title>ControlStageBySignal</title>
+        <teststep timestamp="1053.210260" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=2000ms (max=2000ms)</teststep>
+        <teststep timestamp="1053.460260" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=250ms (max=250ms)</teststep>
+        <result timestamp="1053.460260" result="pass"/>
+      </testpattern>
+      <teststep timestamp="1055.460260" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=2000ms (max=2000ms)</teststep>
+      <teststep timestamp="1055.460260" level="0" type="user" ident="2" result="na">Request Extended Diagnostic Session</teststep>
+      <testpattern timestamp="1055.460260" name="SendDiag_Request_Verify_Response" type="testpattern">
+        <title>SendDiag_Request_Verify_Response</title>
+        <teststep timestamp="1055.461505" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=1.24428ms (max=2000ms)</teststep>
+        <teststep timestamp="1055.461505" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/ExtendedDiagnosticSession_Start/STDS_RQ</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-RQ</cell>
+              <cell>0x10</cell>
+              <cell>10 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x03</cell>
+              <cell>03 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="1055.465687" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=4.18201ms (max=5000ms)</teststep>
+        <teststep timestamp="1055.465687" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/ExtendedDiagnosticSession_Start/STDS_PR</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-PR</cell>
+              <cell>0x50</cell>
+              <cell>50 </cell>
+            </row>
+            <row level="0">
+              <cell>Type</cell>
+              <cell>0x03</cell>
+              <cell>03 </cell>
+            </row>
+            <row level="0">
+              <cell>P2</cell>
+              <cell>50 ms</cell>
+              <cell>00 32 </cell>
+            </row>
+            <row level="0">
+              <cell>P2Ex</cell>
+              <cell>5000 ms</cell>
+              <cell>01 f4 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="1055.465687" level="0" type="user" ident="" result="pass">Response received is valid : Actual Response = 50 3 0 32 1 f4  Expected Response = 50 03 00 32 01 F4</teststep>
+        <teststep timestamp="1055.565687" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp="1055.565687" result="pass"/>
+      </testpattern>
+      <teststep timestamp="1055.565687" level="0" type="user" ident="3" result="na">Inject Brute Force Attack</teststep>
+      <testpattern timestamp="1055.565687" name="Brute_Force_Attack_Bosch_3_Security_Function" type="testpattern">
+        <title>Brute_Force_Attack_Bosch_3_Security_Function</title>
+        <teststep timestamp="1155.565687" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100000ms (max=100000ms)</teststep>
+        <result timestamp="1155.565687" result="pass"/>
+      </testpattern>
+      <teststep timestamp="1155.565687" level="0" type="user" ident="CONCLUSIONS" result="pass">Brute Force Attack Counts: 42 times.\n Times: 100000 ms</teststep>
+      <teststep timestamp="1155.565687" level="0" type="user" ident="4" result="na">Verify requested security level is still locked by reading DID FE14</teststep>
+      <teststep timestamp="1160.565687" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=5000ms (max=5000ms)</teststep>
+      <testpattern timestamp="1160.565687" name="SendDiag_Request_Verify_Negative_Response" type="testpattern">
+        <title>SendDiag_Request_Verify_Negative_Response</title>
+        <teststep timestamp="1160.566341" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=0.654047ms (max=2000ms)</teststep>
+        <teststep timestamp="1160.566341" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/Source_Control_Commit_ID_Read/RDBI_RQ</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-RQ</cell>
+              <cell>0x22</cell>
+              <cell>22 </cell>
+            </row>
+            <row level="0">
+              <cell>Identifier</cell>
+              <cell>0xFE14</cell>
+              <cell>fe 14 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="1160.570568" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=4.22752ms (max=5000ms)</teststep>
+        <teststep timestamp="1160.570568" type="user" ident="" result="na">
+          <tabularinfo>
+            <description>DiagAnchor2: //Anchor/CommonDiagnostics/Source_Control_Commit_ID_Read/RDBI_NR</description>
+            <heading>
+              <cell>Parameter</cell>
+              <cell>Value</cell>
+              <cell>Raw</cell>
+            </heading>
+            <row level="0">
+              <cell>SID-NR</cell>
+              <cell>0x7F</cell>
+              <cell>7f </cell>
+            </row>
+            <row level="0">
+              <cell>SIDRQ-NR</cell>
+              <cell>0x22</cell>
+              <cell>22 </cell>
+            </row>
+            <row level="0">
+              <cell>RESPONSE CODE</cell>
+              <cell>Security access denied</cell>
+              <cell>33 </cell>
+            </row>
+          </tabularinfo>
+        </teststep>
+        <teststep timestamp="1160.570568" level="0" type="user" ident="" result="pass">Response received is valid : Actual Response = 7f 22 33  Expected Response = 7F 22 33</teststep>
+        <teststep timestamp="1160.670568" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+        <result timestamp="1160.670568" result="pass"/>
+      </testpattern>
+      <teststep timestamp="1160.670568" level="0" type="user" ident="5,6" result="na">Verify requested Bosch Security</teststep>
+      <comment timestamp="1160.670568">
+        <text>PostCondition</text>
+      </comment>
+      <teststep timestamp="1160.670568" level="0" type="user" ident="1" result="na">Send request 10 01 to enter Diagnostic Default Session</teststep>
+      <teststep timestamp="1160.671447" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics request sent to &apos;DiagAnchor2&apos; Elapsed time=0.879172ms (max=2000ms)</teststep>
+      <teststep timestamp="1160.671447" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_RQ</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-RQ</cell>
+            <cell>0x10</cell>
+            <cell>10 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x01</cell>
+            <cell>01 </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp="1160.676144" level="1" type="auto" ident="Resume reason" result="na">Resumed on Diagnostics response from &apos;DiagAnchor2&apos; Elapsed time=4.69636ms (max=5000ms)</teststep>
+      <teststep timestamp="1160.676144" type="user" ident="" result="na">
+        <tabularinfo>
+          <description>DiagAnchor2: //Anchor/CommonDiagnostics/DefaultSession_Start/STDS_PR</description>
+          <heading>
+            <cell>Parameter</cell>
+            <cell>Value</cell>
+            <cell>Raw</cell>
+          </heading>
+          <row level="0">
+            <cell>SID-PR</cell>
+            <cell>0x50</cell>
+            <cell>50 </cell>
+          </row>
+          <row level="0">
+            <cell>Type</cell>
+            <cell>0x01</cell>
+            <cell>01 </cell>
+          </row>
+          <row level="0">
+            <cell>P2</cell>
+            <cell>50 ms</cell>
+            <cell>00 32 </cell>
+          </row>
+          <row level="0">
+            <cell>P2Ex</cell>
+            <cell>5000 ms</cell>
+            <cell>01 f4 </cell>
+          </row>
+        </tabularinfo>
+      </teststep>
+      <teststep timestamp="1160.676144" level="0" type="user" ident="" result="pass">Response received is valid : Actual Response = 50 1 0 32 1 f4  Expected Response = 50 01 00 32 01 F4</teststep>
+      <teststep timestamp="1160.776144" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=100ms (max=100ms)</teststep>
+      <teststep timestamp="1160.776144" level="0" type="user" ident="2" result="na">Stop tester present</teststep>
+      <teststep timestamp="1161.276144" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=500ms (max=500ms)</teststep>
+      <teststep timestamp="1171.276144" level="1" type="auto" ident="Resume reason" result="na">Elapsed time=10000ms (max=10000ms)</teststep>
+      <verdict time="2024-12-10 15:17:39" timestamp="1171.276144" endtime="2024-12-10 15:17:39" endtimestamp="1171.276144" result="pass" />
+      <title>TCS_PK_HGT_COMFW_ControlStageBySignal_BruteForceAttack_InvalidKey_BoschSecurityAccess_231237</title>
+      <description>Verify Anchor doesn&apos;t unlock when receiving Invalid Keys through SecurityAccess (0x27) during Power Fluctuation Low to High (LtoH) pattern.</description>
+    </testcase>
+    <skipped starttime="2024-12-10 15:17:39" timestamp="1171.276144">
+      <title>TCS_PK_HGT_COMFW_PowerFluctuationHtoL_BruteForceAttack_InvalidKey_InCar1SecurityAccess_231240</title>
+    </skipped>
+    <title>TSU_PK_HGT_COMS_Firewall_BruteForceAttack</title>
+  </testgroup>
+  <verdict time="2024-12-10 15:17:39" timestamp="1171.276144" endtime="2024-12-10 15:17:39" endtimestamp="1171.276144" result="pass" />
+  <title>HGT_PK-Comms_Firewall</title>
+  <testlogfiles>
+  </testlogfiles>
+  <engineer>
+    <xinfo>
+      <name>Windows Login Name</name>
+      <description>DAR5HC</description>
+    </xinfo>
+  </engineer>
+  <testsetup>
+    <xinfo>
+      <name>Version</name>
+      <description>CANoe.CAN /pro 12.0.101 (SP2)</description>
+    </xinfo>
+    <xinfo>
+      <name>Configuration</name>
+      <description>C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\Canoe\ReFlash\DV5187_PK_Private_COMMUNICATIONFIREWALL.cfg</description>
+    </xinfo>
+    <xinfo>
+      <name>Database PK_BB_CAN on Private</name>
+      <description>C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_BB_CAN.dbc (2024-02-12 14:51:04)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor1</name>
+      <description>CommonDiagnostics, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor2</name>
+      <description>CommonDiagnostics, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor3</name>
+      <description>CommonDiagnostics, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor4</name>
+      <description>CommonDiagnostics, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor5</name>
+      <description>CommonDiagnostics, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor6</name>
+      <description>CommonDiagnostics, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor7</name>
+      <description>CommonDiagnostics, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor8</name>
+      <description>CommonDiagnostics, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchor9</name>
+      <description>CommonDiagnostics, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagAnchorF</name>
+      <description>CommonDiagnostics, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of DiagMasterBLE</name>
+      <description>CommonDiagnostics, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\common\PK_Diag_Anchor.cdd (13, 2023-06-13 11:40:00+05:30)</description>
+    </xinfo>
+    <xinfo>
+      <name>Diagnostic Description of VKM_Base</name>
+      <description>Base_Variant, en-US, C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\databases\MasterMcu\PKCV_Diag_Master.120.cdd</description>
+    </xinfo>
+    <xinfo>
+      <name>Test Module Name</name>
+      <description>TSU_BruteForceAttack_COMs</description>
+    </xinfo>
+    <xinfo>
+      <name>Test Module File</name>
+      <description>C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\Canoe\ReFlash\CAPL_Fluctuation\TSU_BruteForceAttack_COMs.xml</description>
+    </xinfo>
+    <xinfo>
+      <name>Last modification of Test Module File</name>
+      <description>2024-04-15, 17:05:38</description>
+    </xinfo>
+    <xinfo>
+      <name>Test Module Library (CAPL)</name>
+      <description>C:\sandbox\Tri\CommsFirewall_AnchorConfig\CommsFirewall_AnchorConfig\Vector\Canoe\ReFlash\CAPL_Fluctuation\TSU_BruteForceAttack_COMs.can</description>
+    </xinfo>
+    <xinfo>
+      <name>Windows Computer Name</name>
+      <description>HC-C-003DJ</description>
+    </xinfo>
+    <xinfo>
+      <name>Nodelayer Module J1939TestServiceLibraryNL</name>
+      <description>J1939 Test Service Library for CANoe, Version 12.0.101.0, C:\Program Files\Vector CANoe 12.0\Exec32\J1939TestServiceLibraryNL.dll</description>
+    </xinfo>
+  </testsetup>
+  <hardware name="CAN Channel Interfaces" category="CategoryCANIF">
+    <xinfoset type="device">
+      <xinfoobject type="device">
+      <xinfo key="channel">
+        <name>Channel</name>
+        <description>1</description>
+      </xinfo>
+      <xinfo key="device">
+        <name>Device</name>
+        <description>VN1640</description>
+      </xinfo>
+      <xinfo key="serialnumber">
+        <name>Serial number</name>
+        <description>523919</description>
+      </xinfo>
+      <xinfo key="driverdllversion">
+        <name>Driver DLL version</name>
+        <description>20.30.16</description>
+      </xinfo>
+      <xinfo key="driverversion">
+        <name>Driver version</name>
+        <description>20.30.14</description>
+      </xinfo>
+      </xinfoobject>
+      <xinfoobject type="device">
+      <xinfo key="channel">
+        <name>Channel</name>
+        <description>2</description>
+      </xinfo>
+      <xinfo key="device">
+        <name>Device</name>
+        <description>VN1640</description>
+      </xinfo>
+      <xinfo key="serialnumber">
+        <name>Serial number</name>
+        <description>523919</description>
+      </xinfo>
+      <xinfo key="driverdllversion">
+        <name>Driver DLL version</name>
+        <description>20.30.16</description>
+      </xinfo>
+      <xinfo key="driverversion">
+        <name>Driver version</name>
+        <description>20.30.14</description>
+      </xinfo>
+      </xinfoobject>
+    </xinfoset>
+  </hardware>
+</testmodule>
+<!--footprint="e6b84cc4d218003eb0692940767da001" version="1"-->

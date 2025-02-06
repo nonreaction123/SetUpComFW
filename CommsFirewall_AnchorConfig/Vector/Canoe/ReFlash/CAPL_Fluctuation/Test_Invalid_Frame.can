@@ -1,0 +1,21 @@
+/*@!Encoding:1252*/
+includes
+{ 
+}
+
+variables
+{ 
+  message 1438x Invalid_Single_Frame;  // Wrong CAN ID
+  message 702 Invalid_Multiple_Frame;  // Wrong Multiple Frame (701 due to Anchor 1) 
+  msTimer ms_100; // for delay 100ms 
+}
+
+
+
+
+on timer ms_100
+{
+  output(Invalid_Single_Frame);
+  setTimer(ms_100, 100);
+}
+

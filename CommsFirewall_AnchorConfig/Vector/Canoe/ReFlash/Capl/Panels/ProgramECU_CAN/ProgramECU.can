@@ -1,0 +1,761 @@
+/*@!Encoding:1252*/
+includes
+{
+  #include "Encoding.cin"
+}
+
+variables
+{
+    char panelName[32] = "ProgramECU";
+  
+    msTimer rerunTimer;  
+    int i;
+  char tmp[8];    // Temporary buffer containing single HEX value
+  char out[512];  // Bigger output string and "local" to function
+}
+
+on start
+{
+    enableControl(panelName, "grpApplication", 0);
+    enableControl(panelName, "grpCalibration", 0);
+    enableControl(panelName, "grpMasterBle", 0);
+    enableControl(panelName, "grpAnchorBle", 0);
+    enableControl(panelName, "grpMasterDialog", 1);
+    enableControl(panelName, "cbProgAnchor", 1);
+    enableControl(panelName, "cbAnchor1", 1);
+    enableControl(panelName, "cbAnchor2", 1);
+    enableControl(panelName, "cbAnchor3", 1);
+    enableControl(panelName, "cbAnchor4", 1);
+    enableControl(panelName, "cbAnchor5", 1);
+    enableControl(panelName, "cbAnchor6", 1);
+    enableControl(panelName, "cbAnchor7", 1);
+    enableControl(panelName, "cbAnchor8", 1);
+    enableControl(panelName, "cbAnchor9", 1);
+    enableControl(panelName, "cbAnchorF", 1);
+    enableControl(panelName, "pathConfigData", 1);
+    @sysvar::PROGRAM_ECU::boMBleS32 = 1;
+    @sysvar::PROGRAM_ECU::boMBleTI = 0;
+    @sysvar::PROGRAM_ECU::boABleS32 = 1;
+    @sysvar::PROGRAM_ECU::boABleTI = 0;  
+    @sysvar::PROGRAM_ECU::boAR4binfile = 0;
+    @sysvar::PROGRAM_ECU::boAR4pkgfile = 1;
+    @sysvar::PROGRAM_ECU::boMR4binfile = 0;
+    @sysvar::PROGRAM_ECU::boMR4pkgfile = 1;
+    enableControl(panelName, "grpAnchorR4Bin", 0);
+    enableControl(panelName, "grpAnchorR4Pkg", 1);
+    enableControl(panelName, "grpMasterR4Bin", 0);
+    enableControl(panelName, "grpMasterR4Pkg", 1);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorR4PkgFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strR4RxConfigFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strR4TxConfigFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorR4File, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorR4BinVersion, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorR4PkgVersion, "");
+  
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterR4PkgFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMR4RxConfigFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMR4TxConfigFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterR4File, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterR4BinVersion, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterR4PkgVersion, "");
+  
+}
+void printHex(byte ByteArray[], int ByteArraySize)
+{
+  for (i = 0; i<ByteArraySize; i++)
+  { 
+    snprintf(tmp, elcount(tmp), "%.2X", ByteArray[i]);  // byte to HEX convert
+    strncat(out, tmp, elcount(out));  // Concatenate HEX value to output string
+  }
+ 
+  writeEx(0, 1,"%s", out);
+  
+  for (i = 0; i < 301; i++) out[i] = 0;
+  for (i = 0; i < 8; i++) tmp[i] = 0;
+  
+}
+on preStop
+{
+  enableControl(panelName, "grpSimulationStart", 1);
+}
+
+on sysvar_update sysvar::PROGRAM_ECU::boAR4binfile
+{
+  if (1 == @this)
+  {
+    @sysvar::PROGRAM_ECU::boAR4pkgfile = 0;
+    enableControl(panelName, "grpAnchorR4Bin", 1);
+    enableControl(panelName, "grpAnchorR4Pkg", 0);      
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorR4PkgVersion, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorR4PkgFile, "");    
+  }
+}
+
+on sysvar_update sysvar::PROGRAM_ECU::boMR4binfile
+{
+  if (1 == @this)
+  {
+    @sysvar::PROGRAM_ECU::boMR4pkgfile = 0;
+    enableControl(panelName, "grpMasterR4Bin", 1);
+    enableControl(panelName, "grpMasterR4Pkg", 0);      
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterR4PkgVersion, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterR4PkgFile, "");    
+  }
+}
+
+on sysvar_update sysvar::PROGRAM_ECU::boAR4pkgfile
+{
+  if (1 == @this)
+  {
+    @sysvar::PROGRAM_ECU::boAR4binfile = 0;
+    enableControl(panelName, "grpAnchorR4Bin", 0);
+    enableControl(panelName, "grpAnchorR4Pkg", 1);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strR4RxConfigFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strR4TxConfigFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorR4File, "");   
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorR4BinVersion, "");    
+  }
+}
+
+on sysvar_update sysvar::PROGRAM_ECU::boMR4pkgfile
+{
+  if (1 == @this)
+  {
+    @sysvar::PROGRAM_ECU::boMR4binfile = 0;
+    enableControl(panelName, "grpMasterR4Bin", 0);
+    enableControl(panelName, "grpMasterR4Pkg", 1);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMR4RxConfigFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMR4TxConfigFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterR4File, "");   
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterR4BinVersion, "");    
+  }
+}
+
+on sysvar_update sysvar::PROGRAM_ECU::boMBleS32
+{
+  if (1 == @this)
+  {
+    @sysvar::PROGRAM_ECU::boMBleTI = 0;
+  }
+}
+
+on sysvar_update sysvar::PROGRAM_ECU::boMBleTI
+{
+  if (1 == @this)
+  {
+    @sysvar::PROGRAM_ECU::boMBleS32 = 0;
+  }
+}
+
+on sysvar_update sysvar::PROGRAM_ECU::boABleS32
+{
+  if (1 == @this)
+  {
+    @sysvar::PROGRAM_ECU::boABleTI = 0;
+  }
+}
+
+on sysvar_update sysvar::PROGRAM_ECU::boABleTI
+{
+  if (1 == @this)
+  {
+    @sysvar::PROGRAM_ECU::boABleS32 = 0;
+  }
+}
+
+on sysvar_update PROGRAM_ECU::progMasterMcu
+{
+  if (1 == @this)
+  {
+    diagRequest ExtendedDiagnosticSession_Start diagSession;
+
+    enableControl(panelName, "grpApplication", 1);    
+    diagSetTarget("DiagMasterMCU");
+    diagSession.SendRequest();
+  }
+  else{
+       enableControl(panelName, "grpApplication", 0); 
+  }
+}
+
+
+on sysvar_update PROGRAM_ECU::progCalib
+{
+  if (1 == @this)
+  {
+    enableControl(panelName, "grpCalibration", 1);
+  }
+  else
+  {
+    enableControl(panelName, "grpCalibration", 0);
+  }
+}
+
+on sysvar_update PROGRAM_ECU::progMasterBle
+{
+  if (1 == @this)
+  {
+    diagRequest ExtendedDiagnosticSession_Start diagSession;
+       
+    enableControl(panelName, "grpMasterBle", 1);
+    diagSetTarget("DiagMasterBLE");
+    diagSession.SendRequest();
+  }
+  else
+  {
+    enableControl(panelName, "grpMasterBle", 0);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterR4File,"");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterBleFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterR4RxConfigFile,"");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterR4TxConfigFile,"");    
+  }
+}
+
+on sysvar_update PROGRAM_ECU::progAnchorBle
+{
+  if (1 == @this)
+  {
+    enableControl(panelName, "grpAnchorBle", 1);
+  }
+  else
+  {
+    enableControl(panelName, "grpAnchorBle", 0);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorR4File,"");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorBleFile, "");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strR4RxConfigFile,"");
+    sysSetVariableString(sysvar::PROGRAM_ECU::strR4TxConfigFile,"");
+  }
+}
+
+on sysvar PROGRAM_ECU::programmingState
+{
+  if (  (3 == @this) // finished pass
+     || (4 == @this) // finished fail
+     )
+  { // finished
+    @sysvar::PROGRAM_ECU::programmingInProgress = 0;
+    @sysvar::PROGRAM_ECU::programmingDone = 1;
+    
+    if (1 == @sysvar::PROGRAM_ECU::boContinuousRun)
+    {
+      if (3 == @this) // finished pass
+      {
+        setTimer(rerunTimer, 1000);
+        write("repeating test");
+      }
+    }
+  }
+}
+
+on sysvar_update PROGRAM_ECU::btnStartProgram
+{
+  if (1 == @this)
+  {
+    if (0 == @sysvar::PROGRAM_ECU::programmingInProgress)
+    {
+      @sysvar::PROGRAM_ECU::programmingInProgress = 1;
+      @sysvar::PROGRAM_ECU::programmingDone = 0;
+    }
+  }
+}
+
+on sysvar_update PROGRAM_ECU::programmingInProgress
+{
+  if (1 == @this)
+  {
+    enableControl(panelName, "grpSimulationStart", 0);
+    enableControl(panelName, "grpProgramSelect", 0);
+    enableControl(panelName, "grpStartProgramming", 0);
+  }
+  else
+  {
+    enableControl(panelName, "grpSimulationStart", 1);
+    enableControl(panelName, "grpProgramSelect", 1);
+    enableControl(panelName, "grpStartProgramming", 1);
+  }
+}
+
+on sysvar_update PROGRAM_ECU::strMasterBleFile
+{
+  char filename[1000];
+  dword fileHandle;
+  
+  sysGetVariableString(this, filename, elCount(filename));
+  fileHandle = openFileRead(filename, 1);
+  
+  if (fileHandle != 0)
+  {
+    byte dummyReadBuffer[10];
+    byte versionStringByte[16];
+    
+    char versionStringStr[16];
+    char swversion[32];
+    
+    fileGetBinaryBlock(dummyReadBuffer, elcount(dummyReadBuffer), fileHandle);
+    fileGetBinaryBlock(versionStringByte, elcount(versionStringByte), fileHandle);
+    DecodeString(versionStringStr, elcount(versionStringStr), versionStringByte, elCount(versionStringByte), CP_UTF8);
+    
+    snprintf(swversion, elcount(swversion), "%s", versionStringStr);
+    
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterBleBinVersion, swversion);
+    fileClose(fileHandle);
+  }
+  else
+  {
+    write("Error: Cannot open file '%s'", filename);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterBleBinVersion, "");
+  }
+}
+on sysvar_update PROGRAM_ECU::strAnchorBleFile
+{
+  char filename[1000];
+  dword fileHandle;
+  
+  sysGetVariableString(this, filename, elCount(filename));
+  fileHandle = openFileRead(filename, 1);
+  
+  if (fileHandle != 0)
+  {
+    byte dummyReadBuffer[10];
+    byte versionStringByte[16];
+    
+    char versionStringStr[16];
+    char swversion[32];
+    
+    fileGetBinaryBlock(dummyReadBuffer, elcount(dummyReadBuffer), fileHandle);
+    fileGetBinaryBlock(versionStringByte, elcount(versionStringByte), fileHandle);
+    DecodeString(versionStringStr, elcount(versionStringStr), versionStringByte, elCount(versionStringByte), CP_UTF8);
+    
+    snprintf(swversion, elcount(swversion), "%s", versionStringStr);
+    
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorBleBinVersion, swversion);
+    fileClose(fileHandle);
+  }
+  else
+  {
+    write("Error: Cannot open file '%s'", filename);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorBleBinVersion, "");
+  }
+}
+
+on sysvar_update PROGRAM_ECU::strAnchorR4File
+{
+  char filename[1000];
+  dword fileHandle;
+  
+  sysGetVariableString(this, filename, elCount(filename));
+  fileHandle = openFileRead(filename, 1);
+  
+  if (fileHandle != 0)
+  {
+    byte dummyReadBuffer[10];
+    byte versionStringByte[16];
+    
+    char versionStringStr[16];
+    char swversion[32];
+    
+    fileGetBinaryBlock(dummyReadBuffer, elcount(dummyReadBuffer), fileHandle);
+    fileGetBinaryBlock(versionStringByte, elcount(versionStringByte), fileHandle);
+    DecodeString(versionStringStr, elcount(versionStringStr), versionStringByte, elCount(versionStringByte), CP_UTF8);
+    
+    snprintf(swversion, elcount(swversion), "%s", versionStringStr);
+    
+    sysSetVariableString( sysvar::PROGRAM_ECU::strAnchorR4BinVersion, swversion);
+    fileClose(fileHandle);
+  }
+  else
+  {
+    write("Error: Cannot open file '%s'", filename);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorR4BinVersion, "");
+  }
+}
+
+on sysvar_update PROGRAM_ECU::strMasterMcuFile
+{
+  char filename[1000];
+  dword fileHandle;
+  
+  sysGetVariableString(this, filename, elCount(filename));
+  fileHandle = openFileRead(filename, 1);
+  
+  if (fileHandle != 0)
+  {
+    byte dummyReadBuffer[0x120];
+    byte swVersionByte[3];
+    byte containerByte[11];
+    byte variantByte[10];
+    
+    char containerStr[11];
+    char variantStr[10];
+    char swversion[32];
+
+    fileGetBinaryBlock(dummyReadBuffer, elcount(dummyReadBuffer), fileHandle);
+    fileGetBinaryBlock(swVersionByte, elcount(swVersionByte), fileHandle);
+    fileGetBinaryBlock(containerByte, elcount(containerByte), fileHandle);
+    fileGetBinaryBlock(variantByte, elcount(variantByte), fileHandle);
+    
+    DecodeString(containerStr, elcount(containerStr), containerByte, elCount(containerByte), CP_UTF8);
+    DecodeString(variantStr, elcount(variantStr), variantByte, elCount(variantByte), CP_UTF8);
+    
+    snprintf(swversion, elcount(swversion),
+      "%d.%d.%d %s %s", swVersionByte[0],swVersionByte[1],swVersionByte[2],
+      containerStr, variantStr
+      );
+    
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterMcuBinVersion, swversion);
+    fileClose(fileHandle);    
+  }
+  else
+  {
+    write("Error: Cannot open file '%s'", filename);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strMasterMcuBinVersion, "");
+  }
+}
+
+on sysvar_update PROGRAM_ECU::strCalibrationFile
+{
+  char filename[1000];
+  dword fileHandle;
+  
+  sysGetVariableString(this, filename, elCount(filename));
+  fileHandle = openFileRead(filename, 1);
+  
+  if (fileHandle != 0)
+  {
+    byte dummyReadBuffer[256+4];  // sig + len
+    byte structVersionByte[2];
+    byte calPartNumberByte[20];
+    
+    word structVerValue;
+    char calPartNumberStr[20];
+    char configversion[32];
+    
+    fileGetBinaryBlock(dummyReadBuffer, elcount(dummyReadBuffer), fileHandle);
+    fileGetBinaryBlock(structVersionByte, elcount(structVersionByte), fileHandle);
+    fileGetBinaryBlock(calPartNumberByte, elcount(calPartNumberByte), fileHandle);
+    
+    structVerValue = (structVersionByte[0] << 8) + structVersionByte[1];
+    DecodeString(calPartNumberStr, elcount(calPartNumberStr), calPartNumberByte, elCount(calPartNumberByte), CP_UTF8);
+  
+    snprintf(configversion, elcount(configversion),
+      "%d.%s", structVerValue, calPartNumberStr
+    );
+    
+    sysSetVariableString(sysvar::PROGRAM_ECU::strCalBinVersion, configversion);
+    fileClose(fileHandle);    
+  }
+  else
+  {
+    write("Error: Cannot open file '%s'", filename);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strCalBinVersion, "");
+  }
+}
+
+on timer rerunTimer
+{
+    if (1 == @sysvar::PROGRAM_ECU::boContinuousRun)
+    {
+        @sysvar::PROGRAM_ECU::btnStartProgram = 1;   
+    }
+}
+
+//on diagResponse DiagMasterMCU.SWInformation_All_Read
+//{
+//  byte data[100];
+ // char swversion[32];
+  
+//  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+//  GetSwStringFromDID(swversion, data);
+  
+//  sysSetVariableString(sysvar::PROGRAM_ECU::strMasterMcuVersion, swversion);
+//}
+
+//on diagRequestSent DiagMasterMCU.SWInformation_All_Read
+//{
+//  sysSetVariableString(sysvar::PROGRAM_ECU::strMasterMcuVersion, "");
+//}
+
+on diagResponse DiagMasterBLE.SWInformation_All_Read
+{
+  byte data[100];
+  char swversion[32];
+  
+  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+  GetSwStringFromDID(swversion, data);
+  
+  sysSetVariableString(sysvar::PROGRAM_ECU::strMasterBleVersion, swversion);
+}
+
+on diagRequestSent DiagMasterBLE.SWInformation_All_Read
+{
+  sysSetVariableString(sysvar::PROGRAM_ECU::strMasterBleVersion, "");
+}
+
+on diagResponse DiagAnchor1.SWInformation_All_Read
+{
+  byte data[100];
+  char swversion[32];
+  
+  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+  GetSwStringFromDID(swversion, data);
+  
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor1Version, swversion);
+}
+
+on diagRequestSent DiagAnchor1.SWInformation_All_Read
+{
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor1Version, "");
+}
+
+on diagResponse DiagAnchor2.SWInformation_All_Read
+{
+  byte data[100];
+  char swversion[32];
+  
+  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+  GetSwStringFromDID(swversion, data);
+  
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor2Version, swversion);
+}
+
+on diagRequestSent DiagAnchor2.SWInformation_All_Read
+{
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor2Version, "");
+}
+
+on diagResponse DiagAnchor3.SWInformation_All_Read
+{
+  byte data[100];
+  char swversion[32];
+  
+  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+  GetSwStringFromDID(swversion, data);
+  
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor3Version, swversion);
+}
+
+on diagRequestSent DiagAnchor3.SWInformation_All_Read
+{
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor3Version, "");
+}
+
+on diagResponse DiagAnchor4.SWInformation_All_Read
+{
+  byte data[100];
+  char swversion[32];
+  
+  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+  GetSwStringFromDID(swversion, data);
+  
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor4Version, swversion);
+}
+
+on diagRequestSent DiagAnchor4.SWInformation_All_Read
+{
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor4Version, "");
+}
+
+on diagResponse DiagAnchor5.SWInformation_All_Read
+{
+  byte data[100];
+  char swversion[32];
+  
+  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+  GetSwStringFromDID(swversion, data);
+  
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor5Version, swversion);
+}
+
+on diagRequestSent DiagAnchor5.SWInformation_All_Read
+{
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor5Version, "");
+}
+
+on diagResponse DiagAnchor6.SWInformation_All_Read
+{
+  byte data[100];
+  char swversion[32];
+  
+  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+  GetSwStringFromDID(swversion, data);
+  
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor6Version, swversion);
+}
+
+on diagRequestSent DiagAnchor6.SWInformation_All_Read
+{
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor6Version, "");
+}
+
+on diagResponse DiagAnchor7.SWInformation_All_Read
+{
+  byte data[100];
+  char swversion[32];
+  
+  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+  GetSwStringFromDID(swversion, data);
+  
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor7Version, swversion);
+}
+
+on diagRequestSent DiagAnchor7.SWInformation_All_Read
+{
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor7Version, "");
+}
+
+on diagResponse DiagAnchor8.SWInformation_All_Read
+{
+  byte data[100];
+  char swversion[32];
+  
+  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+  GetSwStringFromDID(swversion, data);
+  
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor8Version, swversion);
+}
+
+on diagRequestSent DiagAnchor8.SWInformation_All_Read
+{
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor8Version, "");
+}
+
+on diagResponse DiagAnchor9.SWInformation_All_Read
+{
+  byte data[100];
+  char swversion[32];
+  
+  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+  GetSwStringFromDID(swversion, data);
+  
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor9Version, swversion);
+}
+
+on diagRequestSent DiagAnchor9.SWInformation_All_Read
+{
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchor9Version, "");
+}
+
+on diagResponse DiagAnchorF.SWInformation_All_Read
+{
+  byte data[100];
+  char swversion[32];
+  
+  this.GetPrimitiveData(data, this.GetPrimitiveSize());
+  GetSwStringFromDID(swversion, data);
+  
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorFVersion, swversion);
+}
+
+on diagRequestSent DiagAnchorF.SWInformation_All_Read
+{
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorFVersion, "");
+}
+
+void GetSwStringFromDID(
+  char dest[],
+  byte data[]
+  )
+{
+  byte variantBytes[20];
+  char variantStr[20];
+  word ii;
+  
+  for (ii = 0; ii < elcount(variantBytes); ii++)
+  {
+      variantBytes[ii] = data[66+ii];
+  }
+  
+  DecodeString(variantStr, elcount(variantStr), variantBytes, elCount(variantBytes), CP_UTF8);
+
+  snprintf(dest, elcount(dest),
+    "%d.%d.%d_%s", data[3], data[4], data[5], variantStr
+  );
+}
+
+on sysvar sysvar::PROGRAM_ECU::boAnchor
+{
+  word ii;
+    
+  for (ii = 0; ii < 10; ii++)
+  {
+    if ((1 == @this[ii]) && (ii < 9))
+    {
+      diagRequest ExtendedDiagnosticSession_Start diagSession;
+      char ecuName[32];
+      
+      snprintf(ecuName, elCount(ecuName), "DiagAnchor%d", (ii+1));
+      diagSetTarget(ecuName);
+  
+      diagSession.sendRequest();
+    }
+    else if((1 == @this[ii]) && (ii == 9))
+    {
+      diagRequest ExtendedDiagnosticSession_Start diagSession;
+      char ecuName[32];
+      
+      snprintf(ecuName, elCount(ecuName), "DiagAnchorF");
+      diagSetTarget(ecuName);
+  
+      diagSession.sendRequest();
+    }    
+  }
+}
+
+
+
+on diagResponse ExtendedDiagnosticSession_Start
+{
+ diagRequest Request_Seed_Bosch_Request ReqSeedBosch;  
+ diagRequest Request_Seed_InCar1_Request ReqSeedIncar; 
+ 
+  if(sysGetVariableDWord(sysvar::PROGRAM_ECU::SecurityLevel) == 1)
+  {
+    ReqSeedIncar.SendRequest(); 
+  }
+  else
+  {
+    ReqSeedBosch.SendRequest(); 
+  }  
+}
+
+on diagResponse Request_Seed_Bosch_Request
+{
+  byte data[50];
+  byte seed[48];
+  int i = 2;
+  byte securityKey[64];
+  dword keyActualSizeOut;
+  diagRequest Send_Key_Bosch_Send SendKey;  
+  diagGetParameterRaw(this,"Seed",seed, elCount(seed));
+  diagGenerateKeyFromSeed( seed, 48, 0x61,"UDS_BOSCH_LVL","" ,securityKey,64,keyActualSizeOut);
+  SendKey.SetParameterRaw( "SecurityKey", securityKey, elcount( securityKey));  
+  SendKey.SendRequest(); 
+}
+
+on diagResponse Request_Seed_InCar1_Request
+{
+  byte data[50];
+  byte seed[48];
+  int i = 2;
+  byte securityKey[64];
+  dword keyActualSizeOut;
+  diagRequest Send_Key_InCar1_Send SendKey;  
+  diagGetParameterRaw(this,"Seed",seed, elCount(seed));
+  diagGenerateKeyFromSeed( seed, 48, 0x65,"UDS_INCAR_LVL","" ,securityKey,64,keyActualSizeOut);
+  SendKey.SetParameterRaw( "SecurityKey", securityKey, elcount( securityKey));  
+  SendKey.SendRequest(); 
+}
+
+on diagResponse Send_Key_Bosch_Send
+{
+  diagRequest SWInformation_All_Read swInfo;  
+  
+  swInfo.SendRequest(); 
+}
+
+on diagResponse Send_Key_InCar1_Send
+{
+  diagRequest SWInformation_All_Read swInfo;  
+  
+  swInfo.SendRequest(); 
+}

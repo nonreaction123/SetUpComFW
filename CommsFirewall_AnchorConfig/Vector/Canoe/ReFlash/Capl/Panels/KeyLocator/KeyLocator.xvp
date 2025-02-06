@@ -1,0 +1,307 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="KeyLocator">
+    <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl5" Children="Controls" ControlName="welcomeLight_tagText">
+      <Property Name="Name">TextBoxControl5</Property>
+      <Property Name="Size">70, 20</Property>
+      <Property Name="Location">315, 66</Property>
+      <Property Name="AlarmUpperTextColor">WindowText</Property>
+      <Property Name="ValueDecimalPlaces">0</Property>
+      <Property Name="AlarmLowerBkgColor">Salmon</Property>
+      <Property Name="BoxTextAlign">Center</Property>
+      <Property Name="ValueDisplay">Text</Property>
+      <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+      <Property Name="AlarmLowerTextColor">WindowText</Property>
+      <Property Name="AlarmGeneralSettings">1;0;0;1</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">welcomeLight_tagText:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;welcomeLight_tagText;4;;;-1;;;</Property>
+      <Property Name="TabIndex">13</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl4" Children="Controls" ControlName="outsideTrunk_tagText">
+      <Property Name="Name">TextBoxControl4</Property>
+      <Property Name="Size">70, 20</Property>
+      <Property Name="Location">315, 602</Property>
+      <Property Name="AlarmUpperTextColor">WindowText</Property>
+      <Property Name="ValueDecimalPlaces">0</Property>
+      <Property Name="AlarmLowerBkgColor">Salmon</Property>
+      <Property Name="BoxTextAlign">Center</Property>
+      <Property Name="ValueDisplay">Text</Property>
+      <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+      <Property Name="AlarmLowerTextColor">WindowText</Property>
+      <Property Name="AlarmGeneralSettings">1;0;0;1</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">outsideTrunk_tagText:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;outsideTrunk_tagText;4;;;-1;;;</Property>
+      <Property Name="TabIndex">12</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl3" Children="Controls" ControlName="insideVehicle_tagText">
+      <Property Name="Name">TextBoxControl3</Property>
+      <Property Name="Size">70, 20</Property>
+      <Property Name="Location">315, 340</Property>
+      <Property Name="AlarmUpperTextColor">WindowText</Property>
+      <Property Name="ValueDecimalPlaces">0</Property>
+      <Property Name="AlarmLowerBkgColor">Salmon</Property>
+      <Property Name="BoxTextAlign">Center</Property>
+      <Property Name="ValueDisplay">Text</Property>
+      <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+      <Property Name="AlarmLowerTextColor">WindowText</Property>
+      <Property Name="AlarmGeneralSettings">1;0;0;1</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">insideVehicle_tagText:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;insideVehicle_tagText;4;;;-1;;;</Property>
+      <Property Name="TabIndex">11</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl4" ControlName="insideVehicle_tag0">
+      <Property Name="Name">SwitchControl4</Property>
+      <Property Name="Size">188, 346</Property>
+      <Property Name="Location">256, 168</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\inside_vehicle_tag0.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;insideVehicle_tag0;1;;;-1;;;</Property>
+      <Property Name="TabIndex">6</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl9" ControlName="insideVehicle_tag1">
+      <Property Name="Name">SwitchControl9</Property>
+      <Property Name="Size">188, 346</Property>
+      <Property Name="Location">256, 168</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\inside_vehicle_tag1.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;insideVehicle_tag1;1;;;-1;;;</Property>
+      <Property Name="TabIndex">17</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl10" ControlName="insideVehicle_tag2">
+      <Property Name="Name">SwitchControl10</Property>
+      <Property Name="Size">188, 346</Property>
+      <Property Name="Location">256, 168</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\inside_vehicle_tag2.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;insideVehicle_tag2;1;;;-1;;;</Property>
+      <Property Name="TabIndex">18</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl11" ControlName="insideVehicle_tag3">
+      <Property Name="Name">SwitchControl11</Property>
+      <Property Name="Size">188, 346</Property>
+      <Property Name="Location">256, 168</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\inside_vehicle_tag3.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;insideVehicle_tag3;1;;;-1;;;</Property>
+      <Property Name="TabIndex">19</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl5" ControlName="Switch/Indicator">
+      <Property Name="Name">SwitchControl5</Property>
+      <Property Name="Size">245, 600</Property>
+      <Property Name="Location">225, 8</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\car-default.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;welcomeLight;1;;;-1;;;</Property>
+      <Property Name="TabIndex">8</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl2" Children="Controls" ControlName="rightDoor_tagText">
+      <Property Name="Name">TextBoxControl2</Property>
+      <Property Name="Size">70, 20</Property>
+      <Property Name="Location">476, 303</Property>
+      <Property Name="AlarmUpperTextColor">WindowText</Property>
+      <Property Name="ValueDecimalPlaces">0</Property>
+      <Property Name="AlarmLowerBkgColor">Salmon</Property>
+      <Property Name="ValueDisplay">Text</Property>
+      <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+      <Property Name="AlarmLowerTextColor">WindowText</Property>
+      <Property Name="AlarmGeneralSettings">1;0;0;1</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">rightDoor_tagText:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;rightDoor_tagText;4;;;-1;;;</Property>
+      <Property Name="TabIndex">10</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl1" Children="Controls" ControlName="leftDoor_tagText">
+      <Property Name="Name">TextBoxControl1</Property>
+      <Property Name="Size">70, 20</Property>
+      <Property Name="Location">149, 303</Property>
+      <Property Name="AlarmUpperTextColor">WindowText</Property>
+      <Property Name="ValueDecimalPlaces">0</Property>
+      <Property Name="AlarmLowerBkgColor">Salmon</Property>
+      <Property Name="ValueDisplay">Text</Property>
+      <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+      <Property Name="AlarmLowerTextColor">WindowText</Property>
+      <Property Name="AlarmGeneralSettings">1;0;0;1</Property>
+      <Property Name="DisplayLabel">Hide</Property>
+      <Property Name="DescriptionText">leftDoor_tagText:</Property>
+      <Property Name="DescriptionSize">0, 0</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;leftDoor_tagText;4;;;-1;;;</Property>
+      <Property Name="TabIndex">9</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl2" ControlName="rightDoor_tag0">
+      <Property Name="Name">SwitchControl2</Property>
+      <Property Name="Size">145, 212</Property>
+      <Property Name="Location">446, 208</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\right_door_tag0.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;rightDoor_tag0;1;;;-1;;;</Property>
+      <Property Name="TabIndex">3</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl6" ControlName="rightDoor_tag1">
+      <Property Name="Name">SwitchControl6</Property>
+      <Property Name="Size">145, 212</Property>
+      <Property Name="Location">446, 208</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\right_door_tag1.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;rightDoor_tag1;1;;;-1;;;</Property>
+      <Property Name="TabIndex">14</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl7" ControlName="rightDoor_tag2">
+      <Property Name="Name">SwitchControl7</Property>
+      <Property Name="Size">145, 212</Property>
+      <Property Name="Location">446, 208</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\right_door_tag2.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;rightDoor_tag2;1;;;-1;;;</Property>
+      <Property Name="TabIndex">15</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl8" ControlName="rightDoor_tag3">
+      <Property Name="Name">SwitchControl8</Property>
+      <Property Name="Size">145, 212</Property>
+      <Property Name="Location">446, 208</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\right_door_tag3.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;rightDoor_tag3;1;;;-1;;;</Property>
+      <Property Name="TabIndex">16</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl1" ControlName="leftDoor_tag0">
+      <Property Name="Name">SwitchControl1</Property>
+      <Property Name="Size">145, 212</Property>
+      <Property Name="Location">112, 208</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\left_door_tag0.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;leftDoor_tag0;1;;;-1;;;</Property>
+      <Property Name="TabIndex">2</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl12" ControlName="leftDoor_tag1">
+      <Property Name="Name">SwitchControl12</Property>
+      <Property Name="Size">145, 212</Property>
+      <Property Name="Location">112, 208</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\left_door_tag1.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;leftDoor_tag1;1;;;-1;;;</Property>
+      <Property Name="TabIndex">20</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl13" ControlName="leftDoor_tag2">
+      <Property Name="Name">SwitchControl13</Property>
+      <Property Name="Size">145, 212</Property>
+      <Property Name="Location">112, 208</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\left_door_tag2.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;leftDoor_tag2;1;;;-1;;;</Property>
+      <Property Name="TabIndex">21</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl14" ControlName="leftDoor_tag3">
+      <Property Name="Name">SwitchControl14</Property>
+      <Property Name="Size">145, 212</Property>
+      <Property Name="Location">112, 208</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\left_door_tag3.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;leftDoor_tag3;1;;;-1;;;</Property>
+      <Property Name="TabIndex">22</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl3" ControlName="outsideTrunk_tag0">
+      <Property Name="Name">SwitchControl3</Property>
+      <Property Name="Size">194, 141</Property>
+      <Property Name="Location">253, 496</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\outside_trunk_tag0.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;outsideTrunk_tag0;1;;;-1;;;</Property>
+      <Property Name="TabIndex">4</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl15" ControlName="outsideTrunk_tag1">
+      <Property Name="Name">SwitchControl15</Property>
+      <Property Name="Size">194, 141</Property>
+      <Property Name="Location">253, 496</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\outside_trunk_tag1.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;outsideTrunk_tag1;1;;;-1;;;</Property>
+      <Property Name="TabIndex">23</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl16" ControlName="outsideTrunk_tag2">
+      <Property Name="Name">SwitchControl16</Property>
+      <Property Name="Size">194, 141</Property>
+      <Property Name="Location">253, 496</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\outside_trunk_tag2.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;outsideTrunk_tag2;1;;;-1;;;</Property>
+      <Property Name="TabIndex">24</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.SwitchControl, Vector.CANalyzer.Panels.CommonControls, Version=11.0.55.0, Culture=neutral, PublicKeyToken=null" Name="SwitchControl17" ControlName="outsideTrunk_tag3">
+      <Property Name="Name">SwitchControl17</Property>
+      <Property Name="Size">194, 141</Property>
+      <Property Name="Location">253, 496</Property>
+      <Property Name="StateCnt">2</Property>
+      <Property Name="SwitchValues">1;2;0;1</Property>
+      <Property Name="SwitchValuesRx">1;2;0;1</Property>
+      <Property Name="ImageFile">images\outside_trunk_tag3.png</Property>
+      <Property Name="SymbolConfiguration">5;16;KEY_LOCATOR;;;outsideTrunk_tag3;1;;;-1;;;</Property>
+      <Property Name="TabIndex">25</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">700, 700</Property>
+    <Property Name="BackColor">White</Property>
+    <Property Name="ImageFileName">images\background.png</Property>
+    <Property Name="IsProportional">True</Property>
+  </Object>
+</Panel>

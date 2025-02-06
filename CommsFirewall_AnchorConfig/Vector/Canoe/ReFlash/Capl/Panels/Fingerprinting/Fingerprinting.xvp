@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="Fingerprinting">
+    <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl1" Children="Controls" ControlName="StaticText">
+      <Property Name="Name">StaticTextControl1</Property>
+      <Property Name="Size">402, 53</Property>
+      <Property Name="Location">36, 358</Property>
+      <Property Name="Font">Bosch Office Sans, 36pt, style=Bold</Property>
+      <Property Name="Text">Phone Not Valid!</Property>
+      <Property Name="ForeColor">240, 0, 0</Property>
+      <Property Name="IsVisibleByLoad">False</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl2" Children="Controls" ControlName="Button_On">
+      <Property Name="Name">ButtonControl2</Property>
+      <Property Name="Size">87, 56</Property>
+      <Property Name="Location">193, 252</Property>
+      <Property Name="Text">On</Property>
+      <Property Name="SymbolConfiguration">5;16;Fingerprinting;;;Button_On;1;;;-1;;;</Property>
+      <Property Name="TabIndex">2</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl1" Children="Controls" ControlName="Button_Off">
+      <Property Name="Name">ButtonControl1</Property>
+      <Property Name="Size">87, 56</Property>
+      <Property Name="Location">315, 252</Property>
+      <Property Name="Text">Off</Property>
+      <Property Name="SymbolConfiguration">5;16;Fingerprinting;;;Button_Off;1;;;-1;;;</Property>
+      <Property Name="TabIndex">2</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.LEDControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="LEDControl1" ControlName="LED Control">
+      <Property Name="Name">LEDControl1</Property>
+      <Property Name="Size">80, 80</Property>
+      <Property Name="Location">58, 242</Property>
+      <Property Name="UsedLEDColorOn">Lime</Property>
+      <Property Name="UsedLEDColorOff">Crimson</Property>
+      <Property Name="SymbolConfiguration">5;16;Fingerprinting;;;LED;1;;;-1;;;</Property>
+      <Property Name="TabIndex">1</Property>
+      <Property Name="ReadOnlyControl">True</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.PictureBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="PictureBoxControl1" ControlName="Picture Box">
+      <Property Name="Name">PictureBoxControl1</Property>
+      <Property Name="Size">471, 208</Property>
+      <Property Name="Location">0, 0</Property>
+      <Property Name="ImageFile">..\..\..\..\..\..\..\..\..\Pictures\Fingerprint.png</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">480, 452</Property>
+    <Property Name="BackColor">White</Property>
+  </Object>
+</Panel>

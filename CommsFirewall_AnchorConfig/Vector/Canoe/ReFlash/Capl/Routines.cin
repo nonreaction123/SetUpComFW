@@ -1,0 +1,241 @@
+/*@!Encoding:1252*/
+//0x0200
+testcase BOOT_BS_AND_STMIN_Start(byte & routine_status_Out
+                               ,long & responseLength_Out               //<! Length of the response output
+                               ,long expectedErrorCode                  //<! Expected Error Code
+                               ,int timeOutForResponse                  //<! Timeout for the response
+                               ,char identifier[] )                     //<! testcase identifier)
+{
+  diagRequest BOOT_BS_AND_STMIN_Start req;
+  diagResponse * resp;
+  long returnVal;
+  
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+    routine_status_Out = DiagGetParameter(resp, "routine_status");
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+//0x0200
+//Results are not required by any of the test cases in the specification, therefore, they are not extracted from the message
+testcase BOOT_BS_AND_STMIN_Results(long & responseLength_Out               //<! Length of the response output
+                               ,long expectedErrorCode                  //<! Expected Error Code
+                               ,int timeOutForResponse                  //<! Timeout for the response
+                               ,char identifier[] )                     //<! testcase identifier)
+{
+  diagRequest BOOT_BS_AND_STMIN_Results req;
+  diagResponse * resp;
+  long returnVal;
+  
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+//0x0200
+testcase BOOT_BS_AND_STMIN_Stop( long & responseLength_Out               //<! Length of the response output
+                        ,long expectedErrorCode                  //<! Expected Error Code
+                        ,int timeOutForResponse                  //<! Timeout for the response
+                        ,char identifier[] )                     //<! testcase identifier)
+{
+  diagRequest BOOT_BS_AND_STMIN_Stop req;
+  diagResponse * resp;
+  long returnVal;
+  
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+//0xFF01
+testcase Check_Programming_dependencies_Start( dword crc //<! Data to be transfered
+                                 ,byte & routine_status_Out
+                                 ,long & responseLength_Out               //<! Length of the response output
+                               ,long expectedErrorCode                  //<! Expected Error Code
+                               ,int timeOutForResponse                  //<! Timeout for the response
+                               ,char identifier[] )                     //<! testcase identifier)
+{
+  
+  
+  
+  
+  diagRequest Check_Programming_dependencies_Start req;
+  diagResponse * resp;
+  long returnVal;
+//  byte crcBytes[4];
+//  crcBytes[0] = ((crc & 0xFF000000) >> 24);
+//  crcBytes[1] = ((crc & 0x00FF0000) >> 16);
+//  crcBytes[2] = ((crc & 0x0000FF00) >> 8);
+//  crcBytes[3] = (crc & 0xFF);
+//  diagSetParameterRaw(req,"RoutineControlOptionRecord",crcBytes,4);
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+    routine_status_Out = DiagGetParameter(resp, "routine_status");
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+//0xFF01
+//Results are not required by any of the test cases in the specification, therefore, they are not extracted from the message
+testcase Check_Programming_dependencies_Results(long & responseLength_Out               //<! Length of the response output
+                               ,long expectedErrorCode                  //<! Expected Error Code
+                               ,int timeOutForResponse                  //<! Timeout for the response
+                               ,char identifier[] )                     //<! testcase identifier)
+{
+    diagRequest Check_Programming_dependencies_Results req;
+  diagResponse * resp;
+  long returnVal;
+  
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+//0xFF01
+testcase Check_Programming_dependencies_Stop( long & responseLength_Out               //<! Length of the response output
+                         ,long expectedErrorCode                  //<! Expected Error Code
+                        ,int timeOutForResponse                  //<! Timeout for the response
+                        ,char identifier[] )                     //<! testcase identifier)
+{
+  diagRequest Check_Programming_dependencies_Stop req;
+  diagResponse * resp;
+  long returnVal;
+  
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+
+
+//0x02FF
+testcase BOOT_SPECIFIC_BS_AND_STMIN_Start(byte & routine_status_Out
+                                 ,long & responseLength_Out               //<! Length of the response output
+                                ,long expectedErrorCode                  //<! Expected Error Code
+                               ,int timeOutForResponse                  //<! Timeout for the response
+                               ,char identifier[] )                     //<! testcase identifier)
+{
+  
+  
+  
+  
+    diagRequest BOOT_SPECIFIC_BS_AND_STMIN_Start req;
+  diagResponse * resp;
+  long returnVal;
+  
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+    routine_status_Out = DiagGetParameter(resp, "routine_status");
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+
+//0x02FF
+//Results are not required by any of the test cases in the specification, therefore, they are not extracted from the message
+testcase BOOT_SPECIFIC_BS_AND_STMIN_Results( long & responseLength_Out               //<! Length of the response output
+                                ,long expectedErrorCode                  //<! Expected Error Code
+                               ,int timeOutForResponse                  //<! Timeout for the response
+                               ,char identifier[] )                     //<! testcase identifier)
+{
+    diagRequest BOOT_SPECIFIC_BS_AND_STMIN_Results req;
+  diagResponse * resp;
+  long returnVal;
+
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}
+
+//0x02FF
+testcase BOOT_SPECIFIC_BS_AND_STMIN_Stop(long & responseLength_Out               //<! Length of the response output
+                        ,long expectedErrorCode                  //<! Expected Error Code
+                        ,int timeOutForResponse                  //<! Timeout for the response
+                        ,char identifier[] )                     //<! testcase identifier)
+{
+  diagRequest BOOT_SPECIFIC_BS_AND_STMIN_Stop req;
+  diagResponse * resp;
+  long returnVal;
+  
+  returnVal = utility_SendRequestCheckResponseCode(req, resp, expectedErrorCode, timeOutForResponse, identifier , 1);
+  
+  if(1 == returnVal)
+  {
+    //Result is okay so read the response
+    DiagGetLastResponse(req, resp);
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+  else
+  { 
+    //Test failed, do nothing
+  }
+}

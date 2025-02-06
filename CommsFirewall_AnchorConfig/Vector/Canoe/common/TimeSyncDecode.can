@@ -1,0 +1,172 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  struct CanTSyn {
+    byte  Initialised;          // Has one time sync occurred?
+    int64 VectorStartTime_ns;   // Initial time sync, using the CANcase time
+    qword StbmStartTime_ns;     // Initial time sync, using the data from the message
+    
+    byte  SyncOccurred;         // Was a SYNC message received?
+    byte  SeqCount;             // Counter of the SYNC
+    int64 VectorSyncTime_ns;    // CANcase time of the SYNC message
+    qword StbmSyncTime_ns;      // Content of the FUP message
+    byte  userData[3];
+  };
+  const numDomains=3;
+  struct CanTSyn timeInfo[numDomains];
+}
+
+
+on start
+{
+  int i;
+  
+  for( i=0; i<numDomains; i++)
+  {
+    timeInfo[i].Initialised = 0;
+    timeInfo[i].SyncOccurred = 0;
+  }
+}
+
+
+on message *
+{
+  output(this);
+}
+
+
+
+on message 0x50
+{
+  decode(this.byte(0), this.byte(1), this.byte(2), this.byte(3), this.byte(4), this.byte(5), this.byte(6), this.byte(7), this.time_ns);
+  output(this);
+}
+
+on message TimeSync_Anchor1
+{
+  decode(this.byte(0), this.byte(1), this.byte(2), this.byte(3), this.byte(4), this.byte(5), this.byte(6), this.byte(7), this.time_ns);
+  output(this);
+}
+
+
+
+void decode(byte byte0, byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, int64 msg_time_ns )
+{
+  byte msgType;
+  byte usrData;
+  byte domain;
+  byte seqCounter;
+  dword msgTime;
+  char fmt[10];
+  char buf[256];
+  byte debug = 0;
+  byte domainLog = 0;
+  byte test = 0;
+
+  msgType = byte0;
+  usrData = byte1;
+  domain = byte2 >> 4;
+  seqCounter = byte2 & 0x0F;
+  msgTime =  (dword)byte4 << 24;
+  msgTime += (dword)byte5 << 16;
+  msgTime += (dword)byte6 << 8;
+  msgTime += (dword)byte7;
+  
+  if( debug && (domainLog == domain) )
+  {
+    snprintf( buf, elcount(buf), "Domain %i Type %x StbmTime %i VectorTime %i", domain, msgType, (int)msgTime, msg_time_ns );
+    write( buf );
+  }  
+  
+  if( domain < numDomains )
+  {
+    if( msgType == 0x10 )
+    {
+      // SYNC message, store the content
+      timeInfo[domain].SyncOccurred = 1;
+      timeInfo[domain].SeqCount = seqCounter;
+      timeInfo[domain].StbmSyncTime_ns = msgTime * (qword)1e9;
+      timeInfo[domain].VectorSyncTime_ns = msg_time_ns;
+      timeInfo[domain].userData[0] = byte3;
+      timeInfo[domain].userData[1] = byte1;
+    }
+    else if( (msgType == 0x18) && (timeInfo[domain].SeqCount == seqCounter) && timeInfo[domain].SyncOccurred )
+    {
+      qword ns;
+      
+      timeInfo[domain].userData[2] = byte1;
+
+      // Build the full time of the SYNC message
+      ns = timeInfo[domain].StbmSyncTime_ns + msgTime + (byte3 & 3) * (qword)1e9;
+      timeInfo[domain].SyncOccurred = 0;
+      
+      // Print the time in three columns
+      if( 0 == domain )
+      {
+        snprintf( buf, elcount(buf), "CANoe:%f Radio:%f", timeInfo[domain].VectorSyncTime_ns/1e9, ns/1e9 );
+      }
+      else if( 1 == domain )
+      {
+        dword timeToNvm;
+        timeToNvm = ((timeInfo[domain].userData[2]&0x3F)<<16) | (timeInfo[domain].userData[1]<<8) + timeInfo[domain].userData[0];
+        snprintf( buf, elcount(buf), "CANoe:%f                    UTC:%f (status %x untilNvMWrite %i)", timeInfo[domain].VectorSyncTime_ns/1e9, ns/1e9, timeInfo[domain].userData[2] & 0xC0, timeToNvm );
+      }
+      else if( 2 == domain )
+      {
+        snprintf( buf, elcount(buf), "CANoe:%f                                        Anc:%f (status %x)", timeInfo[domain].VectorSyncTime_ns/1e9, ns/1e9,  timeInfo[domain].userData[2] & 0xC0 );
+      }
+      else
+      {
+        snprintf( buf, elcount(buf), "(oops)" );
+      }
+      write( buf );
+      writetolog( buf );
+      
+      if( timeInfo[domain].initialised < 2 )
+      {        
+        // No previous data, store this as the reference point
+        // But we do this twice - effectively ignoring the first sync
+        timeInfo[domain].StbmStartTime_ns = ns;
+        timeInfo[domain].VectorStartTime_ns = timeInfo[domain].VectorSyncTime_ns;
+        timeInfo[domain].initialised++;
+      }
+      else
+      {
+        // Calculate the error
+        int64 VectorTimeDiff_ns;
+        qword canTimeDiff_ns;
+        int64 error_ns;
+        float ppm;
+        
+        VectorTimeDiff_ns = timeInfo[domain].VectorSyncTime_ns - timeInfo[domain].VectorStartTime_ns;
+        canTimeDiff_ns  = ns - timeInfo[domain].StbmStartTime_ns;
+        error_ns = canTimeDiff_ns - VectorTimeDiff_ns;
+        ppm = (error_ns * 1e6) / VectorTimeDiff_ns;
+        
+        if( test && (domainLog == domain) || (domainLog==99) )
+        {
+          snprintf( buf, elcount(buf), "domain %i: VectorDiff %f s StbmDiff %f s error(StbMDiff-VectorDiff) %f s = %f ppm",
+            domain, VectorTimeDiff_ns/1e9, canTimeDiff_ns/1e9, error_ns/1e9, ppm );
+          write(buf);
+        }
+      }      
+    }
+  }
+}
+
+on key 's'
+{
+  int i;
+  
+  for( i=0; i<numDomains; i++)
+  {
+    timeInfo[i].Initialised = 0;
+    timeInfo[i].SyncOccurred = 0;
+  }
+}
+

@@ -1,0 +1,185 @@
+/*@!Encoding:1252*/
+includes
+{ 
+  #include "Lib\Diag_Req_Resp.cin"
+  #include "Lib\DiagUtilities_New.cin"
+  #include "Lib\InvalidFrame.cin"
+  #include "Lib\PowerFluctuation.cin"
+}
+
+variables
+{ 
+  int Brute_Exttimes = 100; // cycle 200s like tcs
+  //const byte Bosch = 0x61;
+  message Anchor1Nm Anchr1;
+  message Anchor2Nm Anchr2;
+  message Anchor3Nm Anchr3;
+  message Anchor4Nm Anchr4;
+  message Anchor5Nm Anchr5;
+  message Anchor6Nm Anchr6;
+  message Anchor7Nm Anchr7;
+  message Anchor8Nm Anchr8;
+  message Anchor9Nm Anchr9;
+  timer Wait_Time;
+  message 0x401 TriggerBLE;
+  message 0x350 SysPwrMode;
+  timer TriggerBLE_timer;
+  timer SysPwrMode_timer;
+}
+
+
+on timer Wait_Time
+{
+  write("1");
+}
+
+on timer TriggerBLE_timer{
+  output(TriggerBLE);
+  setTimer(SysPwrMode_timer,400);
+}
+
+
+on timer SysPwrMode_timer{
+  output(SysPwrMode);
+  setTimer(TriggerBLE_timer,400);
+}
+
+testfunction BLE_BruteForceAttack(){
+  
+  ///Message for Trigger BLE = "00 22 20 00 01 01 00 28 00 28 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 FB 7F D8 58 52 80 2F D8 EF 6C D5 FD 00 00 00 01  "
+  TriggerBLE.DLC = 14; 
+  TriggerBLE.CAN = 2;
+  TriggerBLE.byte(00) = 0x00;
+  TriggerBLE.byte(01) = 0x22;
+  TriggerBLE.byte(02) = 0x20;
+  TriggerBLE.byte(03) = 0x00;
+  TriggerBLE.byte(04) = 0x01;
+  TriggerBLE.byte(05) = 0x01;
+  TriggerBLE.byte(06) = 0x00;
+  TriggerBLE.byte(07) = 0x28;
+  TriggerBLE.byte(08) = 0x00;
+  TriggerBLE.byte(09) = 0x28;
+  TriggerBLE.byte(10) = 0x01;
+  TriggerBLE.byte(11) = 0x00;
+  TriggerBLE.byte(12) = 0x00;
+  TriggerBLE.byte(13) = 0x00;
+  TriggerBLE.byte(14) = 0x00;
+  TriggerBLE.byte(15) = 0x00;
+  TriggerBLE.byte(16) = 0x00;
+  TriggerBLE.byte(17) = 0x00;
+  TriggerBLE.byte(18) = 0x00;
+  TriggerBLE.byte(19) = 0x00;
+  TriggerBLE.byte(20) = 0x00;
+  TriggerBLE.byte(21) = 0x00;
+  TriggerBLE.byte(22) = 0x00;
+  TriggerBLE.byte(23) = 0x00;
+  TriggerBLE.byte(24) = 0x00;
+  TriggerBLE.byte(25) = 0x00;
+  TriggerBLE.byte(26) = 0x00;
+  TriggerBLE.byte(27) = 0x00;
+  TriggerBLE.byte(28) = 0x00;
+  TriggerBLE.byte(29) = 0x00;
+  TriggerBLE.byte(30) = 0x00;
+  TriggerBLE.byte(31) = 0x00;
+  TriggerBLE.byte(32) = 0xFB;
+  TriggerBLE.byte(33) = 0x7F;
+  TriggerBLE.byte(34) = 0xD8;
+  TriggerBLE.byte(35) = 0x58;
+  TriggerBLE.byte(36) = 0x52;
+  TriggerBLE.byte(37) = 0x80;
+  TriggerBLE.byte(38) = 0x2F;
+  TriggerBLE.byte(39) = 0xD8;
+  TriggerBLE.byte(40) = 0xEF;
+  TriggerBLE.byte(41) = 0x6C;
+  TriggerBLE.byte(42) = 0xD5;
+  TriggerBLE.byte(43) = 0xFD;
+  TriggerBLE.byte(44) = 0x00;
+  TriggerBLE.byte(45) = 0x00;
+  TriggerBLE.byte(46) = 0x00;
+  TriggerBLE.byte(47) = 0x01;
+  
+  ///Message for SysPwrMode = "04 40 44 44 44 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+  SysPwrMode.DLC = 15; 
+  SysPwrMode.CAN = 2;
+  SysPwrMode.byte(00) = 0x04;
+  SysPwrMode.byte(01) = 0x40;
+  SysPwrMode.byte(03) = 0x44;
+  SysPwrMode.byte(04) = 0x44;
+  SysPwrMode.byte(05) = 0x44;
+  SysPwrMode.byte(06) = 0x00;
+  SysPwrMode.byte(07) = 0x00;
+  SysPwrMode.byte(08) = 0x00;
+  SysPwrMode.byte(09) = 0x00;
+  SysPwrMode.byte(10) = 0x00;
+  SysPwrMode.byte(11) = 0x00;
+  SysPwrMode.byte(12) = 0x00;
+  SysPwrMode.byte(13) = 0x00;
+  SysPwrMode.byte(14) = 0x00;
+  SysPwrMode.byte(15) = 0x00;
+  SysPwrMode.byte(16) = 0x00;
+  SysPwrMode.byte(17) = 0x00;
+  SysPwrMode.byte(18) = 0x00;
+  SysPwrMode.byte(19) = 0x00;
+  SysPwrMode.byte(20) = 0x00;
+  SysPwrMode.byte(21) = 0x00;
+  SysPwrMode.byte(22) = 0x00;
+  SysPwrMode.byte(23) = 0x00;
+  SysPwrMode.byte(24) = 0x00;
+  SysPwrMode.byte(25) = 0x00;
+  SysPwrMode.byte(26) = 0x00;
+  SysPwrMode.byte(27) = 0x00;
+  SysPwrMode.byte(28) = 0x00;
+  SysPwrMode.byte(29) = 0x00;
+  SysPwrMode.byte(23) = 0x00;
+  SysPwrMode.byte(24) = 0x00;
+  SysPwrMode.byte(25) = 0x00;
+  SysPwrMode.byte(26) = 0x00;
+  SysPwrMode.byte(27) = 0x00;
+  SysPwrMode.byte(28) = 0x00;
+  SysPwrMode.byte(29) = 0x00;
+  SysPwrMode.byte(30) = 0x00;
+  SysPwrMode.byte(31) = 0x00;
+  SysPwrMode.byte(32) = 0x00;
+  SysPwrMode.byte(33) = 0x00;
+  SysPwrMode.byte(34) = 0x00;
+  SysPwrMode.byte(35) = 0x00;
+  SysPwrMode.byte(36) = 0x00;
+  SysPwrMode.byte(37) = 0x00;
+  SysPwrMode.byte(38) = 0x00;
+  SysPwrMode.byte(39) = 0x00;
+  SysPwrMode.byte(40) = 0x00;
+  SysPwrMode.byte(41) = 0x00;
+  SysPwrMode.byte(42) = 0x00;
+  SysPwrMode.byte(43) = 0x00;
+  SysPwrMode.byte(44) = 0x00;
+  SysPwrMode.byte(45) = 0x00;
+  SysPwrMode.byte(46) = 0x00;
+  SysPwrMode.byte(47) = 0x00;
+  SysPwrMode.byte(48) = 0x00;
+  SysPwrMode.byte(49) = 0x00;
+  SysPwrMode.byte(50) = 0x00;
+  SysPwrMode.byte(51) = 0x00;
+  SysPwrMode.byte(52) = 0x00;
+  SysPwrMode.byte(53) = 0x00;
+  SysPwrMode.byte(54) = 0x00;
+  SysPwrMode.byte(55) = 0x00;
+  SysPwrMode.byte(56) = 0x00;
+  SysPwrMode.byte(57) = 0x00;
+  SysPwrMode.byte(58) = 0x00;
+  SysPwrMode.byte(59) = 0x00;
+  SysPwrMode.byte(60) = 0x00;
+  SysPwrMode.byte(61) = 0x00;
+  SysPwrMode.byte(62) = 0x00;
+  SysPwrMode.byte(63) = 0x00;
+  setTimer(SysPwrMode_timer,400);
+  testWaitForTimeout(Brute_Exttimes);
+  cancelTimer(TriggerBLE_timer);
+  cancelTimer(SysPwrMode_timer);
+  
+}
+
+
+MainTest(){
+    
+    BLE_BruteForceAttack();
+}

@@ -1,0 +1,505 @@
+/*@!Encoding:1252*/
+includes
+{
+}
+//----------------------------------------------------------------------------
+//! \brief  This testcase passes if the bytes are equal
+//! 
+//----------------------------------------------------------------------------
+testcase utility_compareByte(byte var1, byte var2, char identifier[], char description[])
+{
+  char dest[64];
+
+  snprintf(dest, elcount(dest), "Expected = 0x%02X , Actual = 0x%02X", var1, var2);
+    
+  testCaseComment(description);
+  
+  if(var1 == var2)
+  {
+    TestStepPass(identifier, "Test Pass: %s", dest);
+  }
+  else
+  {
+    TestStepFail(identifier, "Test Fail: %s", dest);
+  }
+}
+
+//----------------------------------------------------------------------------
+//! \brief  This testcase passes if the longs are equal
+//! 
+//----------------------------------------------------------------------------
+testcase utility_compareLong(long var1, long var2, char identifier[], char description[])
+{
+  char dest[64];
+
+  snprintf(dest, elcount(dest), "var1 = 0x%x , var2 = 0x%x", var1, var2);
+    
+  testCaseComment(dest);
+  
+  if(var1 == var2)
+  {
+    TestStepPass(identifier, description);
+  }
+  else
+  {
+    TestStepFail(identifier, description);
+  }
+}
+
+//----------------------------------------------------------------------------
+//! \brief  This testcase passes if var1 is less than var2
+//! 
+//----------------------------------------------------------------------------
+testcase utility_lessThanByte(byte var1, byte var2, char identifier[], char description[])
+{
+  char dest[64];
+
+  snprintf(dest, elcount(dest), "var1 = 0x%x , var2 = 0x%x", var1, var2);
+    
+  testCaseComment(dest);
+  
+  if(var1 < var2)
+  {
+    TestStepPass(identifier, description);
+  }
+  else
+  {
+    TestStepFail(identifier, description);
+  }
+}
+
+//----------------------------------------------------------------------------
+//! \brief  This testcase passes if var1 is less than var2
+//! 
+//----------------------------------------------------------------------------
+testcase utility_lessThanFloat(float var1, float var2, char identifier[], char description[])
+{
+  char dest[128];
+
+  snprintf(dest, elcount(dest), "var1 = %f , var2 = %f", var1, var2);
+    
+  testCaseComment(dest);
+  
+  
+  if(var1 < var2)
+  {
+    TestStepPass(identifier, description);
+  }
+  else
+  {
+    TestStepFail(identifier, description);
+  }
+}
+
+
+//----------------------------------------------------------------------------
+//! \brief  This testcase passes if var1 is less than var2
+//! 
+//----------------------------------------------------------------------------
+testcase utility_lessThanLong(long var1, long var2, char identifier[], char description[])
+{
+  char dest[128];
+
+  snprintf(dest, elcount(dest), "var1 = 0x%x , var2 = 0x%x", var1, var2);
+    
+  testCaseComment(dest);
+  
+  if(var1 < var2)
+  {
+    TestStepPass(identifier, description);
+  }
+  else
+  {
+    TestStepFail(identifier, description);
+  }
+}
+
+//----------------------------------------------------------------------------
+//! \brief  This testcase passes if the array has at least one different byte
+//! 
+//----------------------------------------------------------------------------
+testcase utility_isDifferentArray(byte length, byte arr1[], byte arr2[], char identifier[], char description[])
+{
+     byte compareCounter;
+     for(compareCounter = 0 ; compareCounter < length;compareCounter++)
+     {
+        if(arr1[compareCounter] != arr2[compareCounter])
+        {
+           //ok
+          break;
+        }
+     }
+     
+     if(compareCounter == length )
+     {
+        //Test failed as the arrays are equal
+        TestStepFail(identifier, description);
+        
+     }
+    else
+    {
+       TestStepPass(identifier, description);
+    }
+}
+
+//----------------------------------------------------------------------------
+//! \brief  Sends a diagnostic request and checks for a specific response code.
+//!
+//! \return 1 If test passed, 0 if test failed. If the response is positive response pointer will contain
+//!           the value of the response.
+//----------------------------------------------------------------------------
+long utility_SendRequestCheckResponseCode( DiagRequest * request,  //<! Request to be sent
+                                           DiagResponse * response,//<! Pointer to receive the response
+                                           long expectedErrorCode, //<! Expected Error code
+                                           dword timeOutForResponse, //<! Timeout in miliseconds
+                                           char identifier[],      //<! Test identifier
+                                           byte isTest)            //<! Identifies if functions TestPass or Fail should be called
+{
+  long ErrorCode;
+  char dest[128];
+
+  ErrorCode = DiagSendRequest( request );
+  if( 0 != ErrorCode )
+  {
+    snprintf(dest, elcount(dest), "DiagSendRequest = %i", ErrorCode);
+    write( dest );
+    if(isTest == 1)
+    {
+      TestStepFail( identifier, dest);
+    }
+  } 
+  
+  ErrorCode = TestWaitForDiagRequestSent(request, 3000);
+  if( ErrorCode < 0 )
+  {
+    snprintf(dest, elcount(dest), "TestWaitForDiagRequestSent = %i", ErrorCode);
+    write( dest );
+    if(isTest == 1)
+    {
+      TestStepFail( identifier, dest);
+    }
+  }  
+  
+  if( 1 != TestWaitForDiagResponse(request, timeOutForResponse))
+  {
+    if(isTest == 1)
+    {
+      TestStepFail( identifier, "No response received" );
+    }
+    return RESPONSE_CHECK_IS_NOK;
+  }
+
+  ErrorCode = DiagGetLastResponseCode( request );
+  snprintf(dest, elcount(dest), "Error Code: Expected = 0x%x , Received = 0x%x", expectedErrorCode, ErrorCode);
+  if(isTest == 1)
+  {
+    testCaseComment(dest);
+  }
+  
+  if( -1 == ErrorCode )
+  {
+    DiagGetLastResponse(request, response);
+  }
+  
+  if(expectedErrorCode == ErrorCode)
+  {
+    if(isTest == 1)
+    {
+      TestStepPass( identifier, "Response as expected" );
+    }
+    write("RESPONSE_CHECK_IS_OK ");    
+    return RESPONSE_CHECK_IS_OK;
+  }
+  else
+  {
+    if(isTest == 1)
+    {
+      TestStepFail( identifier, "Unexpected response" );
+    }
+    write("RESPONSE_CHECK_IS_NOK ");    
+    return RESPONSE_CHECK_IS_NOK;
+  }
+}
+
+testcase utility_SendRawDiagnostics(byte customDiagMessage[], long expectedResponse, byte expectedResponsePosition, char identifier[])
+{
+  
+  message * diagMessage;
+  message * response;
+  byte counter;
+  byte dataLen;
+  char dest[128];
+  
+  //Set up a diagnostics ID
+  //diagMessage.id = 0x18DAD1F1x;
+  
+  //Select CAN channel 1
+  diagMessage.CAN = 1;
+  
+  //Set the message length
+  dataLen = elcount(customDiagMessage);
+  if( dataLen > 7 )
+  {
+    write( "utility_SendRawDiagnostics(): Data too long" );
+    stop();
+  }
+  
+  // ISO-TP PCI byte
+  diagMessage.byte(0) = dataLen;
+  //Copy the message
+  for(counter = 0; counter <  dataLen ;counter++)
+  {
+    diagMessage.byte(counter+1) = customDiagMessage[counter];
+  }
+  // Pad the message
+  for( counter=dataLen+1; counter<8; counter++ )
+  {
+    diagMessage.byte(counter) = 0xFF;
+  }
+    
+  //Send the message
+  diagMessage.dlc = 8;
+  output(diagMessage);
+  
+  //Get the response
+  testWaitForMessage( response.id, 1000 );
+  testGetWaitEventMsgData(response);
+  
+  snprintf(dest, elcount(dest), "Expected Response: Expected = 0x%x , Received = 0x%x", expectedResponse, response.byte(expectedResponsePosition));
+  testCaseComment(dest);
+  if(expectedResponse == response.byte(expectedResponsePosition))
+  {
+     TestStepPass( identifier, "Response as expected" );
+  }
+  else
+  {
+     TestStepFail( identifier, "Unexpected response" );
+  }
+    
+}
+
+
+
+//TODO: This function should be substituted when the corresponding object provides enables the values to be modified.
+testcase utility_SendRawDiagnosticsRoutine(byte customDiagMessage[], long expectedResponse, byte expectedResponsePosition, char identifier[])
+{
+  
+  message * diagMessage;
+  message * response;
+  byte counter;
+  byte dataLen;
+  char dest[128];
+  
+  //Set up a diagnostics ID
+  //diagMessage.id = 0x18DAD1F1x;
+  
+  //Select CAN channel 1
+  diagMessage.CAN = 1;
+  
+  //Set the message length
+  dataLen = elcount(customDiagMessage);
+  if( dataLen > 7 )
+  {
+    write( "utility_SendRawDiagnostics(): Data too long" );
+    stop();
+  }
+  
+  // ISO-TP PCI byte
+  diagMessage.byte(0) = dataLen;
+  //Copy the message
+  for(counter = 0; counter <  dataLen ;counter++)
+  {
+    diagMessage.byte(counter+1) = customDiagMessage[counter];
+  }
+  // Pad the message
+  for( counter=dataLen+1; counter<8; counter++ )
+  {
+    diagMessage.byte(counter) = 0xFF;
+  }
+    
+  //Send the message
+  diagMessage.dlc = 8;
+  output(diagMessage);
+  
+  //Get the response
+  testWaitForMessage( response.id, 1000 );
+  testGetWaitEventMsgData(response);
+  
+  
+  if( response.byte(1)== ( diagMessage.byte(1) + 0x40)  )
+  { 
+      testCaseComment("Positive Response");
+      snprintf(dest, elcount(dest), "Expected Response: Expected = 0x%x , Received = 0x%x", expectedResponse, response.byte(expectedResponsePosition));
+      testCaseComment(dest);
+
+       //Positive response 
+      if(expectedResponse == response.byte(expectedResponsePosition))
+      {
+         TestStepPass( identifier, "Response as expected" );
+      }
+      else
+      {
+         TestStepFail( identifier, "Unexpected response" );
+      }
+  }
+  else
+  {
+       //Negative response
+      testCaseComment("Negative Response");
+      snprintf(dest, elcount(dest), "Expected Response: Expected = 0x%x , Received = 0x%x", expectedResponse, response.byte(expectedResponsePosition));
+      testCaseComment(dest);
+      if(expectedResponse == response.byte(expectedResponsePosition))
+      {
+         TestStepPass( identifier, "Response as expected" );
+      }
+      else
+      {
+         TestStepFail( identifier, "Unexpected response" );
+      }
+  }
+}
+
+
+  
+
+//Get the firmware file handle
+//Get the firmware file length
+void loadFWFile(char fileName[])
+{
+  byte dummy[1];
+
+  //Open the application firmware file in binary mode
+  fileFwHandle = openFileRead(fileName, 1);
+  if (0 != fileFwHandle)
+  {
+    write("open %s file",fileName );
+    
+    //Get the number of characters in the firmware
+    dataLength = 0;
+    while ( fileGetBinaryBlock (dummy,elcount(dummy),fileFwHandle)!=0 ) 
+    {
+      dataLength++;
+    }
+    
+    if (dataLength > 0x100000)
+    { // Wait for some time to get the file loaded
+      testWaitForTimeout(1000);
+    }
+  }
+  else
+  {
+     write("Cannot open %s file",fileName );
+     TestStepFail( "Cannot open %s file",fileName  );
+  } 
+}
+
+//warning lengths are fixed.
+void stringToHex(byte hexString[], byte hexadecimal[])
+{
+  byte temp[HASH_LENGTH*2];
+  int i, z;
+  for(i = 0; i < HASH_LENGTH*2; i++)
+  {
+      temp[i] = (hexString[i] <= '9') ? (hexString[i] - '0') : (10 + (hexString[i] - 'a'));
+  }
+  
+  z = 0;
+  for(i = 0; i< HASH_LENGTH ;i++)
+  {
+     hexadecimal[i] = (temp[z]<< 4) + temp[z+1];
+     z += 2;
+  }
+  z = 0;
+}
+
+//Load the hash from the file
+//Load the hash length the file
+void loadHASH(char fileName[])
+{
+   dword fileHashHandle;
+   byte dummy[1];
+  // byte HASH_TEMP[HASH_LENGTH];
+  int i;
+  
+   //Open the hash file in binary mode
+   fileHashHandle = openFileRead(fileName, 1);
+ 
+   if (0 != fileHashHandle)
+   {
+      write( "Reading hash from %s", fileName );
+      fileGetBinaryBlock (HASH ,HASH_LENGTH, fileHashHandle);
+       
+      //Close hash file
+      fileClose(fileHashHandle);
+  }
+  else
+  {
+    write("Cannot open %s", fileName);
+  }
+
+}
+
+//Get a hash value
+//const int HASH_TYPE_GOOD = 0;
+//const int HASH_TYPE_BAD = 1;
+void getHASH(byte hashType, byte hashOut[])
+{
+    int counter;
+    if(HASH_TYPE_GOOD == hashType)
+    {
+      //Get the good hash
+      for(counter = 0; counter< HASH_LENGTH;counter++)
+      {
+         hashOut[counter] = HASH[counter];
+      }
+    }
+    else
+    {
+      //Get a bad hash
+      for(counter = 0; counter< HASH_LENGTH;counter++)
+      {
+         hashOut[counter] = HASH[counter] + 1 ;
+      }
+    }
+}
+/*
+void waitUntiltesterPresentOK(char identifier[])        //<! testcase identifier)
+{
+  long responseCheck;
+  
+  responseCheck = RESPONSE_CHECK_IS_NOK;
+  while(responseCheck != RESPONSE_CHECK_IS_OK)
+  {
+    responseCheck = testerPresent(UDS_ERROR_CODE_OK, 1000, identifier);
+  }
+  
+}*/
+
+
+long UdsUtil_testWaitForDiagPositiveResponse(
+    diagRequest * request,
+    dword timeout
+    )
+{
+    long result;
+    long ReceivedErrorCode;
+    int64 startTime_ms;
+    int64 thisTime_ms;
+    
+    startTime_ms = (timeNowInt64() / 1000000);
+    thisTime_ms = startTime_ms;
+    result = 0;
+    while ((thisTime_ms - startTime_ms) < timeout)
+    {
+        TestWaitForDiagResponse(request, timeout); 
+        ReceivedErrorCode = DiagGetLastResponseCode( request );
+      
+        if( -1 == ReceivedErrorCode )
+        {
+            result = 1;
+            break;
+        }
+        thisTime_ms = (timeNowInt64() / 1000000);
+    }
+    return result;
+}

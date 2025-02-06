@@ -1,0 +1,177 @@
+﻿/*@!Encoding:65001*/
+/*@!Encoding:1252*/
+includes
+{
+
+  #include "Encoding.cin"
+
+}
+
+variables 
+{
+  char send_command[30];
+  long length;
+  char flag_traffic = 0;
+  double volt;
+  struct checkbyteDword
+  {
+     dword dw;
+  } checkbyteDword;
+  dword portID = 6;
+  dword baudRate = 115200;
+  dword byteSize = 8;
+  dword parity = 0;
+  dword stopBits = 1;
+  byte buffer_send[30];
+  char arr[20];
+  char volt_command[20];
+  int i;
+  double a;
+  double x;
+  double delta;
+  char asciiChar[10] ="";
+  byte buffer_receive[20];
+  char temp[10];
+  int max_length_receive = 256;
+}
+
+void init_param(){
+  @sysvar::PowerSupply::Input::Current = 1;
+  @sysvar::PowerSupply::Input::Max_Current = 10;
+  @sysvar::PowerSupply::Input::Voltage = 0;
+  @sysvar::PowerSupply::Input::Max_Voltage = 24;
+  @sysvar::PowerSupply::OutPut = 0;
+  @sysvar::PowerSupply::Com::Connection = 0;
+  @sysvar::PowerSupply::Read::Voltage = 0;
+  @sysvar::PowerSupply::Read::Current = 0;
+  @sysvar::PowerSupply::Com::Port = 3;
+}
+
+
+void set_voltage(double volt)
+{
+	{
+        mbstrncpy(send_command ,"VOLT ", elcount(send_command));
+        snprintf(volt_command, elcount(volt_command),"%.2f", volt);
+        write(volt_command);
+        strncat(send_command,volt_command,30);
+        strncat(send_command,"\r\n",30);
+        length=strlen(send_command)+1;
+				for (i=0;i<length;i++) buffer_send[i]=send_command[i];
+				if(rs232Send(portID,buffer_send,length) == 1)
+				{	
+					write("Successful");
+				}
+			
+		} 
+   
+
+}
+
+
+
+void clear_data(char data[]){
+  for (i = 0; i < 6; i++)
+  {
+    data[i] = '\0'; // Assign a null character to each element of the string
+  }
+  
+}
+
+//void read_voltage(){
+//  float volt_value;
+//  clear_data(asciiChar);
+//  mbstrncpy(send_command , "MEAS:VOLT? \r\n", elcount(send_command));
+//  write(send_command);
+//  length=strlen(send_command)+1;
+//	for (i=0;i<length;i++) buffer_send[i]=send_command[i];
+//	if(rs232Send(portID,buffer_send,length) == 1)
+//	{
+//    if (rs232Receive(portID,buffer_receive,max_length_receive) == 1){
+//      for (i = 1; i < 6; i++)
+//        {
+//          snprintf(temp, elCount(temp), "%c", buffer_receive[i]); // convert byte to HEX string
+//          strncat(asciiChar, temp, elcount(asciiChar)); // Concatenate HEX value to output string
+//        }
+//      volt_value = atodbl(asciiChar);
+//      @sysvar::PowerSupply::Read::Voltage = volt_value;
+//    }
+//	}
+//}
+
+void fluctuation(double time)
+{
+    // read_voltage();
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(3500);
+  
+    // read_voltage();
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(50);
+  // read_voltage();
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(50);
+   // read_voltage();
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(50);
+   // read_voltage();
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(50);
+   // read_voltage();
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(50);
+  
+  // read_voltage();
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(50);
+   // read_voltage();
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(50);
+  
+    volt = 10;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(5);
+    delta = 10 / time;
+    while (volt > 0) {
+        volt += 1;
+        @sysvar::PowerSupply::Input::Voltage = volt;
+        set_voltage(volt);
+        testWaitForTimeout(50);
+        volt = volt - 1 - delta;
+        @sysvar::PowerSupply::Input::Voltage = volt;
+        set_voltage(volt);
+        testWaitForTimeout(50);
+      }
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(4000);
+    }
+ 
+
+MainTest(){
+    rs232Open(portID);
+    rs232Configure(portID,baudRate,byteSize,stopBits,parity);
+  //PSW_control();
+  //init_param();
+  //set_voltage(13);
+  //read_voltage();
+    fluctuation(10);
+}

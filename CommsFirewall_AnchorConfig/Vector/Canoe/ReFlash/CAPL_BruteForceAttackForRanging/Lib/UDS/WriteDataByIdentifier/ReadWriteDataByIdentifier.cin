@@ -1,0 +1,500 @@
+/*@!Encoding:1252*/
+//----------------------------------------------------------------------------
+//! \brief  Write the digest to a specific logical block
+//! 
+//----------------------------------------------------------------------------
+testcase HashWrite( byte hash_In[]                           //<! Hash to be writte
+                   ,byte logicalBlock_In[]                   //<! Logical block
+                   ,long expectedErrorCode                   //<! Expected Error Code
+                   ,int timeOutForResponse                   //<! Timeout for the response
+                   ,char identifier[])                       //<! testcase identifier
+{
+  diagRequest Signature_Application_Write req;
+  diagRequest Signature_Calibration_Write reqC;  
+  diagRequest Signature_master_Write req1;
+  diagRequest Signature_anchor_Write req2;
+  diagResponse * resp;
+   
+  /*
+  diagSetParameterRaw( req, "Data" , hash_In, elcount(hash_In) );
+  diagSetParameterRaw( req, "RecordDataIdentifier" , logicalBlock_In, elcount(logicalBlock_In ));
+  utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  */
+  
+  //The following code has been added as a work around for not being able to change RecordDataIdentifier as it is constant in the CANdela
+  if (logicalBlock_In[1] == 1)//Application logical block
+  {
+      diagSetParameterRaw( req, "Data" , hash_In, elcount(hash_In) );
+
+      utility_SendRequestCheckResponseCode( req,  
+                                            resp,
+                                            expectedErrorCode,
+                                            timeOutForResponse,
+                                            identifier, 1);
+  }
+  else if (logicalBlock_In[1] == 2)//Calibration logical block
+  {
+      diagSetParameterRaw( reqC, "Data" , hash_In, elcount(hash_In) );
+      utility_SendRequestCheckResponseCode( req1,  
+                                            resp,
+                                            expectedErrorCode,
+                                            timeOutForResponse,
+                                            identifier, 1);
+  }
+  else
+  {
+     //do nothing
+  }
+  
+}
+
+//----------------------------------------------------------------------------
+//! \brief  Read the digest from a specific logical block
+//! 
+//----------------------------------------------------------------------------
+//TODO: Does not allow to change the logical block. Need to fix .cdd
+testcase HashRead( byte logicalBlock_In[]       //<! LogicalBlock
+                  ,byte hash_Out[]            //<! Array to store the read digest
+                  ,byte block_Out[]           //<! Array to store the logical block
+                  ,long expectedErrorCode    //<! Expected Error Code
+                  ,int timeOutForResponse    //<! Timeout for the response
+                  ,char identifier[])        //<! testcase identifier)
+{
+  diagRequest Signature_Application_Read req;
+  diagResponse * resp;
+  
+  diagSetParameterRaw( req, "RecordDataIdentifier" , logicalBlock_In, elcount(logicalBlock_In ));
+  utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  
+  DiagGetLastResponse(req, resp);
+  DiagGetParameterRaw(resp, "RecordDataIdentifier", block_Out, elcount(block_Out));
+  DiagGetParameterRaw(resp, "Data", hash_Out, elcount(hash_Out));
+}
+
+//----------------------------------------------------------------------------
+//! \brief  Write the digest to a specific logical block
+//! 
+//----------------------------------------------------------------------------
+testcase IdentifierWrite( byte hash_In[]                           //<! Hash to be writte
+                   ,byte logicalBlock_In[]                   //<! Logical block
+                   ,long expectedErrorCode                   //<! Expected Error Code
+                   ,int timeOutForResponse                   //<! Timeout for the response
+                   ,char identifier[])                       //<! testcase identifier
+{
+  diagRequest Signature_Application_Write req;
+  diagResponse * resp;
+  
+  diagSetParameterRaw( req, "Data" , hash_In, elcount(hash_In) );
+  diagSetParameterRaw( req, "RecordDataIdentifier" , logicalBlock_In, elcount(logicalBlock_In ));
+  utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+}
+
+//----------------------------------------------------------------------------
+//! \brief  Read the digest from a specific logical block
+//! 
+//----------------------------------------------------------------------------
+//TODO: Does not allow to change the logical block. Need to fix .cdd
+testcase IdentifierRead( byte logicalBlock_In[]       //<! LogicalBlock
+                  ,byte hash_Out[]            //<! Array to store the read digest
+                  ,byte block_Out[]           //<! Array to store the logical block
+                  ,long expectedErrorCode    //<! Expected Error Code
+                  ,int timeOutForResponse    //<! Timeout for the response
+                  ,char identifier[])        //<! testcase identifier)
+{
+  diagRequest Signature_Application_Read req;
+  diagResponse * resp;
+  
+  diagSetParameterRaw( req, "RecordDataIdentifier" , logicalBlock_In, elcount(logicalBlock_In ));
+  utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  
+  DiagGetLastResponse(req, resp);
+  DiagGetParameterRaw(resp, "RecordDataIdentifier", block_Out, elcount(block_Out));
+  DiagGetParameterRaw(resp, "Data", hash_Out, elcount(hash_Out));
+}
+
+
+
+//----------------------------------------------------------------------------
+//! \brief  Send a tester present request
+//! 
+//----------------------------------------------------------------------------
+testcase testerPresent( long expectedErrorCode    //<! Expected Error Code
+                       ,int timeOutForResponse    //<! Timeout for the response
+                       ,char identifier[])        //<! testcase identifier)
+{
+  diagRequest testerPresent_Send req;
+  diagResponse * resp;
+  long retVal;
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 0);
+  
+}
+
+
+// $22 $F187
+testcase vehicleManufacturerSparePartNumber_R_Read( long & responseLength_Out              //<! Length of the response output
+                                                   ,long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[]
+                                                   )        //<! testcase identifier
+{
+  diagRequest vehicleManufacturerSparePartNumber_R_Read req;
+  diagResponse * resp;
+  long retVal;
+  
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  if (retVal == RESPONSE_CHECK_IS_OK)
+  {
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+}
+
+// $22 $F188
+testcase vehicleManufacturer_ECU_software_number_Read( long & responseLength_Out              //<! Length of the response output
+                                                      ,long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[])        //<! testcase identifier
+{
+  diagRequest Configuration_reference_link_VehicleManufacturer_ECU_software_number_Read req;
+  diagResponse * resp;
+  long retVal;
+  
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  if (retVal == RESPONSE_CHECK_IS_OK)
+  {
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+}
+
+
+// $22 $F18A
+testcase system_Supplier_Identifier_Read(  long & responseLength_Out              //<! Length of the response output
+                                            ,long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[])        //<! testcase identifier
+{
+  diagRequest System_Supplier_Identifier_Read req;
+  diagResponse * resp;
+  long retVal;
+  
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  if (retVal == RESPONSE_CHECK_IS_OK)
+  {
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+}
+
+
+// $22 $F190
+testcase Vehicle_Identification_VIN_Read(  long & responseLength_Out              //<! Length of the response output
+                                           ,long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[])        //<! testcase identifier
+{
+  diagRequest Vehicle_Identification_VIN_Read req;
+  diagResponse * resp;
+  long retVal;
+  
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  if (retVal == RESPONSE_CHECK_IS_OK)
+  {
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+}
+
+// $22 $F191
+testcase Vehicle_manufacturer_ECU_Hardware_Number_Read( long & responseLength_Out              //<! Length of the response output
+                                                    ,long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[])        //<! testcase identifier
+{
+  diagRequest Vehicle_manufacturer_ECU_Hardware_Number_Read req;
+  diagResponse * resp;
+  long retVal;
+  
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  if (retVal == RESPONSE_CHECK_IS_OK)
+  {
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+}
+
+// $22 $F194
+testcase System_Supplier_ECU_Software_Number_Read(  long & responseLength_Out              //<! Length of the response output
+                                                    ,long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[])        //<! testcase identifier
+{
+  diagRequest System_Supplier_ECU_Software_Number_Read req;
+  diagResponse * resp;
+  long retVal;
+  
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  if (retVal == RESPONSE_CHECK_IS_OK)
+  {
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+}
+
+// $22 $F195
+testcase System_Supplier_ECU_Software_Version_Number_Read(  long & responseLength_Out              //<! Length of the response output
+                                                    ,long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[])        //<! testcase identifier
+{
+  diagRequest System_Supplier_ECU_Software_Version_Number_Read req;
+  diagResponse * resp;
+  long retVal;
+  
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  if (retVal == RESPONSE_CHECK_IS_OK)
+  {
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+}
+
+
+// $22 $F1A0
+testcase VDIAG_Read( long & responseLength_Out              //<! Length of the response output
+                     ,long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[])        //<! testcase identifier
+{
+  diagRequest VDIAG_Read req;
+  diagResponse * resp;
+  long retVal;
+  
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  if (retVal == RESPONSE_CHECK_IS_OK)
+  {
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+}
+
+
+// $22 $F1A1
+testcase vehicleManufacturerSparePartNumber_N_Read( long & responseLength_Out              //<! Length of the response output
+                                                   ,long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[])        //<! testcase identifier
+{
+
+  
+  diagRequest vehicleManufacturerSparePartNumber_N_Read req;
+  diagResponse * resp;
+  long retVal;
+  
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  if (retVal == RESPONSE_CHECK_IS_OK)
+  {
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+}
+
+// $22 $F010
+testcase Fingerprint_Read(long & responseLength_Out              //<! Length of the response output.
+                          ,double recordDataIdentifier_In, byte recordDataIdentifier_Out[], byte fingerPrint_Out[],
+                          long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[])        //<! testcase identifier
+{
+
+  
+  diagRequest Fingerprint_Read req;
+  diagResponse * resp;
+  long returnVal;
+  
+  diagSetParameter(req,      "RecordDataIdentifier" ,      recordDataIdentifier_In );
+  returnVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+
+  if(returnVal == RESPONSE_CHECK_IS_OK)
+  {
+    //Response
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+    DiagGetParameterRaw(resp, "RecordDataIdentifier", recordDataIdentifier_Out, elcount(recordDataIdentifier_Out));
+    DiagGetParameterRaw(resp, "Finger_Print", fingerPrint_Out, elcount(fingerPrint_Out));
+  }
+  else
+  {
+    //Do nothing, test failed.
+  }
+}
+
+// $22 $F011
+testcase IndexSrvData_Read( long & responseLength_Out              //<! Length of the response output
+                            ,long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[])        //<! testcase identifier
+{
+
+  
+  diagRequest IndexSrvData_Read req;
+  diagResponse * resp;
+    long retVal;
+  
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  if (retVal == RESPONSE_CHECK_IS_OK)
+  {
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+}
+
+
+// $22 $F012
+testcase Operational_Reference_Read( long & responseLength_Out              //<! Length of the response output.
+                                     ,long expectedErrorCode    //<! Expected Error Code
+                                                   ,int timeOutForResponse    //<! Timeout for the response
+                                                   ,char identifier[])        //<! testcase identifier
+{
+
+  
+  diagRequest Operational_Reference_Read req;
+  diagResponse * resp;
+    long retVal;
+  
+  retVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+  if (retVal == RESPONSE_CHECK_IS_OK)
+  {
+    responseLength_Out = DiagGetPrimitiveSize(resp);
+  }
+}
+
+
+/*
+//WARNING: Trying to use the same object for all the routines
+testcase startRoutine(byexpectedErrorCode)
+{
+  diagRequest BOOT_BS_AND_STMIN_Start req;
+  RoutineControlType
+  
+  RoutineIdentifier
+  
+  //request
+  diagSetParameter(req, "RoutineIdentifier" ,      RoutineIdentifier );
+  diagSetParameter(req, "RoutineControlType" ,      RoutineControlType );
+  
+  
+  
+  //response
+  diagGetParameter();
+  
+    //Get response
+  TestWaitForDiagRequestSent(req, 1000); //Wait for a second until the request is sent
+  TestWaitForDiagResponse(req, 1000);
+  errorCode = DiagGetLastResponseCode( req );//Just check the response code, anything else will be check outside of this function
+  if( -1 == errorCode )
+  {
+    TestStepPass( "ReadFingerprint", "Positive response" );
+    DiagGetLastResponse(req, response);
+    //Response
+    DiagGetParameterRaw(response, "RecordDataIdentifier", recordDataIdentifier_Out, elcount(recordDataIdentifier_Out));
+    //WARNING: Does the function make sure that we are receiving the number of expected bytes?
+    DiagGetParameterRaw(response, "Finger_Print", fingerPrint_Out, elcount(fingerPrint_Out));
+  }
+  else
+  {
+    TestStepFail( "ReadFingerprint", "Negative response");
+  }
+  
+  
+  
+  
+  
+}
+
+testcase stopRoutine()
+{
+  BOOT_BS_AND_STMIN_Start
+  
+}
+
+testcase resultRoutine()
+{
+  
+  
+}
+*/
+
+
+

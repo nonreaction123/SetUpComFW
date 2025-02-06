@@ -1,0 +1,261 @@
+/*@!Encoding:1252*/
+includes
+{
+
+}
+
+variables
+{
+    char panelName[32] = "ProgramECU";
+  
+    msTimer rerunTimer;  
+}
+
+on sysvar_update PROGRAM_ECU::progApp
+{
+  if (1 == @sysvar::PROGRAM_ECU::progApp)
+  {
+    SetControlVisibility(panelName, "grpSwVariant", 1);
+  }
+  else
+  {
+    SetControlVisibility(panelName, "grpSwVariant", 0);
+  }
+}
+
+on start
+{
+  SetControlVisibility(panelName, "grpProgramSelect", 1);
+  SetControlVisibility(panelName, "grpStartProgramming", 1);
+  SetControlVisibility(panelName, "grpSwVariant", 0);
+}
+
+on stopMeasurement
+{
+  SetControlVisibility(panelName, "grpProgramSelect", 0);
+  SetControlVisibility(panelName, "grpStartProgramming", 0);
+  SetControlVisibility(panelName, "grpSwVariant", 0);  
+}
+
+on sysvar PROGRAM_ECU::programmingState
+{
+  if (  (3 == @this) // finished pass
+     || (4 == @this) // finished fail
+     )
+  { // finished
+    @sysvar::PROGRAM_ECU::programmingInProgress = 0;
+    @sysvar::PROGRAM_ECU::programmingDone = 1;
+    
+    if (1 == @sysvar::PROGRAM_ECU::boContinuousRun)
+    {
+      if (3 == @this) // finished pass
+      {
+        setTimer(rerunTimer, 1000);
+        write("repeating test");
+      }
+    }
+  }
+}
+
+on sysvar_update PROGRAM_ECU::btnStartProgram
+{
+  if (1 == @this)
+  {
+    if (0 == @sysvar::PROGRAM_ECU::programmingInProgress)
+    {
+      @sysvar::PROGRAM_ECU::programmingInProgress = 1;
+      @sysvar::PROGRAM_ECU::programmingDone = 0;
+    }
+  }
+}
+
+on sysvar_update PROGRAM_ECU::programmingInProgress
+{
+  if (1 == @this)
+  {
+    SetControlVisibility(panelName, "btnStartProgram", 0);
+    SetControlVisibility(panelName, "sscButton", 0);
+    SetControlVisibility(panelName, "cbProgConfigData", 0);
+    SetControlVisibility(panelName, "cbProgApplication", 0);
+  }
+  else
+  {
+    SetControlVisibility(panelName, "btnStartProgram", 1);
+    SetControlVisibility(panelName, "sscButton", 1);
+    SetControlVisibility(panelName, "cbProgConfigData", 1);
+    SetControlVisibility(panelName, "cbProgApplication", 1);
+  }
+}
+
+on sysvar_update PROGRAM_ECU::strMasterFile
+{
+  char filename[1000];
+  dword fileHandle;
+  
+  sysGetVariableString(this, filename, elCount(filename));
+  fileHandle = openFileRead(filename, 1);
+  
+  if (fileHandle != 0)
+  {
+    byte buffer[16];
+    dword bin_addr;
+    char configversion[32];
+    
+    bin_addr = 0;
+    do
+    {
+      fileGetBinaryBlock(buffer, elcount(buffer), fileHandle);
+      bin_addr += elcount(buffer);
+    } while (bin_addr <= 0x0);
+    
+    snprintf(configversion, elcount(configversion),
+      "%02x%02x%02x%02x%02x.%02x%02x.%02x%02x%02x%02x%02x%02x%02x%02x",
+      buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
+      buffer[5],buffer[6],
+      buffer[7],buffer[8],buffer[9],buffer[10],buffer[11],buffer[12],buffer[13],buffer[14]
+      );
+    
+    sysSetVariableString(sysvar::PROGRAM_ECU::strSwVersion, configversion);
+  }
+  else
+  {
+    write("Error: Cannot open file '%s'", filename);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strSwVersion, "");
+  }
+}
+on sysvar_update PROGRAM_ECU::strAnchorFile
+{
+  char filename[1000];
+  dword fileHandle;
+  
+  sysGetVariableString(this, filename, elCount(filename));
+  fileHandle = openFileRead(filename, 1);
+  
+  if (fileHandle != 0)
+  {
+    byte buffer[16];
+    dword bin_addr;
+    char configversion[32];
+    
+    bin_addr = 0;
+    do
+    {
+      fileGetBinaryBlock(buffer, elcount(buffer), fileHandle);
+      bin_addr += elcount(buffer);
+    } while (bin_addr <= 0x0);
+    
+    snprintf(configversion, elcount(configversion),
+      "%02x%02x%02x%02x%02x.%02x%02x.%02x%02x%02x%02x%02x%02x%02x%02x",
+      buffer[0],buffer[1],buffer[2],buffer[3],buffer[4],
+      buffer[5],buffer[6],
+      buffer[7],buffer[8],buffer[9],buffer[10],buffer[11],buffer[12],buffer[13],buffer[14]
+      );
+    
+    sysSetVariableString(sysvar::PROGRAM_ECU::strSwVersion, configversion);
+  }
+  else
+  {
+    write("Error: Cannot open file '%s'", filename);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strSwVersion, "");
+  }
+}
+
+on sysvar_update PROGRAM_ECU::strApplicationFile
+{
+  char filename[1000];
+  dword fileHandle;
+  
+  sysGetVariableString(this, filename, elCount(filename));
+  fileHandle = openFileRead(filename, 1);
+  
+  if (fileHandle != 0)
+  {
+    byte buffer[16+0x134];
+    dword bin_addr;
+    char swversion[32];
+    dword start_addr = 0x134;
+    
+    bin_addr = 0;
+    //do
+    //{
+      fileGetBinaryBlock(buffer, elcount(buffer), fileHandle);
+    //  bin_addr += elcount(buffer);
+    //} while (bin_addr <= (0x134+16));
+    
+    snprintf(swversion, elcount(swversion),
+      "%c%c%c%c.%c%c%c%c.%c%c%c%c",
+      buffer[start_addr+0],buffer[start_addr+1],buffer[start_addr+2],buffer[start_addr+3],
+      buffer[start_addr+4],buffer[start_addr+5],buffer[start_addr+6],buffer[start_addr+7],
+      buffer[start_addr+8],buffer[start_addr+9],buffer[start_addr+10],buffer[start_addr+11]
+      );
+    
+    sysSetVariableString(sysvar::PROGRAM_ECU::strSwVersion, swversion);
+  }
+  else
+  {
+    write("Error: Cannot open file '%s'", filename);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strSwVersion, "");
+  }
+}
+
+on sysvar_update PROGRAM_ECU::strConfigurationFile
+{
+  char filename[1000];
+  dword fileHandle;
+  
+  sysGetVariableString(this, filename, elCount(filename));
+  fileHandle = openFileRead(filename, 1);
+  
+  if (fileHandle != 0)
+  {
+    char configversion[8]; 
+    byte buffer[256+4+8];
+    dword bin_addr;
+    
+    bin_addr = 0;
+//    do
+//    {
+      fileGetBinaryBlock(buffer, elcount(buffer), fileHandle);
+    snprintf(configversion, elcount(configversion),
+      "%c%c%c%c%c%c%c%c",
+      buffer[256+4+0],buffer[256+4+1],buffer[256+4+2],buffer[256+4+3],
+      buffer[256+4+4],buffer[256+4+5],buffer[256+4+6],buffer[256+4+7]
+      );
+    
+//      bin_addr += elcount(buffer);
+//    } while (bin_addr <= 0x0);
+      
+    sysSetVariableString(sysvar::PROGRAM_ECU::strConfigIDNumVersion, configversion);
+  }
+  else
+  {
+    write("Error: Cannot open file '%s'", filename);
+    sysSetVariableString(sysvar::PROGRAM_ECU::strConfigIDNumVersion, "");
+  }
+}
+
+on preStart
+{
+  char temp[1000];
+  
+  sysGetVariableString(sysvar::PROGRAM_ECU::strApplicationFile, temp, elcount(temp));
+  sysSetVariableString(sysvar::PROGRAM_ECU::strApplicationFile, temp);
+
+  sysGetVariableString(sysvar::PROGRAM_ECU::strConfigurationFile, temp, elcount(temp));
+  sysSetVariableString(sysvar::PROGRAM_ECU::strConfigurationFile, temp);
+  
+  sysGetVariableString(sysvar::PROGRAM_ECU::strMasterFile, temp, elcount(temp));
+  sysSetVariableString(sysvar::PROGRAM_ECU::strMasterFile, temp);
+ 
+  sysGetVariableString(sysvar::PROGRAM_ECU::strAnchorFile, temp, elcount(temp));
+  sysSetVariableString(sysvar::PROGRAM_ECU::strAnchorFile, temp);
+  
+}
+
+on timer rerunTimer
+{
+    if (1 == @sysvar::PROGRAM_ECU::boContinuousRun)
+    {
+        @sysvar::PROGRAM_ECU::btnStartProgram = 1;   
+    }
+}

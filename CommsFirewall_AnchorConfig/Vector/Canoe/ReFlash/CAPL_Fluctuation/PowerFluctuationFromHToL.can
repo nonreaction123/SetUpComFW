@@ -1,0 +1,21 @@
+﻿/*@!Encoding:65001*/
+/*@!Encoding:1252*/
+includes
+{
+  #include "Lib\PowerFluctuation.cin"
+}
+
+
+
+
+
+void fluctuation()
+{
+    PowerFluctuationHightoLow();
+}
+ 
+
+MainTest(){
+    
+    fluctuation();
+}

@@ -1,0 +1,137 @@
+/*@!Encoding:1252*/
+includes
+{
+    #include "..\..\utility\util_compare.cin"
+    #include "ReadDataByIdentifier.cin"
+}
+
+testcase tc_RDBI_ReadFBLVersion(
+    char identifier[],          //<! Test identifier
+    long expectedErrorCode,     //<! Expected Error code
+    int timeOutForResponse      //<! Timeout in miliseconds
+)
+{
+    tf_RDBI_ReadFBLVersion(identifier, expectedErrorCode, timeOutForResponse);
+}
+
+testfunction tf_RDBI_ReadFBLVersion(
+    char identifier[],          //<! Test identifier
+    long expectedErrorCode,     //<! Expected Error code
+    int timeOutForResponse      //<! Timeout in miliseconds
+)
+{
+    diagRequest Boot_Version_Read req;
+    diagResponse * resp;
+    
+    if (RESPONSE_CHECK_IS_OK == 
+        nf_RDBI_ReadDIDxxxx_Fuzzy(identifier, req, resp, expectedErrorCode, timeOutForResponse, 1))
+    {
+        long exp_numOfModules;
+        char exp_bootSwId[31];
+        
+        long act_numOfModules;
+        char act_bootSwId[31];
+
+        if (8 == @sysvar::GLOBAL_CANOE_CONFIG::u32NumOfChannels)
+        {
+            exp_numOfModules = sysGetVariableInt(sysvar::UDS_RDBI_8CH::F180_NumOfModule);
+            sysGetVariableString(sysvar::UDS_RDBI_8CH::F180_BootSwId, exp_bootSwId, elcount(exp_bootSwId));
+        }
+        else
+        {
+            exp_numOfModules = sysGetVariableInt(sysvar::UDS_RDBI_3CH::F180_NumOfModule);
+            sysGetVariableString(sysvar::UDS_RDBI_3CH::F180_BootSwId, exp_bootSwId, elcount(exp_bootSwId));
+        }
+        
+        act_numOfModules = resp.GetParameter("NumberOfModules");
+
+        diagGetParameter(resp, "Boot_Software_Identification", act_bootSwId, elcount(act_bootSwId));
+        
+        nf_ucmp_CompareByte(identifier, "NumberOfModules", exp_numOfModules, act_numOfModules, 1);
+        
+        nf_ucmp_CompareString(identifier, "Boot_Software_Identification", exp_bootSwId, act_bootSwId, 31, 1);
+    }
+}
+
+testcase tc_RDBI_ReadApplicationVersion(
+    char identifier[],          //<! Test identifier
+    long expectedErrorCode,     //<! Expected Error code
+    int timeOutForResponse      //<! Timeout in miliseconds
+)
+{
+    tf_RDBI_ReadApplicationVersion(identifier, expectedErrorCode, timeOutForResponse);
+}
+
+testfunction tf_RDBI_ReadApplicationVersion(
+    char identifier[],          //<! Test identifier
+    long expectedErrorCode,     //<! Expected Error code
+    int timeOutForResponse      //<! Timeout in miliseconds
+)
+{
+    diagRequest System_Supplier_ECU_Software_Version_Number_Read req;
+    diagResponse * resp;
+    
+    if (RESPONSE_CHECK_IS_OK == 
+        nf_RDBI_ReadDIDxxxx_Fuzzy(identifier, req, resp, expectedErrorCode, timeOutForResponse, 1))
+    {
+        char exp_ApplSwId[32];
+        
+        char act_ApplSwId[32];
+
+        if (8 == @sysvar::GLOBAL_CANOE_CONFIG::u32NumOfChannels)
+        {
+            sysGetVariableString(sysvar::UDS_RDBI_8CH::F195_EcuSwVersionNumber, exp_ApplSwId, elcount(exp_ApplSwId));
+        }
+        else
+        {
+            sysGetVariableString(sysvar::UDS_RDBI_3CH::F195_EcuSwVersionNumber, exp_ApplSwId, elcount(exp_ApplSwId));
+        }
+        
+        diagGetParameter(resp, "ECU_Software_Version_Number", act_ApplSwId, elcount(act_ApplSwId));
+        
+        nf_ucmp_CompareString(identifier, "ECU_Software_Version_Number", exp_ApplSwId, act_ApplSwId, 32, 1);
+    }
+}
+
+
+testcase tc_RDBI_ReadSwContainerId(
+    char identifier[],          //<! Test identifier
+    long expectedErrorCode,     //<! Expected Error code
+    int timeOutForResponse      //<! Timeout in miliseconds
+)
+{
+    tf_RDBI_ReadSwContainerId(identifier, expectedErrorCode, timeOutForResponse);
+}
+
+testfunction tf_RDBI_ReadSwContainerId(
+    char identifier[],          //<! Test identifier
+    long expectedErrorCode,     //<! Expected Error code
+    int timeOutForResponse      //<! Timeout in miliseconds
+)
+{
+    diagRequest System_Supplier_ECU_Software_Number_Read req;
+    diagResponse * resp;
+    
+    if (RESPONSE_CHECK_IS_OK == 
+        nf_RDBI_ReadDIDxxxx_Fuzzy(identifier, req, resp, expectedErrorCode, timeOutForResponse, 1))
+    {
+        char exp_SwContainerId[32];
+        
+        char act_SwContainerId[32];
+
+        if (8 == @sysvar::GLOBAL_CANOE_CONFIG::u32NumOfChannels)
+        {
+            sysGetVariableString(sysvar::UDS_RDBI_8CH::F194_SwContainerID, exp_SwContainerId, elcount(exp_SwContainerId));
+        }
+        else
+        {
+            sysGetVariableString(sysvar::UDS_RDBI_3CH::F194_SwContainerID, exp_SwContainerId, elcount(exp_SwContainerId));
+        }
+        
+        diagGetParameter(resp, "ECU_Software_Number", act_SwContainerId, elcount(act_SwContainerId));
+        
+        nf_ucmp_CompareString(identifier, "ECU_Software_Number", exp_SwContainerId, act_SwContainerId, 32, 1);
+    }
+}
+    
+   

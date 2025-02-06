@@ -1,0 +1,372 @@
+/*@!Encoding:1252*/
+includes
+{ 
+  #include "Lib\Diag_Req_Resp.cin"
+  #include "Lib\DiagUtilities_New.cin"
+  #include "Lib\InvalidFrame.cin"
+  #include "Lib\PowerFluctuation.cin"
+}
+
+variables
+{ 
+  int Brute_Exttimes = 100; // cycle 200s like tcs
+  //const byte Bosch = 0x61;
+  message Anchor1Nm Anchr1;
+  message Anchor2Nm Anchr2;
+  message Anchor3Nm Anchr3;
+  message Anchor4Nm Anchr4;
+  message Anchor5Nm Anchr5;
+  message Anchor6Nm Anchr6;
+  message Anchor7Nm Anchr7;
+  message Anchor8Nm Anchr8;
+  message Anchor9Nm Anchr9;
+  timer Wait_Time;
+  message 0x170 pduID_10;
+  message 0x170 pduID_11;
+  message 0x170 pduID_12;
+  message 0x170 pduID_13;
+  message 0x350 SysPwrMode;
+  timer pduID_10_timer;
+  timer pduID_11_timer;
+  timer pduID_12_timer;
+  timer pduID_13_timer;
+  timer SysPwrMode_timer;
+}
+
+
+on timer Wait_Time
+{
+  write("1");
+}
+
+on timer pduID_10_timer{
+  output(pduID_10);
+  setTimer(pduID_11_timer,400);
+}
+
+
+on timer pduID_11_timer{
+  output(pduID_11);
+  setTimer(pduID_12_timer,400);
+}
+
+
+on timer pduID_12_timer{
+  output(pduID_12);
+  setTimer(pduID_13_timer,400);
+}
+
+
+on timer pduID_13_timer{
+  output(pduID_13);
+  setTimer(SysPwrMode_timer,400);
+}
+
+on timer SysPwrMode_timer{
+  output(SysPwrMode);
+  setTimer(pduID_10_timer,400);
+}
+
+testfunction UWB_BruteForceAttack(){
+  
+  ///Message for PDU10 = "00 1D 10 00 01 00 FF EB 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 14 00 14 23 7F CF E9 DC"
+  pduID_10.DLC = 13; 
+  pduID_10.CAN = 2;
+  pduID_10.byte(0) = 0x00;
+  pduID_10.byte(1) = 0x1D;
+  pduID_10.byte(2) = 0x10;
+  pduID_10.byte(3) = 0x00;
+  pduID_10.byte(4) = 0x01;
+  pduID_10.byte(5) = 0x00;
+  pduID_10.byte(6) = 0xFF;
+  pduID_10.byte(7) = 0xEB;
+  pduID_10.byte(8) = 0x40;
+  pduID_10.byte(24) = 0x14;
+  pduID_10.byte(26) = 0x14;
+  pduID_10.byte(27) = 0x23;
+  pduID_10.byte(28) = 0x7F;
+  pduID_10.byte(29) = 0xCF;
+  pduID_10.byte(30) = 0XE9;
+  pduID_10.byte(31) = 0xDC;
+  
+  //MESSAGE FOR PDU11 = "00 36 11 81 5E 2E A1 E3 99 A9 8B 96 F1 83 30 FF 5E CC 6F A7 F6 39 C3 A7 DD FC 8B CF 8A 47 38 D4 07 C8 75 A5 CD CF 0C C9 0B C8 1A 2D 6E 8A B4 5F E1 87 AE D6 5F E5 7A 99 00 00 00 26 00 00 00 26"
+  pduID_11.DLC = 15; 
+  pduID_11.CAN = 2;
+  pduID_11.byte(0) = 0x00;
+  pduID_11.byte(1) = 0x36;
+  pduID_11.byte(2) = 0x11;
+  pduID_11.byte(3) = 0x81;
+  pduID_11.byte(4) = 0x5E;
+  pduID_11.byte(5) = 0x2E;
+  pduID_11.byte(6) = 0xA1;
+  pduID_11.byte(7) = 0xE3;
+  pduID_11.byte(8) = 0x99;
+  pduID_11.byte(9) = 0xA9;
+  pduID_11.byte(10) = 0x8B;
+  pduID_11.byte(11) = 0x96;
+  pduID_11.byte(12) = 0xF1;
+  pduID_11.byte(13) = 0x83;
+  pduID_11.byte(14) = 0x30;
+  pduID_11.byte(15) = 0xFF;
+  pduID_11.byte(16) = 0x5E;
+  pduID_11.byte(17) = 0xCC;
+  pduID_11.byte(18) = 0x6F;
+  pduID_11.byte(19) = 0xA7;
+  pduID_11.byte(20) = 0xF6;
+  pduID_11.byte(21) = 0x39;
+  pduID_11.byte(22) = 0xC3;
+  pduID_11.byte(23) = 0xA7;
+  pduID_11.byte(24) = 0xDD;
+  pduID_11.byte(25) = 0xFC;
+  pduID_11.byte(26) = 0x8B;
+  pduID_11.byte(27) = 0xCF;
+  pduID_11.byte(28) = 0x8A;
+  pduID_11.byte(29) = 0x47;
+  pduID_11.byte(30) = 0x38;
+  pduID_11.byte(31) = 0xD4;
+  pduID_11.byte(32) = 0x07;
+  pduID_11.byte(33) = 0xC8;
+  pduID_11.byte(34) = 0x75;
+  pduID_11.byte(35) = 0xA5;
+  pduID_11.byte(36) = 0xCD;
+  pduID_11.byte(37) = 0xCF;
+  pduID_11.byte(38) = 0x0C;
+  pduID_11.byte(39) = 0xC9;
+  pduID_11.byte(40) = 0x0B;
+  pduID_11.byte(41) = 0xC8;
+  pduID_11.byte(42) = 0x1A;
+  pduID_11.byte(43) = 0x2D;
+  pduID_11.byte(44) = 0x6E;
+  pduID_11.byte(45) = 0x8A;
+  pduID_11.byte(46) = 0xB4;
+  pduID_11.byte(47) = 0x5F;
+  pduID_11.byte(48) = 0xE1;
+  pduID_11.byte(49) = 0x87;
+  pduID_11.byte(50) = 0xAE;
+  pduID_11.byte(51) = 0xD6;
+  pduID_11.byte(52) = 0x5F;
+  pduID_11.byte(53) = 0xE5;
+  pduID_11.byte(54) = 0x7A;
+  pduID_11.byte(55) = 0x99;
+  pduID_11.byte(56) = 0x00;
+  pduID_11.byte(57) = 0x00;
+  pduID_11.byte(58) = 0x00;
+  pduID_11.byte(59) = 0x26;
+  pduID_11.byte(60) = 0x00;
+  pduID_11.byte(61) = 0x00;
+  pduID_11.byte(62) = 0x00;
+  pduID_11.byte(63) = 0x26;
+
+  
+  //Message for PDU 12 = " 00 36 12 81 18 EB 4E 52 F1 AE 4D 39 B4 8F 17 EA 92 7B 4F E7 66 57 A4 7F 32 88 DE 3D 2E 83 60 2D 62 4A 7C CC 9B C1 44 FE 7E 06 2B AE 1E 2D C7 F2 A2 8D 74 D9 9B AD 21 3A 00 00 00 26 00 00 00 26"
+   
+  pduID_12.DLC = 15; 
+  pduID_12.CAN = 2;
+  pduID_12.byte(00) = 0x00;
+   pduID_12.byte(01) = 0x36;
+   pduID_12.byte(02) = 0x12;
+   pduID_12.byte(03) = 0x81;
+   pduID_12.byte(04) = 0x18;
+   pduID_12.byte(05) = 0xEB;
+   pduID_12.byte(06) = 0x4E;
+   pduID_12.byte(07) = 0x52;
+   pduID_12.byte(08) = 0xF1;
+   pduID_12.byte(09) = 0xAE;
+   pduID_12.byte(10) = 0x4D;
+   pduID_12.byte(11) = 0x39;
+   pduID_12.byte(12) = 0xB4;
+   pduID_12.byte(13) = 0x8F;
+   pduID_12.byte(14) = 0x17;
+   pduID_12.byte(15) = 0xEA;
+   pduID_12.byte(16) = 0x92;
+   pduID_12.byte(17) = 0x7B;
+   pduID_12.byte(18) = 0x4F;
+   pduID_12.byte(19) = 0xE7;
+   pduID_12.byte(20) = 0x66;
+   pduID_12.byte(21) = 0x57;
+   pduID_12.byte(22) = 0xA4;
+   pduID_12.byte(23) = 0x7F;
+   pduID_12.byte(24) = 0x32;
+   pduID_12.byte(25) = 0x88;
+   pduID_12.byte(26) = 0xDE;
+   pduID_12.byte(27) = 0x3D;
+   pduID_12.byte(28) = 0x2E;
+   pduID_12.byte(29) = 0x83;
+   pduID_12.byte(30) = 0x60;
+   pduID_12.byte(31) = 0x2D;
+   pduID_12.byte(32) = 0x62;
+   pduID_12.byte(33) = 0x4A;
+   pduID_12.byte(34) = 0x7C;
+   pduID_12.byte(35) = 0xCC;
+   pduID_12.byte(36) = 0x9B;
+   pduID_12.byte(37) = 0xC1;
+   pduID_12.byte(38) = 0x44;
+   pduID_12.byte(39) = 0xFE;
+   pduID_12.byte(40) = 0x7E;
+   pduID_12.byte(41) = 0x06;
+   pduID_12.byte(42) = 0x2B;
+   pduID_12.byte(43) = 0xAE;
+   pduID_12.byte(44) = 0x1E;
+   pduID_12.byte(45) = 0x2D;
+   pduID_12.byte(46) = 0xC7;
+   pduID_12.byte(47) = 0xF2;
+   pduID_12.byte(48) = 0xA2;
+   pduID_12.byte(49) = 0x8D;
+   pduID_12.byte(50) = 0x74;
+   pduID_12.byte(51) = 0xD9;
+   pduID_12.byte(52) = 0x9B;
+   pduID_12.byte(53) = 0xAD;
+   pduID_12.byte(54) = 0x21;
+   pduID_12.byte(55) = 0x3A;
+   pduID_12.byte(56) = 0x00;
+   pduID_12.byte(57) = 0x00;
+   pduID_12.byte(58) = 0x00;
+   pduID_12.byte(59) = 0x26;
+   pduID_12.byte(60) = 0x00;
+   pduID_12.byte(61) = 0x00;
+   pduID_12.byte(62) = 0x00;
+   pduID_12.byte(63) = 0x26;
+
+  
+ //Message for PDU 13 = " 00 2A 13 00 01 00 FF EB 40 00 00 01 00 00 00 09 05 00 03 06 08 10 00 00 00 00 00 00 00 00 00 00 00 00 50 28 57 22 27 00 D7 4C 1D 9E 00 00 00 01"
+  pduID_13.DLC = 14; 
+  pduID_13.CAN = 2;
+  pduID_13.byte(00) = 0x00;
+  pduID_13.byte(01) = 0x2A;
+  pduID_13.byte(02) = 0x13;
+  pduID_13.byte(03) = 0x00;
+  pduID_13.byte(04) = 0x01;
+  pduID_13.byte(05) = 0x00;
+  pduID_13.byte(06) = 0xFF;
+  pduID_13.byte(07) = 0xEB;
+  pduID_13.byte(08) = 0x40;
+  pduID_13.byte(09) = 0x00;
+  pduID_13.byte(10) = 0x00;
+  pduID_13.byte(11) = 0x01;
+  pduID_13.byte(12) = 0x00;
+  pduID_13.byte(13) = 0x00;
+  pduID_13.byte(14) = 0x00;
+  pduID_13.byte(15) = 0x09;
+  pduID_13.byte(16) = 0x05;
+  pduID_13.byte(17) = 0x00;
+  pduID_13.byte(18) = 0x03;
+  pduID_13.byte(19) = 0x06;
+  pduID_13.byte(20) = 0x08;
+  pduID_13.byte(21) = 0x10;
+  pduID_13.byte(22) = 0x00;
+  pduID_13.byte(23) = 0x00;
+  pduID_13.byte(24) = 0x00;
+  pduID_13.byte(25) = 0x00;
+  pduID_13.byte(26) = 0x00;
+  pduID_13.byte(27) = 0x00;
+  pduID_13.byte(28) = 0x00;
+  pduID_13.byte(29) = 0x00;
+  pduID_13.byte(30) = 0x00;
+  pduID_13.byte(31) = 0x00;
+  pduID_13.byte(32) = 0x00;
+  pduID_13.byte(33) = 0x00;
+  pduID_13.byte(34) = 0x50;
+  pduID_13.byte(35) = 0x28;
+  pduID_13.byte(36) = 0x57;
+  pduID_13.byte(37) = 0x22;
+  pduID_13.byte(38) = 0x27;
+  pduID_13.byte(39) = 0x00;
+  pduID_13.byte(40) = 0xD7;
+  pduID_13.byte(41) = 0x4C;
+  pduID_13.byte(42) = 0x1D;
+  pduID_13.byte(43) = 0x9E;
+  pduID_13.byte(44) = 0x00;
+  pduID_13.byte(45) = 0x00;
+  pduID_13.byte(46) = 0x00;
+  pduID_13.byte(47) = 0x01;
+  
+  
+  //Message for SysPwrMode = "02 20 22 22 22 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+  SysPwrMode.DLC = 15; 
+  SysPwrMode.CAN = 2;
+  SysPwrMode.byte(00) = 0x02;
+  SysPwrMode.byte(01) = 0x20;
+  SysPwrMode.byte(03) = 0x22;
+  SysPwrMode.byte(04) = 0x22;
+  SysPwrMode.byte(05) = 0x22;
+  SysPwrMode.byte(06) = 0x00;
+  SysPwrMode.byte(07) = 0x00;
+  SysPwrMode.byte(08) = 0x00;
+  SysPwrMode.byte(09) = 0x00;
+  SysPwrMode.byte(10) = 0x00;
+  SysPwrMode.byte(11) = 0x00;
+  SysPwrMode.byte(12) = 0x00;
+  SysPwrMode.byte(13) = 0x00;
+  SysPwrMode.byte(14) = 0x00;
+  SysPwrMode.byte(15) = 0x00;
+  SysPwrMode.byte(16) = 0x00;
+  SysPwrMode.byte(17) = 0x00;
+  SysPwrMode.byte(18) = 0x00;
+  SysPwrMode.byte(19) = 0x00;
+  SysPwrMode.byte(20) = 0x00;
+  SysPwrMode.byte(21) = 0x00;
+  SysPwrMode.byte(22) = 0x00;
+  SysPwrMode.byte(23) = 0x00;
+  SysPwrMode.byte(24) = 0x00;
+  SysPwrMode.byte(25) = 0x00;
+  SysPwrMode.byte(26) = 0x00;
+  SysPwrMode.byte(27) = 0x00;
+  SysPwrMode.byte(28) = 0x00;
+  SysPwrMode.byte(29) = 0x00;
+  SysPwrMode.byte(23) = 0x00;
+  SysPwrMode.byte(24) = 0x00;
+  SysPwrMode.byte(25) = 0x00;
+  SysPwrMode.byte(26) = 0x00;
+  SysPwrMode.byte(27) = 0x00;
+  SysPwrMode.byte(28) = 0x00;
+  SysPwrMode.byte(29) = 0x00;
+  SysPwrMode.byte(30) = 0x00;
+  SysPwrMode.byte(31) = 0x00;
+  SysPwrMode.byte(32) = 0x00;
+  SysPwrMode.byte(33) = 0x00;
+  SysPwrMode.byte(34) = 0x00;
+  SysPwrMode.byte(35) = 0x00;
+  SysPwrMode.byte(36) = 0x00;
+  SysPwrMode.byte(37) = 0x00;
+  SysPwrMode.byte(38) = 0x00;
+  SysPwrMode.byte(39) = 0x00;
+  SysPwrMode.byte(40) = 0x00;
+  SysPwrMode.byte(41) = 0x00;
+  SysPwrMode.byte(42) = 0x00;
+  SysPwrMode.byte(43) = 0x00;
+  SysPwrMode.byte(44) = 0x00;
+  SysPwrMode.byte(45) = 0x00;
+  SysPwrMode.byte(46) = 0x00;
+  SysPwrMode.byte(47) = 0x00;
+  SysPwrMode.byte(48) = 0x00;
+  SysPwrMode.byte(49) = 0x00;
+  SysPwrMode.byte(50) = 0x00;
+  SysPwrMode.byte(51) = 0x00;
+  SysPwrMode.byte(52) = 0x00;
+  SysPwrMode.byte(53) = 0x00;
+  SysPwrMode.byte(54) = 0x00;
+  SysPwrMode.byte(55) = 0x00;
+  SysPwrMode.byte(56) = 0x00;
+  SysPwrMode.byte(57) = 0x00;
+  SysPwrMode.byte(58) = 0x00;
+  SysPwrMode.byte(59) = 0x00;
+  SysPwrMode.byte(60) = 0x00;
+  SysPwrMode.byte(61) = 0x00;
+  SysPwrMode.byte(62) = 0x00;
+  SysPwrMode.byte(63) = 0x00;
+  setTimer(SysPwrMode_timer,400);
+  testWaitForTimeout(Brute_Exttimes);
+  cancelTimer(pduID_10_timer);
+  cancelTimer(pduID_11_timer);
+  cancelTimer(pduID_12_timer);
+  cancelTimer(pduID_13_timer);
+  cancelTimer(SysPwrMode_timer);
+  
+}
+
+
+MainTest(){
+    
+    UWB_BruteForceAttack();
+}
+

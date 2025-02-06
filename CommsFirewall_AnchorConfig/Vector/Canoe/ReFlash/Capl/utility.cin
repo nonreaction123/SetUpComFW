@@ -1,0 +1,17 @@
+/*@!Encoding:1252*/
+variables
+{
+    dword utility_BusContext[3];
+}
+
+void utility_initBusContext()
+{
+  utility_BusContext[0] = GetBusNameContext( "CAN1" );
+  utility_BusContext[1] = GetBusNameContext( "CAN2" );
+  utility_BusContext[2] = GetBusNameContext( "CAN3" );
+}
+
+void utility_SetBusContext( byte canBus )
+{
+  SetBusContext( utility_BusContext[canBus-1] );
+}

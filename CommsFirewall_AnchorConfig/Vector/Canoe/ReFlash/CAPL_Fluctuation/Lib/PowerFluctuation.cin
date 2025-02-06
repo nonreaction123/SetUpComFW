@@ -1,0 +1,203 @@
+/*@!Encoding:1252*/
+includes
+{
+}
+
+variables
+{
+  char send_command[30];
+  long length;
+  char flag_traffic = 0;
+  double volt;
+  struct checkbyteDword
+  {
+     dword dw;
+  } checkbyteDword;
+  dword portID = 4;
+  dword baudRate = 115200;
+  dword byteSize = 8;
+  dword parity = 0;
+  dword stopBits = 1;
+  byte buffer_send[30];
+  char arr[20];
+  char volt_command[20];
+  int i;
+  double a;
+  double x;
+  double delta;
+  char asciiChar[10] ="";
+  byte buffer_receive[20];
+  char temp[10];
+  int max_length_receive = 256;
+  timer Wait_25ms_timer;
+  timer Wait_3500ms_timer;
+  timer Wait_50ms_timer;
+}
+
+
+on timer Wait_25ms_timer{
+ write("1");
+}
+on timer Wait_50ms_timer{
+ write("2");
+}
+on timer Wait_3500ms_timer{
+ write("3");
+}
+
+// Function for set voltage
+void set_voltage(double volt)
+{
+	{
+        mbstrncpy(send_command ,"VOLT ", elcount(send_command));
+        snprintf(volt_command, elcount(volt_command),"%.2f", volt);
+        //write(volt_command);
+        strncat(send_command,volt_command,30);
+        strncat(send_command,"\r\n",30);
+        length=strlen(send_command)+1;
+				for (i=0;i<length;i++) buffer_send[i]=send_command[i]; // Get buffer to send to Power Supply
+				if(rs232Send(portID,buffer_send,length) == 1)
+				{	
+					//write("Successful");
+				}
+			
+		} 
+   
+
+}
+
+
+
+void clear_data(char data[]){
+  for (i = 0; i < 6; i++)
+  {
+    data[i] = '\0'; // Assign a null character to each element of the string
+  }
+  
+}
+
+
+
+// Function for Power Fluctuation from 2 -> 12V
+testfunction PowerFluctuationHightoLow()
+{
+    rs232Open(portID);
+    rs232Configure(portID,baudRate,byteSize,stopBits,parity);
+    // Set Output 1 for Power Supply to enter voltage mode
+    mbstrncpy(send_command ,"OUTP 1", elcount(send_command));
+    strncat(send_command,"\r\n",30);
+    length=strlen(send_command)+1;
+    for (i=0;i<length;i++) buffer_send[i]=send_command[i];
+				if(rs232Send(portID,buffer_send,length) == 1)
+				{	
+					//write("Successful");
+				}
+    // read_voltage();
+    volt = 10;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(25);
+    while (volt > 0) {
+        volt += 0.5;
+        @sysvar::PowerSupply::Input::Voltage = volt;
+        set_voltage(volt);
+        testWaitForTimeout(25);
+//        setTimer(Wait_25ms_timer,25);
+        volt = volt + 0.5;
+        @sysvar::PowerSupply::Input::Voltage = volt;
+        set_voltage(volt);
+        testWaitForTimeout(25);
+//        setTimer(Wait_25ms_timer,25);
+        volt = volt - 1;
+        @sysvar::PowerSupply::Input::Voltage = volt;
+        set_voltage(volt);
+        testWaitForTimeout(25);
+//        setTimer(Wait_25ms_timer,25);
+        volt = volt - 1;
+        @sysvar::PowerSupply::Input::Voltage = volt;
+        set_voltage(volt);
+        testWaitForTimeout(25);
+//        setTimer(Wait_25ms_timer,25);
+      }
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(250);
+}
+
+
+// Function for Power Fluctuation from 10 -> 0V
+testfunction PowerFluctuationLowtoHigh()
+{
+    rs232Open(portID);
+    rs232Configure(portID,baudRate,byteSize,stopBits,parity);
+    // Set Output 1 for Power Supply to enter voltage mode
+    mbstrncpy(send_command ,"OUTP 1", elcount(send_command));
+    strncat(send_command,"\r\n",30);
+    length=strlen(send_command)+1;
+    for (i=0;i<length;i++) buffer_send[i]=send_command[i];
+				if(rs232Send(portID,buffer_send,length) == 1)
+				{	
+					//write("Successful");
+				}
+
+  //Start Power Fluctuation
+    volt = 2;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(25);
+    //setTimer(Wait_25ms_timer,25);
+    while (volt < 12) {
+        volt += 1;
+        @sysvar::PowerSupply::Input::Voltage = volt;
+        set_voltage(volt);
+        testWaitForTimeout(25);
+        //setTimer(Wait_25ms_timer,25);
+        volt += 1;
+        @sysvar::PowerSupply::Input::Voltage = volt;
+        set_voltage(volt);
+        testWaitForTimeout(25);
+        //setTimer(Wait_25ms_timer,25);
+        volt = volt - 1;
+        @sysvar::PowerSupply::Input::Voltage = volt;
+        set_voltage(volt);
+        testWaitForTimeout(25);
+        //setTimer(Wait_25ms_timer,25);
+        volt = volt - 0.75;
+        @sysvar::PowerSupply::Input::Voltage = volt;
+        set_voltage(volt);
+        testWaitForTimeout(25);
+        //setTimer(Wait_25ms_timer,25);
+      }
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    
+}
+
+
+testfunction ControlStageBySignal()
+{
+    rs232Open(portID);
+    rs232Configure(portID,baudRate,byteSize,stopBits,parity);
+    // Set Output 1 for Power Supply to enter voltage mode
+    mbstrncpy(send_command ,"OUTP 1", elcount(send_command));
+    strncat(send_command,"\r\n",30);
+    length=strlen(send_command)+1;
+    for (i=0;i<length;i++) buffer_send[i]=send_command[i];
+				if(rs232Send(portID,buffer_send,length) == 1)
+				{	
+					//write("Successful");
+				}
+
+  //Start Power Fluctuation
+    volt = 0;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(2000);
+   
+    volt = 12;
+    @sysvar::PowerSupply::Input::Voltage = volt;
+    set_voltage(volt);
+    testWaitForTimeout(250);
+}

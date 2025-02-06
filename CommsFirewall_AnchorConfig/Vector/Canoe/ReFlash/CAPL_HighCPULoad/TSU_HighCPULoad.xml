@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<testmodule title="HGT_PK-Comms_Firewall" version="">
+
+
+			
+<testgroup title="TSU_PK_HGT_COMS_Firewall_CPUHighLoad">
+
+<capltestcase name="TCS_PK_HGT_COMFW_CPUHighLoad"></capltestcase>
+
+
+
+</testgroup>
+	
+
+</testmodule>

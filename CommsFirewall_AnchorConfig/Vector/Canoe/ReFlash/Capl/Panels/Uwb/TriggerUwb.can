@@ -1,0 +1,202 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  _align(1) struct StartData_st
+  {
+    dword   UwbSessionId;
+    word    UwbProtocolVersion;
+
+    word    UwbConfigId;
+    byte    SyncCodeIdx;
+    byte    ChIdx;
+    byte    PulseShapeCombo;
+
+    byte    RANMultiplier;
+    byte    NumChapsPerSlot;
+    byte    NumResponders;
+    byte    NumSlotPerRound;
+
+    qword   UwbTime0;
+    dword   HopModeKey;
+    byte    HoppingCfgBitMask;
+
+    dword   STSIndex0;
+
+    byte    KeyRef;
+    
+    byte    URSK[32];
+  };
+  
+  _align(1) struct StopData_st
+  {
+    dword   UwbSessionId;
+  };
+
+  diagRequest DiagMasterMCU.* DiagStartReq;
+  diagRequest DiagMasterMCU.* DiagStopReq;
+}
+
+
+on start
+{
+
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag1::btnStartRanging
+{
+  TriggerStartRanging(this.`namespace);
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag2::btnStartRanging
+{
+  TriggerStartRanging(this.`namespace);
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag3::btnStartRanging
+{
+  TriggerStartRanging(this.`namespace);
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag4::btnStartRanging
+{
+  TriggerStartRanging(this.`namespace);
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag5::btnStartRanging
+{
+  TriggerStartRanging(this.`namespace);
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag6::btnStartRanging
+{
+  TriggerStartRanging(this.`namespace);
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag1::btnStopRanging
+{
+  TriggerStopRanging(this.`namespace);
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag2::btnStopRanging
+{
+  TriggerStopRanging(this.`namespace);
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag3::btnStopRanging
+{
+  TriggerStopRanging(this.`namespace);
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag4::btnStopRanging
+{
+  TriggerStopRanging(this.`namespace);
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag5::btnStopRanging
+{
+  TriggerStopRanging(this.`namespace);
+}
+
+on sysvar sysvar::TRIGGER_UWB_Tag6::btnStopRanging
+{
+  TriggerStopRanging(this.`namespace);
+}
+
+void TriggerStartRanging(char nmsp[])
+{
+  long startRanging;
+  
+  startRanging = sysGetVariableInt(nmsp, "btnStartRanging");
+  
+  if (1 == startRanging)
+  {
+    byte tempPrimitiveRaw[100];
+    struct StartData_st tempData;
+    
+    write("Start Ranging for %s" , nmsp); 
+    
+    tempData.UwbSessionId       = sysGetVariableDWord(nmsp, "u32SessionID");
+    tempData.UwbProtocolVersion = sysGetVariableInt(nmsp, "u16ProtocolVersion");
+    tempData.UwbConfigId        = sysGetVariableInt(nmsp, "u16ConfigID");
+    tempData.SyncCodeIdx        = sysGetVariableInt(nmsp, "u8SyncCode");
+    tempData.ChIdx              = sysGetVariableInt(nmsp, "u8Channel");
+    tempData.PulseShapeCombo    = sysGetVariableInt(nmsp, "u8PulseShapeCombo");
+    tempData.RANMultiplier      = sysGetVariableInt(nmsp, "u8RANMultiplier");
+    tempData.NumChapsPerSlot    = sysGetVariableInt(nmsp, "u8ChapsPerSlot");
+    tempData.NumResponders      = sysGetVariableInt(nmsp, "u8Responders");
+    tempData.NumSlotPerRound    = sysGetVariableInt(nmsp, "u8SlotsPerRound");
+    tempData.UwbTime0           = sysGetVariableQWord(nmsp, "u64UWBTime0");
+    tempData.HopModeKey         = sysGetVariableDWord(nmsp, "u32HopModeKey");
+    tempData.HoppingCfgBitMask  = sysGetVariableInt(nmsp, "u8HoppingCfg");
+    tempData.STSIndex0          = sysGetVariableDWord(nmsp, "u32StsIndex0");
+    tempData.KeyRef             = sysGetVariableInt(nmsp, "u8KeyRef");
+
+    SysVarToByteString(nmsp, "strURSK", tempData.URSK, elcount(tempData.URSK));
+    tempPrimitiveRaw[0] = 0x31;
+    tempPrimitiveRaw[1] = 0x01;
+    tempPrimitiveRaw[2] = 0x03;
+    tempPrimitiveRaw[3] = 0x22;
+    tempPrimitiveRaw[4] = 0x03;
+    tempPrimitiveRaw[5] = 0xFE;
+    tempPrimitiveRaw[6] = 0xAF;
+    memcpy_h2n(tempPrimitiveRaw, 7, tempData);
+    
+    DiagStartReq.Resize(7 + __size_of(struct StartData_st));
+    DiagStartReq.SetPrimitiveData(tempPrimitiveRaw, 7 + __size_of(struct StartData_st));
+    DiagStartReq.SendRequest();
+  }
+}
+
+void TriggerStopRanging(char nmsp[])
+{
+  long stopRanging;
+  
+  stopRanging = sysGetVariableInt(nmsp, "btnStopRanging");
+  
+  if (1 == stopRanging)
+  {
+    byte tempPrimitiveRaw[32];
+    struct StopData_st tempData;
+    
+    write("Stop Ranging for %s" , nmsp); 
+
+    tempData.UwbSessionId       = sysGetVariableDWord(nmsp, "u32SessionID");
+
+    tempPrimitiveRaw[0] = 0x31;
+    tempPrimitiveRaw[1] = 0x01;
+    tempPrimitiveRaw[2] = 0x03;
+    tempPrimitiveRaw[3] = 0x22;
+    tempPrimitiveRaw[4] = 0x02;
+    tempPrimitiveRaw[5] = 0xFE;
+    tempPrimitiveRaw[6] = 0xAF;
+    memcpy_h2n(tempPrimitiveRaw, 7, tempData);
+    tempPrimitiveRaw[11] = 0x00;
+    
+    DiagStartReq.Resize(7 + __size_of(struct StopData_st) + 1);
+    DiagStartReq.SetPrimitiveData(tempPrimitiveRaw, 7 + __size_of(struct StopData_st) + 1);
+    DiagStartReq.SendRequest();
+    
+  } 
+}
+
+void SysVarToByteString(char nmsp[], char varName[], byte Buf[], long BufLength)
+{
+  char svChar[100];
+  long ii;
+  
+  sysGetVariableString(nmsp, varName, svChar, elCount(svChar));
+  for (ii = 0; ii < BufLength; ii++)
+  {
+    char temp[10];
+    long jj;
+    jj = ii * 2;
+    snprintf(temp, elcount(temp), "0x%c%c", svChar[jj], svChar[jj+1]);
+    Buf[ii] = atol(temp);
+  }
+}
+

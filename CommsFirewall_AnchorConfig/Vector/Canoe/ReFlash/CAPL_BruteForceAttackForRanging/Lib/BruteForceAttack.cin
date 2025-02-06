@@ -1,0 +1,844 @@
+/*@!Encoding:1252*/
+includes
+{
+}
+
+variables
+{
+  msTimer Invalid_Keys_Bosch_Security_1; // for delay 100ms 
+  msTimer Invalid_Keys_Bosch_Security_2; // for delay 100ms 
+  msTimer Invalid_Keys_Bosch_Security_3; // for delay 100ms 
+  msTimer Invalid_Keys_Bosch_Security_4; // for delay 100ms 
+  msTimer Invalid_Keys_Bosch_Security_5; // for delay 100ms 
+
+  msTimer Invalid_Keys_InCar1_Security_1; // for delay 100ms 
+  msTimer Invalid_Keys_InCar1_Security_2; // for delay 100ms 
+  msTimer Invalid_Keys_InCar1_Security_3; // for delay 100ms 
+  msTimer Invalid_Keys_InCar1_Security_4; // for delay 100ms 
+  msTimer Invalid_Keys_InCar1_Security_5; // for delay 100ms 
+
+  msTimer Invalid_Keys_ExchangeKeys_Security_1; // for delay 100ms 
+  msTimer Invalid_Keys_ExchangeKeys_Security_2; // for delay 100ms 
+  msTimer Invalid_Keys_ExchangeKeys_Security_3; // for delay 100ms 
+  msTimer Invalid_Keys_ExchangeKeys_Security_4; // for delay 100ms 
+  msTimer Invalid_Keys_ExchangeKeys_Security_5; // for delay 100ms 
+  msTimer Invalid_Keys_ExchangeKeys_Security_6; // for delay 100ms 
+
+  message 0x702 Send_Extended_Session;        // Extended Sessions
+  message 0x702 Invalid_Keys_61;              // Wrong Keys (701 due to Anchor 1)
+  message 0x702 Invalid_Keys_62_Frame_1;      // Wrong Keys (701 due to Anchor 1)
+  message 0x702 Invalid_Keys_62_Frame_2;      // Wrong Keys (701 due to Anchor 1)
+  message 0x702 Invalid_Keys_65;              // Wrong Keys (701 due to Anchor 1)
+  message 0x702 Invalid_Keys_66_Frame_1;      // Wrong Keys (701 due to Anchor 1)
+  message 0x702 Invalid_Keys_66_Frame_2;      // Wrong Keys (701 due to Anchor 1)
+  message 0x702 Invalid_Keys_40_Frame_1;      // Wrong Keys (701 due to Anchor 1)
+  message 0x702 Invalid_Keys_40_Frame_2;      // Wrong Keys (701 due to Anchor 1)
+  message 0x702 Invalid_Keys_41_Frame_1;      // Wrong Keys (701 due to Anchor 1)
+  message 0x702 Invalid_Keys_41_Frame_2;      // Wrong Keys (701 due to Anchor 1)
+  message 0x702 Check_Security_Anchors_FE14;  // Wrong Keys (701 due to Anchor 1)
+  byte check_byte1;
+  long time = 100000;                          //time for Brute Force Attack
+  char Invalid_Keys_1[1000] = "27 62 93 76 F7 65 CE FD DA EA DF 65 ED EB 0A DE BC 82 09 57 0D B2 19 CA 08 A5 C3 8D AE B6 C4 71 14 30 D8 7C 38 3D 81 C9 90 3E 4E 37 AF F8 59 4E 23 C1 8C 7C 10 A1 B6 37 92 CD BB 58 AA BB CC DD EE FF";
+  char Invalid_Keys_2[1000] = "27 62 09 66 F1 19 NG FD 12 EA DA 65 ED EB 0A DE BC 82 09 67 0D B2 19 10 08 A5 C3 8D AE B6 C4 79 15 30 D8 7C 38 3D 81 C9 90 3E 4E 37 AF F8 59 4E 23 C1 8C 7C 10 A1 B6 37 92 CD BB 58 AA BB CC DD EE FF";
+  char Invalid_Keys_3[1000] = "27 62 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC";
+  char Invalid_Keys_4[1000] = "27 62 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00";
+  char Invalid_Keys_5[1000] = "27 62 27 FE 14 65 CE FD DA EA DF 65 ED EB 0A DE BC 82 09 57 0D B2 19 CA 08 A5 C3 8D AE B6 C4 71 14 30 D8 7C 38 3D 81 C9 90 3E 4E 37 AF F8 59 4E 23 C1 8C 7C 10 A1 B6 37 92 CD BB 58 AA BB CC DD EE FF";
+  char Invalid_Keys_6[1000] = "27 62 19 08 F7 99 CB FD DA EA DF 65 ED EB 0A DE BC 82 09 57 0D B2 19 CA 08 A5 C3 8D AE B6 C4 71 14 30 D8 7C 38 3D 81 C9 90 3E 4E 37 AF F8 59 4E 23 C1 8C 7C 10 A1 B6 37 92 CD BB 58 AA BB CC DD EE FF";
+  char Invalid_Keys_7[1000] = "27 62 01 20 14 15 C1 F2 10 E1 D1 10 1D EB 0A DE BC 82 09 57 0D B2 19 CA 08 A5 C3 8D AE B6 C4 71 14 30 D8 7C 38 3D 81 C9 90 3E 4E 37 AF F8 59 4E 23 C1 8C 7C 10 A1 B6 37 92 CD BB 58 AA BB CC DD EE FF";
+  char Invalid_Keys_8[1000] = "27 62 91 22 24 64 52 3D D4 4A 1F 65 ED EB 0A DE BC 82 09 57 0D B2 19 CA 08 A5 C3 8D AE B6 C4 71 14 30 D8 7C 38 3D 81 C9 90 3E 4E 37 AF F8 59 4E 23 C1 8C 7C 10 A1 B6 37 92 CD BB 58 AA BB CC DD EE FF";
+  char Invalid_Keys_9[1000] = "27 62 92 71 11 35 C5 4D D6 65 4F 45 4D EB 0A DE BC 82 09 57 0D B2 19 CA 08 A5 C3 8D AE B6 C4 71 14 30 D8 7C 38 3D 81 C9 90 3E 4E 37 AF F8 59 4E 23 C1 8C 7C 10 A1 B6 37 92 CD BB 58 AA BB CC DD EE FF";
+}
+
+
+//Set timer for Invalid Single Frame Communication
+
+on timer Invalid_Keys_Bosch_Security_1
+{
+  output(Invalid_Keys_61);
+  
+  setTimer(Invalid_Keys_Bosch_Security_2, 200);
+
+}
+
+on timer Invalid_Keys_Bosch_Security_2
+{
+  output(Invalid_Keys_62_Frame_1);
+  
+  setTimer(Invalid_Keys_Bosch_Security_3, 200);
+
+}
+
+on timer Invalid_Keys_Bosch_Security_3
+{
+  output(Invalid_Keys_62_Frame_2);
+  
+  setTimer(Invalid_Keys_Bosch_Security_4, 200);
+
+}
+
+on timer Invalid_Keys_Bosch_Security_4
+{
+  
+  output(Check_Security_Anchors_FE14);
+  setTimer(Invalid_Keys_Bosch_Security_5,200);
+  
+}
+on timer Invalid_Keys_Bosch_Security_5
+{
+  
+  @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times + 1;
+  setTimer(Invalid_Keys_Bosch_Security_1,1600);
+  
+}
+
+///////////////////////////////////////////////////////////////////
+
+
+
+on timer Invalid_Keys_InCar1_Security_1
+{
+  output(Invalid_Keys_65);
+  
+  setTimer(Invalid_Keys_InCar1_Security_2, 200);
+
+}
+
+on timer Invalid_Keys_InCar1_Security_2
+{
+  output(Invalid_Keys_66_Frame_1);
+  
+  setTimer(Invalid_Keys_InCar1_Security_3, 200);
+
+}
+
+on timer Invalid_Keys_InCar1_Security_3
+{
+  output(Invalid_Keys_66_Frame_2);
+  
+  setTimer(Invalid_Keys_InCar1_Security_4, 200);
+
+}
+
+on timer Invalid_Keys_InCar1_Security_4
+{
+  
+  output(Check_Security_Anchors_FE14);
+  setTimer(Invalid_Keys_InCar1_Security_5,200);
+  
+}
+on timer Invalid_Keys_InCar1_Security_5
+{
+  
+  @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times + 1;
+  setTimer(Invalid_Keys_InCar1_Security_1,1600);
+  
+}
+
+
+///////////////////////////////////////////////////////////////////
+
+
+on timer Invalid_Keys_ExchangeKeys_Security_1
+{
+  output(Invalid_Keys_40_Frame_1);
+  
+  setTimer(Invalid_Keys_ExchangeKeys_Security_2, 200);
+
+}
+on timer Invalid_Keys_ExchangeKeys_Security_2
+{
+  output(Invalid_Keys_40_Frame_2);
+  
+  setTimer(Invalid_Keys_ExchangeKeys_Security_3, 200);
+
+}
+
+on timer Invalid_Keys_ExchangeKeys_Security_3
+{
+  output(Invalid_Keys_62_Frame_1);
+  
+  setTimer(Invalid_Keys_ExchangeKeys_Security_4, 200);
+
+}
+
+on timer Invalid_Keys_ExchangeKeys_Security_4
+{
+  output(Invalid_Keys_62_Frame_2);
+  
+  setTimer(Invalid_Keys_ExchangeKeys_Security_5, 200);
+
+}
+
+on timer Invalid_Keys_ExchangeKeys_Security_5
+{
+  
+  output(Check_Security_Anchors_FE14);
+  setTimer(Invalid_Keys_ExchangeKeys_Security_6,200);
+  
+}
+on timer Invalid_Keys_ExchangeKeys_Security_6
+{
+  
+  @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times = @sysvar::BruteForceAttack::BruteForceAttack_Times::BruteForceAttack_Times + 1;
+  setTimer(Invalid_Keys_ExchangeKeys_Security_1,1600);
+  
+}
+
+//on message 0x722
+//{
+//   if (this.byte(0) == 0x03 && this.byte(1) == 0x7f && this.byte(2) == 0x22 && this.byte(3) == 0x33) TeststepPass("Response received is valid");
+//   if (this.byte(0) == 0x10 && this.byte(2) == 0x62 && this.byte(3) == 0xFE && this.byte(4) == 0x14) 
+//      {testStepFail("The Security have unlocked"); 
+//       @sysvar::BruteForceAttack::CheckSecurityLock::SecurityIsLocked = 1;}
+//}
+
+testfunction Brute_Force_Attack_Bosch_1_Security_Function ()
+{
+  //////////////////////////////
+  Send_Extended_Session.dlc = 8;
+  Send_Extended_Session.can = 2;
+  Send_Extended_Session.byte(0) = 0x02;
+  Send_Extended_Session.byte(1) = 0x10;
+  Send_Extended_Session.byte(2) = 0x03;
+  Send_Extended_Session.byte(3) = 0xCC;
+  Send_Extended_Session.byte(4) = 0xCC;
+  Send_Extended_Session.byte(5) = 0xCC;
+  Send_Extended_Session.byte(6) = 0xCC;
+  Send_Extended_Session.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_61.dlc = 8;
+  Invalid_Keys_61.can = 2;
+  Invalid_Keys_61.byte(0) = 0x02;
+  Invalid_Keys_61.byte(1) = 0x27;
+  Invalid_Keys_61.byte(2) = 0x61;
+  Invalid_Keys_61.byte(3) = 0xCC;
+  Invalid_Keys_61.byte(4) = 0xCC;
+  Invalid_Keys_61.byte(5) = 0xCC;
+  Invalid_Keys_61.byte(6) = 0xCC;
+  Invalid_Keys_61.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_62_Frame_1.dlc = 15;
+  Invalid_Keys_62_Frame_1.can = 2;
+  Invalid_Keys_62_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_62_Frame_1.byte(1) = 0x42;
+  Invalid_Keys_62_Frame_1.byte(2) = 0x27;
+  Invalid_Keys_62_Frame_1.byte(3) = 0x62;
+  Invalid_Keys_62_Frame_1.int64(4) = 0x10101010;
+  
+  ////////////////////////////////
+  Invalid_Keys_62_Frame_2.dlc = 8;
+  Invalid_Keys_62_Frame_2.can = 2;
+  Invalid_Keys_62_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_62_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_62_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_62_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_62_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_62_Frame_2.byte(5) = 0xCC;
+  Invalid_Keys_62_Frame_2.byte(6) = 0xCC;
+  Invalid_Keys_62_Frame_2.byte(7) = 0xCC;
+  ///////////////////////////////
+  Check_Security_Anchors_FE14.dlc = 8;
+  Check_Security_Anchors_FE14.can = 2;
+  Check_Security_Anchors_FE14.byte(0) = 0x03;
+  Check_Security_Anchors_FE14.byte(1) = 0x22;
+  Check_Security_Anchors_FE14.byte(2) = 0xFE;
+  Check_Security_Anchors_FE14.byte(3) = 0x14;
+  Check_Security_Anchors_FE14.byte(4) = 0xCC;
+  Check_Security_Anchors_FE14.byte(5) = 0xCC;
+  Check_Security_Anchors_FE14.byte(6) = 0xCC;
+  Check_Security_Anchors_FE14.byte(7) = 0xCC;
+  
+  setTimer(Invalid_Keys_Bosch_Security_1,10);
+  testWaitForTimeout(time);
+  cancelTimer(Invalid_Keys_Bosch_Security_1);
+  cancelTimer(Invalid_Keys_Bosch_Security_2);
+  cancelTimer(Invalid_Keys_Bosch_Security_3);
+  cancelTimer(Invalid_Keys_Bosch_Security_4);
+  cancelTimer(Invalid_Keys_Bosch_Security_5);
+ 
+
+}
+
+testfunction Brute_Force_Attack_Bosch_2_Security_Function ()
+{
+  //////////////////////////////
+  Send_Extended_Session.dlc = 8;
+  Send_Extended_Session.can = 2;
+  Send_Extended_Session.byte(0) = 0x02;
+  Send_Extended_Session.byte(1) = 0x10;
+  Send_Extended_Session.byte(2) = 0x03;
+  Send_Extended_Session.byte(3) = 0xCC;
+  Send_Extended_Session.byte(4) = 0xCC;
+  Send_Extended_Session.byte(5) = 0xCC;
+  Send_Extended_Session.byte(6) = 0xCC;
+  Send_Extended_Session.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_61.dlc = 8;
+  Invalid_Keys_61.can = 2;
+  Invalid_Keys_61.byte(0) = 0x02;
+  Invalid_Keys_61.byte(1) = 0x27;
+  Invalid_Keys_61.byte(2) = 0x61;
+  Invalid_Keys_61.byte(3) = 0xCC;
+  Invalid_Keys_61.byte(4) = 0xCC;
+  Invalid_Keys_61.byte(5) = 0xCC;
+  Invalid_Keys_61.byte(6) = 0xCC;
+  Invalid_Keys_61.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_62_Frame_1.dlc = 15;
+  Invalid_Keys_62_Frame_1.can = 2;
+  Invalid_Keys_62_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_62_Frame_1.byte(1) = 0x42;
+  Invalid_Keys_62_Frame_1.byte(2) = 0x27;
+  Invalid_Keys_62_Frame_1.byte(3) = 0x62;
+  Invalid_Keys_62_Frame_1.int64(4) = 0x10101010;
+  
+  ////////////////////////////////
+  Invalid_Keys_62_Frame_2.dlc = 8;
+  Invalid_Keys_62_Frame_2.can = 2;
+  Invalid_Keys_62_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_62_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_62_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_62_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_62_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_62_Frame_2.byte(5) = 0xCC;
+  Invalid_Keys_62_Frame_2.byte(6) = 0xCC;
+  Invalid_Keys_62_Frame_2.byte(7) = 0xCC;
+  ///////////////////////////////
+  Check_Security_Anchors_FE14.dlc = 8;
+  Check_Security_Anchors_FE14.can = 2;
+  Check_Security_Anchors_FE14.byte(0) = 0x03;
+  Check_Security_Anchors_FE14.byte(1) = 0x22;
+  Check_Security_Anchors_FE14.byte(2) = 0xFE;
+  Check_Security_Anchors_FE14.byte(3) = 0x14;
+  Check_Security_Anchors_FE14.byte(4) = 0xCC;
+  Check_Security_Anchors_FE14.byte(5) = 0xCC;
+  Check_Security_Anchors_FE14.byte(6) = 0xCC;
+  Check_Security_Anchors_FE14.byte(7) = 0xCC;
+  
+  setTimer(Invalid_Keys_Bosch_Security_1,10);
+  testWaitForTimeout(time);
+  cancelTimer(Invalid_Keys_Bosch_Security_1);
+  cancelTimer(Invalid_Keys_Bosch_Security_2);
+  cancelTimer(Invalid_Keys_Bosch_Security_3);
+  cancelTimer(Invalid_Keys_Bosch_Security_4);
+  cancelTimer(Invalid_Keys_Bosch_Security_5);
+
+
+}
+
+testfunction Brute_Force_Attack_Bosch_3_Security_Function ()
+{
+  //////////////////////////////
+  Send_Extended_Session.dlc = 8;
+  Send_Extended_Session.can = 2;
+  Send_Extended_Session.byte(0) = 0x02;
+  Send_Extended_Session.byte(1) = 0x10;
+  Send_Extended_Session.byte(2) = 0x03;
+  Send_Extended_Session.byte(3) = 0xCC;
+  Send_Extended_Session.byte(4) = 0xCC;
+  Send_Extended_Session.byte(5) = 0xCC;
+  Send_Extended_Session.byte(6) = 0xCC;
+  Send_Extended_Session.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_61.dlc = 8;
+  Invalid_Keys_61.can = 2;
+  Invalid_Keys_61.byte(0) = 0x02;
+  Invalid_Keys_61.byte(1) = 0x27;
+  Invalid_Keys_61.byte(2) = 0x61;
+  Invalid_Keys_61.byte(3) = 0xCC;
+  Invalid_Keys_61.byte(4) = 0xCC;
+  Invalid_Keys_61.byte(5) = 0xCC;
+  Invalid_Keys_61.byte(6) = 0xCC;
+  Invalid_Keys_61.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_62_Frame_1.dlc = 15;
+  Invalid_Keys_62_Frame_1.can = 2;
+  Invalid_Keys_62_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_62_Frame_1.byte(1) = 0x42;
+  Invalid_Keys_62_Frame_1.byte(2) = 0x27;
+  Invalid_Keys_62_Frame_1.byte(3) = 0x62;
+  Invalid_Keys_62_Frame_1.int64(4) = 0x10101010;
+  
+  ////////////////////////////////
+  Invalid_Keys_62_Frame_2.dlc = 8;
+  Invalid_Keys_62_Frame_2.can = 2;
+  Invalid_Keys_62_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_62_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_62_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_62_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_62_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_62_Frame_2.byte(5) = 0xCC;
+  Invalid_Keys_62_Frame_2.byte(6) = 0xCC;
+  Invalid_Keys_62_Frame_2.byte(7) = 0xCC;
+  ///////////////////////////////
+  Check_Security_Anchors_FE14.dlc = 8;
+  Check_Security_Anchors_FE14.can = 2;
+  Check_Security_Anchors_FE14.byte(0) = 0x03;
+  Check_Security_Anchors_FE14.byte(1) = 0x22;
+  Check_Security_Anchors_FE14.byte(2) = 0xFE;
+  Check_Security_Anchors_FE14.byte(3) = 0x14;
+  Check_Security_Anchors_FE14.byte(4) = 0xCC;
+  Check_Security_Anchors_FE14.byte(5) = 0xCC;
+  Check_Security_Anchors_FE14.byte(6) = 0xCC;
+  Check_Security_Anchors_FE14.byte(7) = 0xCC;
+  
+  setTimer(Invalid_Keys_Bosch_Security_1,10);
+  testWaitForTimeout(time);
+  cancelTimer(Invalid_Keys_Bosch_Security_1);
+  cancelTimer(Invalid_Keys_Bosch_Security_2);
+  cancelTimer(Invalid_Keys_Bosch_Security_3);
+  cancelTimer(Invalid_Keys_Bosch_Security_4);
+  cancelTimer(Invalid_Keys_Bosch_Security_5);
+
+
+}
+
+testfunction Brute_Force_Attack_InCar1_1_Security_Function ()
+{
+  //////////////////////////////
+  Send_Extended_Session.dlc = 8;
+  Send_Extended_Session.can = 2;
+  Send_Extended_Session.byte(0) = 0x02;
+  Send_Extended_Session.byte(1) = 0x10;
+  Send_Extended_Session.byte(2) = 0x03;
+  Send_Extended_Session.byte(3) = 0xCC;
+  Send_Extended_Session.byte(4) = 0xCC;
+  Send_Extended_Session.byte(5) = 0xCC;
+  Send_Extended_Session.byte(6) = 0xCC;
+  Send_Extended_Session.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_65.dlc = 8;
+  Invalid_Keys_65.can = 2;
+  Invalid_Keys_65.byte(0) = 0x02;
+  Invalid_Keys_65.byte(1) = 0x27;
+  Invalid_Keys_65.byte(2) = 0x65;
+  Invalid_Keys_65.byte(3) = 0xCC;
+  Invalid_Keys_65.byte(4) = 0xCC;
+  Invalid_Keys_65.byte(5) = 0xCC;
+  Invalid_Keys_65.byte(6) = 0xCC;
+  Invalid_Keys_65.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_66_Frame_1.dlc = 15;
+  Invalid_Keys_66_Frame_1.can = 2;
+  Invalid_Keys_66_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_66_Frame_1.byte(1) = 0x42;
+  Invalid_Keys_66_Frame_1.byte(2) = 0x27;
+  Invalid_Keys_66_Frame_1.byte(3) = 0x66;
+  Invalid_Keys_66_Frame_1.int64(4) = 0x10101010;
+  
+  ////////////////////////////////
+  Invalid_Keys_66_Frame_2.dlc = 8;
+  Invalid_Keys_66_Frame_2.can = 2;
+  Invalid_Keys_66_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_66_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_66_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_66_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_66_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_66_Frame_2.byte(5) = 0xCC;
+  Invalid_Keys_66_Frame_2.byte(6) = 0xCC;
+  Invalid_Keys_66_Frame_2.byte(7) = 0xCC;
+  ///////////////////////////////
+  Check_Security_Anchors_FE14.dlc = 8;
+  Check_Security_Anchors_FE14.can = 2;
+  Check_Security_Anchors_FE14.byte(0) = 0x03;
+  Check_Security_Anchors_FE14.byte(1) = 0x22;
+  Check_Security_Anchors_FE14.byte(2) = 0xFE;
+  Check_Security_Anchors_FE14.byte(3) = 0x14;
+  Check_Security_Anchors_FE14.byte(4) = 0xCC;
+  Check_Security_Anchors_FE14.byte(5) = 0xCC;
+  Check_Security_Anchors_FE14.byte(6) = 0xCC;
+  Check_Security_Anchors_FE14.byte(7) = 0xCC;
+  
+  setTimer(Invalid_Keys_InCar1_Security_1,10);
+  testWaitForTimeout(time);
+  cancelTimer(Invalid_Keys_InCar1_Security_1);
+  cancelTimer(Invalid_Keys_InCar1_Security_2);
+  cancelTimer(Invalid_Keys_InCar1_Security_3);
+  cancelTimer(Invalid_Keys_InCar1_Security_4);
+  cancelTimer(Invalid_Keys_InCar1_Security_5);
+
+
+}
+
+testfunction Brute_Force_Attack_InCar1_2_Security_Function ()
+{
+  //////////////////////////////
+  Send_Extended_Session.dlc = 8;
+  Send_Extended_Session.can = 2;
+  Send_Extended_Session.byte(0) = 0x02;
+  Send_Extended_Session.byte(1) = 0x10;
+  Send_Extended_Session.byte(2) = 0x03;
+  Send_Extended_Session.byte(3) = 0xCC;
+  Send_Extended_Session.byte(4) = 0xCC;
+  Send_Extended_Session.byte(5) = 0xCC;
+  Send_Extended_Session.byte(6) = 0xCC;
+  Send_Extended_Session.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_65.dlc = 8;
+  Invalid_Keys_65.can = 2;
+  Invalid_Keys_65.byte(0) = 0x02;
+  Invalid_Keys_65.byte(1) = 0x27;
+  Invalid_Keys_65.byte(2) = 0x65;
+  Invalid_Keys_65.byte(3) = 0xCC;
+  Invalid_Keys_65.byte(4) = 0xCC;
+  Invalid_Keys_65.byte(5) = 0xCC;
+  Invalid_Keys_65.byte(6) = 0xCC;
+  Invalid_Keys_65.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_66_Frame_1.dlc = 15;
+  Invalid_Keys_66_Frame_1.can = 2;
+  Invalid_Keys_66_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_66_Frame_1.byte(1) = 0x42;
+  Invalid_Keys_66_Frame_1.byte(2) = 0x27;
+  Invalid_Keys_66_Frame_1.byte(3) = 0x66;
+  Invalid_Keys_66_Frame_1.int64(4) = 0x10101010;
+  
+  ////////////////////////////////
+  Invalid_Keys_66_Frame_2.dlc = 8;
+  Invalid_Keys_66_Frame_2.can = 2;
+  Invalid_Keys_66_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_66_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_66_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_66_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_66_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_66_Frame_2.byte(5) = 0xCC;
+  Invalid_Keys_66_Frame_2.byte(6) = 0xCC;
+  Invalid_Keys_66_Frame_2.byte(7) = 0xCC;
+  ///////////////////////////////
+  Check_Security_Anchors_FE14.dlc = 8;
+  Check_Security_Anchors_FE14.can = 2;
+  Check_Security_Anchors_FE14.byte(0) = 0x03;
+  Check_Security_Anchors_FE14.byte(1) = 0x22;
+  Check_Security_Anchors_FE14.byte(2) = 0xFE;
+  Check_Security_Anchors_FE14.byte(3) = 0x14;
+  Check_Security_Anchors_FE14.byte(4) = 0xCC;
+  Check_Security_Anchors_FE14.byte(5) = 0xCC;
+  Check_Security_Anchors_FE14.byte(6) = 0xCC;
+  Check_Security_Anchors_FE14.byte(7) = 0xCC;
+  
+  setTimer(Invalid_Keys_InCar1_Security_1,10);
+  testWaitForTimeout(time);
+  cancelTimer(Invalid_Keys_InCar1_Security_1);
+  cancelTimer(Invalid_Keys_InCar1_Security_2);
+  cancelTimer(Invalid_Keys_InCar1_Security_3);
+  cancelTimer(Invalid_Keys_InCar1_Security_4);
+  cancelTimer(Invalid_Keys_InCar1_Security_5);
+
+
+}
+
+
+testfunction Brute_Force_Attack_InCar1_3_Security_Function ()
+{
+  //////////////////////////////
+  Send_Extended_Session.dlc = 8;
+  Send_Extended_Session.can = 2;
+  Send_Extended_Session.byte(0) = 0x02;
+  Send_Extended_Session.byte(1) = 0x10;
+  Send_Extended_Session.byte(2) = 0x03;
+  Send_Extended_Session.byte(3) = 0xCC;
+  Send_Extended_Session.byte(4) = 0xCC;
+  Send_Extended_Session.byte(5) = 0xCC;
+  Send_Extended_Session.byte(6) = 0xCC;
+  Send_Extended_Session.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_65.dlc = 8;
+  Invalid_Keys_65.can = 2;
+  Invalid_Keys_65.byte(0) = 0x02;
+  Invalid_Keys_65.byte(1) = 0x27;
+  Invalid_Keys_65.byte(2) = 0x65;
+  Invalid_Keys_65.byte(3) = 0xCC;
+  Invalid_Keys_65.byte(4) = 0xCC;
+  Invalid_Keys_65.byte(5) = 0xCC;
+  Invalid_Keys_65.byte(6) = 0xCC;
+  Invalid_Keys_65.byte(7) = 0xCC;
+  ////////////////////////////////
+  Invalid_Keys_66_Frame_1.dlc = 15;
+  Invalid_Keys_66_Frame_1.can = 2;
+  Invalid_Keys_66_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_66_Frame_1.byte(1) = 0x42;
+  Invalid_Keys_66_Frame_1.byte(2) = 0x27;
+  Invalid_Keys_66_Frame_1.byte(3) = 0x66;
+  Invalid_Keys_66_Frame_1.int64(4) = 0x10101010;
+  
+  ////////////////////////////////
+  Invalid_Keys_66_Frame_2.dlc = 8;
+  Invalid_Keys_66_Frame_2.can = 2;
+  Invalid_Keys_66_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_66_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_66_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_66_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_66_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_66_Frame_2.byte(5) = 0xCC;
+  Invalid_Keys_66_Frame_2.byte(6) = 0xCC;
+  Invalid_Keys_66_Frame_2.byte(7) = 0xCC;
+  ///////////////////////////////
+  Check_Security_Anchors_FE14.dlc = 8;
+  Check_Security_Anchors_FE14.can = 2;
+  Check_Security_Anchors_FE14.byte(0) = 0x03;
+  Check_Security_Anchors_FE14.byte(1) = 0x22;
+  Check_Security_Anchors_FE14.byte(2) = 0xFE;
+  Check_Security_Anchors_FE14.byte(3) = 0x14;
+  Check_Security_Anchors_FE14.byte(4) = 0xCC;
+  Check_Security_Anchors_FE14.byte(5) = 0xCC;
+  Check_Security_Anchors_FE14.byte(6) = 0xCC;
+  Check_Security_Anchors_FE14.byte(7) = 0xCC;
+  
+  setTimer(Invalid_Keys_InCar1_Security_1,10);
+  testWaitForTimeout(time);
+  cancelTimer(Invalid_Keys_InCar1_Security_1);
+  cancelTimer(Invalid_Keys_InCar1_Security_2);
+  cancelTimer(Invalid_Keys_InCar1_Security_3);
+  cancelTimer(Invalid_Keys_InCar1_Security_4);
+  cancelTimer(Invalid_Keys_InCar1_Security_5);
+ 
+
+}
+
+
+//////////////////////////////////////////////////////////////////////
+
+
+testfunction Brute_Force_Attack_Exchange_Keys_2_Security_Function ()
+{
+  //////////////////////////////
+  Send_Extended_Session.dlc = 8;
+  Send_Extended_Session.can = 2;
+  Send_Extended_Session.byte(0) = 0x02;
+  Send_Extended_Session.byte(1) = 0x10;
+  Send_Extended_Session.byte(2) = 0x03;
+  Send_Extended_Session.byte(3) = 0xCC;
+  Send_Extended_Session.byte(4) = 0xCC;
+  Send_Extended_Session.byte(5) = 0xCC;
+  Send_Extended_Session.byte(6) = 0xCC;
+  Send_Extended_Session.byte(7) = 0xCC;
+  ///////////////////////////////////
+  Invalid_Keys_40_Frame_1.dlc = 15;
+  Invalid_Keys_40_Frame_1.can = 2;
+  Invalid_Keys_40_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_40_Frame_1.byte(1) = 0x44;
+  Invalid_Keys_40_Frame_1.byte(2) = 0x31;
+  Invalid_Keys_40_Frame_1.byte(3) = 0x01;
+  Invalid_Keys_40_Frame_1.byte(4) = 0xFB;
+  Invalid_Keys_40_Frame_1.byte(5) = 0x40;
+  Invalid_Keys_40_Frame_1.byte(6) = 0x10;
+  
+  ////////////////////////////////
+  Invalid_Keys_40_Frame_2.dlc = 8;
+  Invalid_Keys_40_Frame_2.can = 2;
+  Invalid_Keys_40_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_40_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_40_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_40_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_40_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_40_Frame_2.byte(5) = 0x21;
+  Invalid_Keys_40_Frame_2.byte(6) = 0x12;
+  Invalid_Keys_40_Frame_2.byte(7) = 0xCC;
+  ///////////////////////////////
+    Invalid_Keys_41_Frame_1.dlc = 15;
+  Invalid_Keys_41_Frame_1.can = 2;
+  Invalid_Keys_41_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_41_Frame_1.byte(1) = 0x44;
+  Invalid_Keys_41_Frame_1.byte(2) = 0x31;
+  Invalid_Keys_41_Frame_1.byte(3) = 0x01;
+  Invalid_Keys_41_Frame_1.byte(4) = 0xFB;
+  Invalid_Keys_41_Frame_1.byte(5) = 0x41;
+  Invalid_Keys_41_Frame_1.byte(6) = 0x10;
+  
+  ////////////////////////////////
+  Invalid_Keys_41_Frame_2.dlc = 8;
+  Invalid_Keys_41_Frame_2.can = 2;
+  Invalid_Keys_41_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_41_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_41_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_41_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_41_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_41_Frame_2.byte(5) = 0x21;
+  Invalid_Keys_41_Frame_2.byte(6) = 0x12;
+  Invalid_Keys_41_Frame_2.byte(7) = 0xCC;
+  //////////////////////////////////////
+  
+  Check_Security_Anchors_FE14.dlc = 8;
+  Check_Security_Anchors_FE14.can = 2;
+  Check_Security_Anchors_FE14.byte(0) = 0x03;
+  Check_Security_Anchors_FE14.byte(1) = 0x22;
+  Check_Security_Anchors_FE14.byte(2) = 0xFE;
+  Check_Security_Anchors_FE14.byte(3) = 0x14;
+  Check_Security_Anchors_FE14.byte(4) = 0xCC;
+  Check_Security_Anchors_FE14.byte(5) = 0xCC;
+  Check_Security_Anchors_FE14.byte(6) = 0xCC;
+  Check_Security_Anchors_FE14.byte(7) = 0xCC;
+  
+  setTimer(Invalid_Keys_ExchangeKeys_Security_1,10);
+  testWaitForTimeout(time);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_1);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_2);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_3);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_4);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_5);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_6);
+
+}
+
+
+testfunction Brute_Force_Attack_Exchange_Keys_1_Security_Function ()
+{
+  //////////////////////////////
+  Send_Extended_Session.dlc = 8;
+  Send_Extended_Session.can = 2;
+  Send_Extended_Session.byte(0) = 0x02;
+  Send_Extended_Session.byte(1) = 0x10;
+  Send_Extended_Session.byte(2) = 0x03;
+  Send_Extended_Session.byte(3) = 0xCC;
+  Send_Extended_Session.byte(4) = 0xCC;
+  Send_Extended_Session.byte(5) = 0xCC;
+  Send_Extended_Session.byte(6) = 0xCC;
+  Send_Extended_Session.byte(7) = 0xCC;
+  ///////////////////////////////////
+  Invalid_Keys_40_Frame_1.dlc = 15;
+  Invalid_Keys_40_Frame_1.can = 2;
+  Invalid_Keys_40_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_40_Frame_1.byte(1) = 0x44;
+  Invalid_Keys_40_Frame_1.byte(2) = 0x31;
+  Invalid_Keys_40_Frame_1.byte(3) = 0x01;
+  Invalid_Keys_40_Frame_1.byte(4) = 0xFB;
+  Invalid_Keys_40_Frame_1.byte(5) = 0x40;
+  Invalid_Keys_40_Frame_1.byte(6) = 0x10;
+  
+  ////////////////////////////////
+  Invalid_Keys_40_Frame_2.dlc = 8;
+  Invalid_Keys_40_Frame_2.can = 2;
+  Invalid_Keys_40_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_40_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_40_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_40_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_40_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_40_Frame_2.byte(5) = 0x21;
+  Invalid_Keys_40_Frame_2.byte(6) = 0x12;
+  Invalid_Keys_40_Frame_2.byte(7) = 0xCC;
+  ///////////////////////////////
+    Invalid_Keys_41_Frame_1.dlc = 15;
+  Invalid_Keys_41_Frame_1.can = 2;
+  Invalid_Keys_41_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_41_Frame_1.byte(1) = 0x44;
+  Invalid_Keys_41_Frame_1.byte(2) = 0x31;
+  Invalid_Keys_41_Frame_1.byte(3) = 0x01;
+  Invalid_Keys_41_Frame_1.byte(4) = 0xFB;
+  Invalid_Keys_41_Frame_1.byte(5) = 0x41;
+  Invalid_Keys_41_Frame_1.byte(6) = 0x10;
+  
+  ////////////////////////////////
+  Invalid_Keys_41_Frame_2.dlc = 8;
+  Invalid_Keys_41_Frame_2.can = 2;
+  Invalid_Keys_41_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_41_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_41_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_41_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_41_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_41_Frame_2.byte(5) = 0x21;
+  Invalid_Keys_41_Frame_2.byte(6) = 0x12;
+  Invalid_Keys_41_Frame_2.byte(7) = 0xCC;
+  //////////////////////////////////////
+  
+  Check_Security_Anchors_FE14.dlc = 8;
+  Check_Security_Anchors_FE14.can = 2;
+  Check_Security_Anchors_FE14.byte(0) = 0x03;
+  Check_Security_Anchors_FE14.byte(1) = 0x22;
+  Check_Security_Anchors_FE14.byte(2) = 0xFE;
+  Check_Security_Anchors_FE14.byte(3) = 0x14;
+  Check_Security_Anchors_FE14.byte(4) = 0xCC;
+  Check_Security_Anchors_FE14.byte(5) = 0xCC;
+  Check_Security_Anchors_FE14.byte(6) = 0xCC;
+  Check_Security_Anchors_FE14.byte(7) = 0xCC;
+  
+  setTimer(Invalid_Keys_ExchangeKeys_Security_1,10);
+  testWaitForTimeout(time);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_1);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_2);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_3);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_4);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_5);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_6);
+}
+
+
+testfunction Brute_Force_Attack_Exchange_Keys_3_Security_Function ()
+{
+  //////////////////////////////
+  Send_Extended_Session.dlc = 8;
+  Send_Extended_Session.can = 2;
+  Send_Extended_Session.byte(0) = 0x02;
+  Send_Extended_Session.byte(1) = 0x10;
+  Send_Extended_Session.byte(2) = 0x03;
+  Send_Extended_Session.byte(3) = 0xCC;
+  Send_Extended_Session.byte(4) = 0xCC;
+  Send_Extended_Session.byte(5) = 0xCC;
+  Send_Extended_Session.byte(6) = 0xCC;
+  Send_Extended_Session.byte(7) = 0xCC;
+  ///////////////////////////////////
+  Invalid_Keys_40_Frame_1.dlc = 15;
+  Invalid_Keys_40_Frame_1.can = 2;
+  Invalid_Keys_40_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_40_Frame_1.byte(1) = 0x44;
+  Invalid_Keys_40_Frame_1.byte(2) = 0x31;
+  Invalid_Keys_40_Frame_1.byte(3) = 0x01;
+  Invalid_Keys_40_Frame_1.byte(4) = 0xFB;
+  Invalid_Keys_40_Frame_1.byte(5) = 0x40;
+  Invalid_Keys_40_Frame_1.byte(6) = 0x10;
+  
+  ////////////////////////////////
+  Invalid_Keys_40_Frame_2.dlc = 8;
+  Invalid_Keys_40_Frame_2.can = 2;
+  Invalid_Keys_40_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_40_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_40_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_40_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_40_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_40_Frame_2.byte(5) = 0x21;
+  Invalid_Keys_40_Frame_2.byte(6) = 0x12;
+  Invalid_Keys_40_Frame_2.byte(7) = 0xCC;
+  ///////////////////////////////
+    Invalid_Keys_41_Frame_1.dlc = 15;
+  Invalid_Keys_41_Frame_1.can = 2;
+  Invalid_Keys_41_Frame_1.byte(0) = 0x10;
+  Invalid_Keys_41_Frame_1.byte(1) = 0x44;
+  Invalid_Keys_41_Frame_1.byte(2) = 0x31;
+  Invalid_Keys_41_Frame_1.byte(3) = 0x01;
+  Invalid_Keys_41_Frame_1.byte(4) = 0xFB;
+  Invalid_Keys_41_Frame_1.byte(5) = 0x41;
+  Invalid_Keys_41_Frame_1.byte(6) = 0x10;
+  
+  ////////////////////////////////
+  Invalid_Keys_41_Frame_2.dlc = 8;
+  Invalid_Keys_41_Frame_2.can = 2;
+  Invalid_Keys_41_Frame_2.byte(0) = 0x21;
+  Invalid_Keys_41_Frame_2.byte(1) = 0x02;
+  Invalid_Keys_41_Frame_2.byte(2) = 0x31;
+  Invalid_Keys_41_Frame_2.byte(3) = 0x41;
+  Invalid_Keys_41_Frame_2.byte(4) = 0x31;
+  Invalid_Keys_41_Frame_2.byte(5) = 0x21;
+  Invalid_Keys_41_Frame_2.byte(6) = 0x12;
+  Invalid_Keys_41_Frame_2.byte(7) = 0xCC;
+  //////////////////////////////////////
+  
+  Check_Security_Anchors_FE14.dlc = 8;
+  Check_Security_Anchors_FE14.can = 2;
+  Check_Security_Anchors_FE14.byte(0) = 0x03;
+  Check_Security_Anchors_FE14.byte(1) = 0x22;
+  Check_Security_Anchors_FE14.byte(2) = 0xFE;
+  Check_Security_Anchors_FE14.byte(3) = 0x14;
+  Check_Security_Anchors_FE14.byte(4) = 0xCC;
+  Check_Security_Anchors_FE14.byte(5) = 0xCC;
+  Check_Security_Anchors_FE14.byte(6) = 0xCC;
+  Check_Security_Anchors_FE14.byte(7) = 0xCC;
+  
+  setTimer(Invalid_Keys_ExchangeKeys_Security_1,10);
+  testWaitForTimeout(time);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_1);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_2);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_3);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_4);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_5);
+  cancelTimer(Invalid_Keys_ExchangeKeys_Security_6);
+
+}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BUILD-ACTION-MANIFEST xsi:schemaLocation="http://bosch.com/schema/buildActionManifest/r1.0 BuildActionManifest_1-0-2.xsd" xmlns="http://bosch.com/schema/buildActionManifest/r1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SHORT-NAME>RB_Manifest</SHORT-NAME>
+  <BUILD-ACTIONS>
+    <BUILD-ACTION>
+      <SHORT-NAME>MasterMcu_App_CopyElf_CANape</SHORT-NAME>
+      <CATEGORY>GENERATOR</CATEGORY>
+      <INVOCATION>
+        <SDGS>
+          <SDG>
+            <SD GID="FILEGROUP_NAME">MasterMcu_App_CopyElf</SD>
+            <SD GID="BATCH_PARAMS">xcopy /D /Y _builds\${project.variant}\_bin\MasterMcu_App\MasterMcu_App.elf _builds\${project.variant}\_gen\Vector\CANape\</SD>
+            <SD GID="OUTPUT_DIRS">_builds\${project.variant}\_gen\Vector</SD>
+          </SDG>
+        </SDGS>
+      </INVOCATION>
+      <CREATED-DATAS>
+        <BUILD-ACTION-IO-ELEMENT>
+          <CATEGORY>ARTIFACT</CATEGORY>
+          <SDGS>
+            <SDG>
+              <SD GID="ROLE_PROVIDER_TYPE">MDF</SD>
+              <SD GID="USED_ACTION_ROLE">MISC_FILES</SD>
+              <SD GID="MasterMcu">app</SD>
+            </SDG>
+          </SDGS>
+          <ENGINEERING-OBJECTS>
+            <BUILD-ENGINEERING-OBJECT>
+              <SHORT-LABEL>*</SHORT-LABEL>
+              <CATEGORY>PJTELF_COPY</CATEGORY>
+              <DOMAIN>PK</DOMAIN>
+              <FILE-TYPE>elf</FILE-TYPE>
+            </BUILD-ENGINEERING-OBJECT>
+          </ENGINEERING-OBJECTS>
+        </BUILD-ACTION-IO-ELEMENT>
+      </CREATED-DATAS>
+      <INPUT-DATAS>
+        <BUILD-ACTION-IO-ELEMENT>
+          <CATEGORY>ARTIFACT</CATEGORY>
+          <SDGS>
+            <SDG>
+              <SD GID="USED_ACTION_ROLE">PRJ_BATCH_FILES</SD>
+            </SDG>
+          </SDGS>
+          <ENGINEERING-OBJECTS>
+            <BUILD-ENGINEERING-OBJECT>
+              <SHORT-LABEL>ExecCmd</SHORT-LABEL>
+              <CATEGORY>SWBAT</CATEGORY>
+              <DOMAIN>PK</DOMAIN>
+              <FILE-TYPE>bat</FILE-TYPE>
+            </BUILD-ENGINEERING-OBJECT>
+          </ENGINEERING-OBJECTS>
+        </BUILD-ACTION-IO-ELEMENT>
+        <BUILD-ACTION-IO-ELEMENT>
+          <CATEGORY>ARTIFACT</CATEGORY>
+          <SDGS>
+            <SDG>
+              <SD GID="USED_ACTION_ROLE">SEQUENCING_FILE_INPUT</SD>
+              <SD GID="MasterMcu_App">true</SD>
+            </SDG>
+          </SDGS>
+          <ENGINEERING-OBJECTS>
+            <BUILD-ENGINEERING-OBJECT>
+              <SHORT-LABEL>*</SHORT-LABEL>
+              <CATEGORY>PJTELF_APP</CATEGORY>
+              <DOMAIN>PK</DOMAIN>
+              <FILE-TYPE>elf</FILE-TYPE>
+            </BUILD-ENGINEERING-OBJECT>
+          </ENGINEERING-OBJECTS>
+        </BUILD-ACTION-IO-ELEMENT>
+      </INPUT-DATAS>
+      <REQUIRED-ENVIRONMENT-REF DEST="BUILD-ACTION-ENVIRONMENT">/RB_Manifest/com_bosch_cdgb_processor_util_BatchFilesAction</REQUIRED-ENVIRONMENT-REF>
+    </BUILD-ACTION>
+  </BUILD-ACTIONS>
+</BUILD-ACTION-MANIFEST>

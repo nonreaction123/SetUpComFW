@@ -1,0 +1,21 @@
+/*@!Encoding:1252*/
+
+
+long nf_RDBI_ReadDIDxxxx_Fuzzy(
+    char identifier[],          //<! Test identifier
+    diagRequest * req,          //<! request
+    diagResponse * resp,        //<! request
+    long expectedErrorCode,     //<! Expected Error code
+    int timeOutForResponse,     //<! Timeout in miliseconds
+    byte isTest                 //<! Is test
+    )
+{
+    long returnVal;
+  
+    returnVal =  utility_SendRequestCheckResponseCode( req,  
+                                             resp,
+                                             expectedErrorCode,
+                                             timeOutForResponse,
+                                             identifier, isTest);     
+    return returnVal;
+}

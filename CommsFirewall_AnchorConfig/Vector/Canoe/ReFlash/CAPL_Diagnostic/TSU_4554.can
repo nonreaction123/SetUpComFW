@@ -1,0 +1,921 @@
+/*@!Encoding:1252*/
+includes
+{ 
+  #include "Lib\Diag_Req_Resp.cin"
+  #include "Lib\DiagUtilities_New.cin"
+  
+}
+
+variables
+{  
+  //const byte Bosch = 0x61;
+  Char LogfileName[1000];
+  Char TestcaseName[1000];
+  Char ECU_qualifier[1000] = "DiagAnchor2";
+  Char Pos_FED8[100] = "62 FE D8 05 00"; // Combi: 62 FE D8 07 00 - Uwb: 62 FE D8 05 00
+  Char Pos_FE09[100] = "62 FE 09 01"; //01: InField - 02: Analysis
+  Char Pos_F180[100] = "62 F1 80 01 46 30 30 35 56 54 32 32 35 36 30 30"; // ../Build/HGT_C2/SwProperties/SwVersion_merged.properties
+  Char Pos_F181[100] = "62 F1 81 02 46 30 30 35 56 54 32 32 35 35 30 30 46 30 30 35 56 54 32 32 35 34 30 30"; // ../Build/HGT_C2/SwProperties/SwVersion_merged.properties
+  Char Pos_F18C[100] = "62 F1 8C 54 48 49 52 54 59 43 48 41 52 48 4F 4E 44 41 53 45 52 49 41 4C 4E 55 4D 5F 30 30 30 30 31"; // Combi: ProdData_CC26x2_Anchor.bin, Uwb: ProdData_S32.bin
+  Char Pos_F192[100] = "62 F1 92 46 30 30 35 56 30 33 34 35 30 30 30"; // Combi: ProdData_CC26x2_Anchor.bin, Uwb: ProdData_S32.bin
+  Char Pos_F195[100] = "62 F1 95 02 06 00 04 06 00 04";
+  message Anchor1Nm Anchr1;
+  message Anchor2Nm Anchr2;
+  message Anchor3Nm Anchr3;
+  message Anchor4Nm Anchr4;
+  message Anchor5Nm Anchr5;
+  message Anchor6Nm Anchr6;
+  message Anchor7Nm Anchr7;
+  message Anchor8Nm Anchr8;
+  message Anchor9Nm Anchr9;
+}
+
+NM_Wakeup()
+{
+    output(Anchr1);
+    output(Anchr2);
+    output(Anchr3);
+    output(Anchr4);
+    output(Anchr5);
+    output(Anchr6);
+    output(Anchr7);
+    output(Anchr8);
+    output(Anchr9);
+    testwaitfortimeout(200);  
+}
+
+
+PreCondition()
+{
+    testCaseComment("Precondition");
+    Teststep("1","Start tester present");
+    diagStartTesterPresent(ECU_qualifier);
+    TestStep("2","Send request 10 01 to enter Diagnostic Default Session ");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+}
+
+PostCondition()
+{
+    testCaseComment("PostCondition");
+    TestStep("1","Send request 10 01 to enter Diagnostic Default Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Stop tester present");
+    StopTesterPresent();
+    testwaitfortimeout(500);
+}
+
+StartLogging_Anchor(Char UseCaseName[])
+{
+    Strncat(LogfileName, "Logs/", 6);
+    Strncat(LogfileName, UseCaseName, elcount(TestcaseName));
+    Strncat(LogfileName, ".asc", elcount(TestcaseName));
+    setLogFileName(LogfileName);
+    StartLogging();
+}
+
+///////////////////////////////4554_TSU_PK_HGT_R01_AnchorUDSServer_ReadDataByIdentifier///////////////////////////////////
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF188_100453()
+{
+    testCaseDescription("The intention of the test case is to verify the positive response and data for SID 22 along with the DID for Read Vehicle Manufacturer ECU Software Number F188 of the Anchor ECU.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F188_ReadVehicleManufacturerECUSoftwareNumber_100453");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 01 to enter Default Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send request 22 F1 88 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 88", 10);
+    TestStep("3","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("4","Send request 22 F1 88 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 88", 10);
+    TestStep("5,6","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);    
+    TestStep("7","Send request 10 02 to enter Progamming Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("8","Send request 22 F1 88 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 88",10);
+    PostCondition();
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE09_PrimaryChipLifeCycle_App_ExtendedSession_0x61SecurityLevel_26436()
+{
+    testCaseDescription("Verify that a�positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xFE09 while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE09_PrimaryChipLifeCycle_App_ExtendedSession_0x61SecurityLevel_26436");
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 22 FE 09 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE 09",4);
+    PostCondition();
+    testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE34_BLEResetCount_App_ExtendedSession_0x61SecurityLevel_29329()
+{
+    testCaseDescription("Verify that a positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xFE34 while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE34_BLEResetCount_App_ExtendedSession_0x61SecurityLevel_29329");
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    testWaitForTimeout(500);
+    TestStep("4","Send request 22 FE 34 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE 34",8);
+    testWaitForTimeout(500);
+    PostCondition();
+    testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE35_BLEResetCause_App_ExtendedSession_0x61SecurityLevel_33080()
+{
+    testCaseDescription("Verify that a positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xFE35 while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE35_BLEResetCause_App_ExtendedSession_0x61SecurityLevel_33080");
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    testWaitForTimeout(500);
+    TestStep("4","Send request 22 FE 35 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE 35",4);
+    testWaitForTimeout(500);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE43_BLEResolvablePrivateAddress_App_ExtendedSession_0x61SecurityLevel_27596()
+{
+    testCaseDescription("Verify that a positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xFE43 while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE43_BLEResolvablePrivateAddress_App_ExtendedSession_0x61SecurityLevel_27596");
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 22 FE 43 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE 43",9);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE61_BoschECU_SerialNumber_30162()
+{
+    testCaseDescription("Verify that a positive response message is returned when a Read Data ByIdentifier request is sent for DID 0xFE61_Bosch ECU Serial Number");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE61_BoschECU_SerialNumber_30162");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 22 FE 61 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE 61", 35);
+    TestStep("2","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send request 22 FE 61 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE 61", 35);    
+    TestStep("4,5","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("6","Send request 22 FE 61 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE 61",35);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFED8_ECUType_63798()
+{
+    testCaseDescription("Verify that a positive response message is returned when a Read Data ByIdentifier request is sent for DID 0xFED8_Bosch ECU Serial Number");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFED8_ECUType_63798");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 22 FE D8 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE D8","7F 22 31");
+    TestStep("2","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send request 22 FE D8 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE D8",5);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_WriteDataByIdentifier_DIDFED9_PositionIdx_ExtendedSession_0x61Level_30017()
+{
+    testCaseDescription("Verify that the server responds appropriately when a WriteDataByIdentifier request is sent for DID 0xFED9 while in extended session with 0x61 security level.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_WriteDataByIdentifier_DIDFED9_PositionIdx_ExtendedSession_0x61Level_30017");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send 2E FE D9 00 to request WriteDataByIdentifier Service");
+	SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE D9 01","6E FE D9");
+    TestStep("5","Send request 22 FE D9 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE D9","62 FE D9 01");
+    TestStep("6","Send 2E FE D9 00 to request WriteDataByIdentifier Service");
+	SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE D9 00","6E FE D9");
+    TestStep("7","Send request 22 FE D9 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE D9","62 FE D9 00");    
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFB42_SerialNumberBroadcast_ExtendedSession_NoSecurityLeve_And_SecurityLevel_27413()
+{
+    testCaseDescription("Verify that positive response messages are returned when valid request messages for each supported SFID are sent for RID 0xFB42.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFB42_SerialNumberBroadcast_ExtendedSession_NoSecurityLevel0x61SecurityLevelAnd0x65SecurityLevel_27413");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2","Send request 31 01 FB 42 01 F4 to Request Routine control services");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FB 42 01 F4 00 00 00 00 00 00 00 00","71 01 FB 42");
+    TestStep("3,4","Send Security Seed Request 61 and Key 62 in DiagAnchor");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send request 31 01 FB 42 01 F4 to Request Routine control services");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FB 42 01 F4 00 00 00 00 00 00 00 00","71 01 FB 42"); 
+    TestStep("6,7","Send Security Seed Request 65 and Key 66 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);       
+    TestStep("8","Send request 31 01 FB 42 01 F4 to Request Routine control services");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FB 42 01 F4 00 00 00 00 00 00 00 00","71 01 FB 42"); 
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_HGT_PK_AnchorUDSServer_RoutineControl_RIDFB3B_SetUWBChipLifecycleToAnalysis_103987()
+{
+    testCaseDescription("Verify positive response is returned when a request message for RID FB3B of SFID 0x01 of RoutineControl is sent in extended session with Bosch security clearance.");
+    StartLogging_Anchor("TCS_HGT_PK_AnchorUDSServer_RoutineControl_RIDFB3B_SetUWBChipLifecycleToAnalysis_103987");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");    
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 31 01 FB 3B to Request Routine control services");
+	SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FB 3B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", "71 01 FB 3B 00");    
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF18C_ECUSerialNumberDataIdentifier_App_DefaultSession_31918()
+{
+    testCaseDescription("Verify that a positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xF18C while in application default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF18C_ECUSerialNumberDataIdentifier_App_DefaultSession_31918");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 01 to enter Default Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send request 22 F1 8C to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 8C",19);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF18C_ECUSerialNumberDataIdentifier_App_ExtendedSession_31924()
+{
+    testCaseDescription("Verify that a�positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xF18C while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF18C_ECUSerialNumberDataIdentifier_App_ExtendedSession_0x61SecurityLevel_31924");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);    
+    TestStep("4","Send request 22 F1 8C to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 8C",19);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF18C_ECUSerialNumberDataIdentifier_Fbl_ProgrammingSession_31930()
+{
+    testCaseDescription("Verify that a�positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xF18C while in bootloader programming session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF18C_ECUSerialNumberDataIdentifier_Fbl_ProgrammingSession_0x61SecurityLevel_31930");
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");    
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 10 02 to enter Programing Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("5","Send request 22 F1 8C to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 8C",19);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F192_System_Supplier_ECU_Hardware_Number_Data_Identifier_32546()
+{
+    testCaseDescription("The intention of the test case is to verify the positive response and data for SID 22 along with the DID for Read Supplier Manufacturer ECU Hardware Part Number F192 of the Anchor ECU.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F192_System_Supplier_ECU_Hardware_Number_Data_Identifier_32546");
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 22 F1 92 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 F1 92", Pos_F192);    
+    TestStep("2","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send request 22 F1 92 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 F1 92", Pos_F192);
+    TestStep("4,5","Send Security Seed Request 61 and Key 62 in DiagAnchor");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("6","Send request 10 02 to enter Programing Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("7","Send request 22 F1 92 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 F1 92", Pos_F192);    
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF195_App_DefaultSession_28039()
+{
+    testCaseDescription("Verify that a�positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xF195 while in application default session.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF195_SystemSupplierECUSoftwareVersionNumberDataIdentifier_App_DefaultSession_28039");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 01 to enter Default Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send request 22 F1 95 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 95",10);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF195_App_ExtendedSession_NoSecurityLevel_26205()
+{
+    testCaseDescription("Verify that a�positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xF195 while in application extended session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF195_SystemSupplierECUSoftwareVersionNumberDataIdentifier_App_ExtendedSession_NoSecurityLevel_26205");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2","Send request 22 F1 95 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 95",10);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF195_Fbl_ProgrammingSession_0x61SecurityLevel_28774()
+{
+    testCaseDescription("Verify that a�positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xF195 while in bootloader programming session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF195_SystemSupplierECUSoftwareVersionNumberDataIdentifier_Fbl_ProgrammingSession_0x61SecurityLevel_28774");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");  
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 10 02 to enter Programing Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("5","Send request 22 F1 95 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 95",10);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF181_App_DefaultSession_31709()
+{
+    testCaseDescription("Verify that a positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xF181 while in application default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF181_ApplicationSoftwareIdentificationDataIdentifier_App_DefaultSession_31709");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 01 to enter Default Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send request 22 F1 81 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 F1 81", Pos_F181);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF181_App_ExtendedSession_NoSecurityLevel_31727()
+{
+    testCaseDescription("Verify that a�positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xF181 while in application extended session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF181_ApplicationSoftwareIdentificationDataIdentifier_App_ExtendedSession_NoSecurityLevel_31727");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2","Send request 22 F1 81 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 F1 81", Pos_F181);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF180_App_DefaultSession_31685()
+{
+    testCaseDescription("Verify that a positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xF180 while in application default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF180_BootSoftwareIdentificationDataIdentifier_App_DefaultSession_31685");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 01 to enter Default Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send request 22 F1 80 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 F1 80", Pos_F180);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF180_App_ExtendedSession_NoSecurityLevel_31703()
+{
+    testCaseDescription("Verify that a�positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xF180 while in application extended session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF180_BootSoftwareIdentificationDataIdentifier_App_ExtendedSession_NoSecurityLevel_31703");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2","Send request 22 F1 80 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 F1 80", Pos_F180);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF180_Fbl_ProgrammingSession_0x61SecurityLevel_31691()
+{
+    testCaseDescription("Verify that a�positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xF180 while in bootloader programming session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF180_BootSoftwareIdentificationDataIdentifier_Fbl_ProgrammingSession_0x61SecurityLevel_31691");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");  
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 10 02 to enter Programing Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("5","Send request 22 F1 80 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 F1 80", Pos_F180);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF188_Fbl_ExtendedSession_NoSecurityLevel_32460()
+{
+    testCaseDescription("Verify that positive response is returned when a ReadDataByIdentifier request is sent for DID 0xF188 while in bootloader extended session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDF188_VehicleManufacturerECUSoftwareNumberDataIdentifier_Fbl_ExtendedSession_NoSecurityLevel_32460");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");    
+	TestStep("2,3","Send Security Seed Request 65 and Key 66 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);    
+    TestStep("4","Send request 10 02 to enter Programing Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("5","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");         
+    TestStep("6","Send request 22 F1 81 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 88",28);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE30_App_DefaultSession_27984()
+{
+    testCaseDescription("Verify that a positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xFE30 while in application default session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE30_AnchorSessionIdentification_App_DefaultSession_27984");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 01 to enter Default Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send request 22 FE 30 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE 30", "62 FE 30 01 41");
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE30_App_ExtendedSession_NoSecurityLevel_26714()
+{
+    testCaseDescription("Verify that a positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xFE30 while in application extended session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE30_AnchorSessionIdentification_App_ExtendedSession_NoSecurityLevel_26714");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2","Send request 22 FE 30 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE 30", "62 FE 30 03 41");
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE30_Fbl_ProgrammingSession_0x61SecurityLevel_30456()
+{
+    testCaseDescription("Verify that a�positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xFE30 while in bootloader programming session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE30_AnchorSessionIdentification_Fbl_ProgrammingSession_0x61SecurityLevel_30456");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");  
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 10 02 to enter Programing Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");    
+    TestStep("5","Send request 22 FE 30 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE 30", "62 FE 30 02 42");
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE30_Fbl_ExtendedSession_NoSecurityLevel_27590()
+{
+    testCaseDescription("Verify that a�positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xFE30 while in bootloader extended session with no security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE30_AnchorSessionIdentification_Fbl_ExtendedSession_NoSecurityLevel_27590");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");    
+	TestStep("2,3","Send Security Seed Request 65 and Key 66 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Incar_1);    
+    TestStep("4","Send request 10 02 to enter Programing Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("5","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");         
+    TestStep("6","Send request 22 FE 30 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE 30", "62 FE 30 03 42");
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_WriteDataByIdentifier_DIDFE07_CANIdx_ExtendedSession_0x61Level_27244()
+{
+    testCaseDescription("Verify that the server responds appropriately when a WriteDataByIdentifier request is sent for DID 0xFE07 while in extended session with 0x61 security level.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_WriteDataByIdentifier_DIDFE07_CANIdx_ExtendedSession_0x61Level_27244");  
+    PreCondition();
+    testCaseComment("Actions");    
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");    
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 2E FE 07 01 to request WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE 07 01", "6E FE 07");     
+    TestStep("5","Send request 22 FE 07 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE 07", "62 FE 07 01");
+    TestStep("6","Send request 2E FE 07 01 to request WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE 07 0F", "6E FE 07");     
+    TestStep("7","Send request 22 FE 07 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE 07", "62 FE 07 0F");
+    testWaitForTimeout(1000);
+    //Return default CANIdx
+    TestStep("8","Send request 2E FE 07 02 to request WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE 07 02", "6E FE 07");
+    TestStep("9","Send request 22 FE 07 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE 07", "62 FE 07 02");  
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();      
+}
+
+testcase TCS_PK_HGT_AnchorUDS_Supported_Diagnostic_103668()
+{
+    testCaseDescription("Verify that Positive Responses are returned when request is sent to Anchor ECU");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDS_Supported_Diagnostic_103668");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 01 to enter Default Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send request 10 03 to enter Extended Diagnostic Session");    
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send Security Seed Request 61 in DiagAnchor");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"27 61","67 61");    
+    TestStep("4","Send request 11 01 to ECU Reset");
+    SendDiag_Request_Verify_Response(DiagAnchor2,"11 01","51 01");
+    testWaitForTimeout(500);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_DVPVTest_Anchor_ReadWriteBleAddress_FE03_25477()
+{
+    testCaseDescription("Test case to verify BLE Address read write functionality.");
+    StartLogging_Anchor("TCS_PK_HGT_DVPVTest_Anchor_ReadWriteBleAddress_FE03_25477");
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");
+    testWaitForTimeout(500);
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 2E FE 03 to request WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE 03 C0 00 00 00 00 01", "6E FE 03"); 
+    TestStep("5","Send request 22 FE 03 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE 03", "62 FE 03 C0 00 00 00 00 01");
+    TestStep("6","Send request 2E FE 03 to request WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE 03 C0 00 00 00 00 02", "6E FE 03"); 
+    TestStep("7","Send request 22 FE 03 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE 03", "62 FE 03 C0 00 00 00 00 02");  
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDTCInformation_SFID0x0A_App_DefaultSession_31289()
+{
+    testCaseDescription("Verify that a�positive response message is returned and the ReadDTCInformation service is implemented when a request message for ReadDTCInformation SFID 0x0A is sent in application default session with no security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDTCInformation_SFID0x0A_App_DefaultSession_31289");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 01 to enter Default Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+    TestStep("4","Send request 19 0A to ReadDTCInformation");
+    SendDiag_Request_Verify_Response(DiagAnchor2,"19 0A","59 0A 31 90 00 49 00");
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ClearDiagnosticInformation_App_ExtendedSession_NoSecurityLevel_30499()
+{
+    testCaseDescription("Verify that a�positive response message is returned when ClearDiagnosticInformation is requested in extended session with no security clearance.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ClearDiagnosticInformation_App_ExtendedSession_NoSecurityLevel_30499");  
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");    
+    TestStep("4","Send request 14 FF FF FF to ClearDiagnosticInformation");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"14 FF FF FF","54");
+    testwaitfortimeout(1000);
+    PostCondition();
+  testWaitForTimeout(5000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_DVPVTest_Anchor_EnterFastSleep_FA05_32491()
+{
+    StartLogging_Anchor("TCS_PK_HGT_DVPVTest_Anchor_EnterFastSleep_FA05_32491");
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 01 to enter Default Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3,4","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("5","Send request 31 01 FA 05 01 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FA 05 01", "71 01 FA 05");
+    testWaitForTimeout(3000);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA01_BLERxSensitivityTest_ExtendedSession_0x61SecurityLevel_26285()
+{
+    testCaseDescription("Verify that positive response messages are returned when valid request messages for each supported SFID are sent for RID 0xFA01.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA01_BLERxSensitivityTest_ExtendedSession_0x61SecurityLevel_26285");
+    PreCondition();
+    testCaseComment("Actions");   
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");    
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 2E FE A4 01 to request WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE A4 01", "6E FE A4"); 
+    TestStep("5","Send request 31 01 FA 01 to enable Routine control request");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"31 01 fa 01 80 EA CA 80 00 01 01 2C 00 01", 5);
+    testWaitForTimeout(100);
+    TestStep("6","Send request 31 02 FA 01 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 02 FA 01", "71 02 FA 01");
+    TestStep("7","Send request 31 01 FA 01 to enable Routine control request");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"31 01 FA 01 80 EA CA 80 00 01 01 2C 00 01", 5);
+    testWaitForTimeout(3000);
+    TestStep("8","Send request 31 03 FA 01 to enable Routine control request");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"31 03 FA 01", 14);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA02_BLETxPowerTest_ExtendedSession_0x61SecurityLevel_25670()
+{
+    testCaseDescription("Verify that positive response messages are returned when valid request messages for each supported SFID are sent for RID 0xFA02.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA02_BLETxPowerTest_ExtendedSession_0x61SecurityLevel_25670");
+    PreCondition();
+    testCaseComment("Actions");   
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");    
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 2E FE A4 01 to request WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE A4 01", "6E FE A4"); 
+    TestStep("5","Send request 31 01 FA 02 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FA 02 01 00 64 00 01", "71 01 FA 02");
+    testWaitForTimeout(100);
+    TestStep("6","Send request 31 02 FA 02 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 02 FA 02", "71 02 FA 02");
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_DVPVTest_Anchor_FEA4_RFTestMode_30060()
+{
+    testCaseDescription("Test case to verify read RF test mode functionality.");
+    StartLogging_Anchor("TCS_PK_HGT_DVPVTest_Anchor_FEA4_RFTestMode_30060");  
+    PreCondition();
+    testCaseComment("Actions");    
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 2E FE A4 01 to request WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE A4 01", "6E FE A4");     
+    TestStep("5","Send request 22 FE A4 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE A4", "62 FE A4 01");
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE13_UWBChipVersion_App_ExtendedSession_0x61SecurityLevel_32018()
+{
+    testCaseDescription("Verify that a positive response message is returned when a ReadDataByIdentifier request is sent for DID 0xFE13 while in application extended session with 0x61 security access.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE13_UWBChipVersion_App_ExtendedSession_0x61SecurityLevel_32018");  
+    PreCondition();
+    testCaseComment("Actions");    
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch); 
+    testWaitForTimeout(1000);
+    TestStep("4","Send request 22 FE 13 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE 13", 57);
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_WriteDataByIdentifier_DIDFEB2_ExtendedSession_0x61SecurityLevel_29997()
+{
+    testCaseDescription("Verify that the server responds appropriately when a WriteDataByIdentifier request is sent for DID 0xFEB2 while in extended session with 0x61 security level.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_WriteDataByIdentifier_DIDFEB2_UWBCentreFrequencyCalibrationBaseOffset_ExtendedSession_0x61SecurityLevel_29997");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 2E FE B2 FF FF FF FF to WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE B2 FF FF FF FF","6E FE B2");
+    TestStep("5","Send request 22 FE B2 to ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE B2","62 FE B2 FF FF FF FF");
+    TestStep("6","Send request 2E FE B2 80 00 80 00 to WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE B2 80 00 80 00","6E FE B2");
+    TestStep("7","Send request 22 FE B2 to ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE B2","62 FE B2 80 00 80 00");
+    TestStep("8","Send request 2E FE B2 80 00 80 00 to WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE B2 00 00 00 00","6E FE B2");
+    TestStep("9","Send request 22 FE B2 to ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"22 FE B2","62 FE B2 00 00 00 00");
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA0B_CarrierWaveMode_ExtendedSession_0x61SecurityLevel_32815()
+{
+    testCaseDescription("Verify that positive response messages are returned when valid request messages for each supported SFID are sent for RID 0xFA0B.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA0B_CarrierWaveMode_ExtendedSession_0x61SecurityLevel_32815");
+    PreCondition();
+    testCaseComment("Actions");
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");    
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 2E FE A4 01 to request WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE A4 01", "6E FE A4"); 
+    TestStep("5","Send request 31 01 FA 0B to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FA 0B 05 00 01", "71 01 FA 0B"); 
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA08_uwbFramesTx_ExtendedSession_0x61SecurityLevel_26322()
+{
+    testCaseDescription("Verify that positive response messages are returned when valid request messages for each supported SFID are sent for RID 0xFA08.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA08_uwbFramesTx_ExtendedSession_0x61SecurityLevel_26322");
+    PreCondition();
+    testCaseComment("Actions");   
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");    
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 2E FE A4 01 to request WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE A4 01", "6E FE A4"); 
+    TestStep("5","Send request 31 01 FA 08 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FA 08 05 00 00 00 00 00 64 0C 12 12", "71 01 FA 08 01");
+    TestStep("6","Send request 31 02 FA 08 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 02 FA 08", "71 02 FA 08");
+    TestStep("7","Send request 31 01 FA 08 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FA 08 09 00 00 00 00 00 64 0C 12 12", "71 01 FA 08 01");
+    TestStep("8","Send request 31 02 FA 08 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 02 FA 08", "71 02 FA 08");
+    TestStep("9","Send request 31 01 FA 08 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FA 08 05 00 00 00 00 00 64 0C 12 12", "71 01 FA 08 01");
+    testWaitForTimeout(1000);
+    TestStep("10","Send request 31 03 FA 08 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 03 FA 08", "71 03 FA 08 01");
+    TestStep("11","Send request 31 01 FA 08 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FA 08 05 00 00 00 00 00 64 0C 12 12", "71 01 FA 08 01");
+    testWaitForTimeout(1000);
+    TestStep("12","Send request 31 03 FA 08 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 03 FA 08", "71 03 FA 08 01");    
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA09_uwbFramesRx_ExtendedSession_0x61SecurityLevel_30168()
+{
+    testCaseDescription("Verify that positive response messages are returned when valid request messages for each supported SFID are sent for RID 0xFA09.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFA09_uwbFramesRx_ExtendedSession_0x61SecurityLevel_30168");
+    PreCondition();
+    testCaseComment("Actions");   
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");    
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 2E FE A4 01 to request WriteDataByIdentifier Service");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"2E FE A4 01", "6E FE A4"); 
+    TestStep("5","Send request 31 01 FA 09 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FA 09 0B B8 05 00 64 0C 73 73", "71 01 FA 09");
+    TestStep("6","Send request 31 02 FA 09 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 02 FA 09", "71 02 FA 09");
+    TestStep("7","Send request 31 01 FA 09 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FA 09 0B B8 09 00 64 0C 73 73", "71 01 FA 09");
+    TestStep("8","Send request 31 03 FA 09 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 03 FA 09", "71 03 FA 09 00 00 00 00 00 00 FF FF");
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC13_RIDFB38_App_ExtendedSession_0x61SecurityLevel_25783()
+{
+    testCaseDescription("Verify that NRC 0x13 (IMLOIF) is returned when a request message of incorrect length for Routine 0xFB38.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_NRC13_RIDFB38_App_ExtendedSession_0x61SecurityLevel_25783");
+    PreCondition();
+    testCaseComment("Actions");   
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");    
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 31 01 FB 38 to enable Routine control request");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 38 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", "7F 31 13");
+    TestStep("5","Send request 31 01 FB 38 to enable Routine control request");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 FB 38 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00", "7F 31 13");
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFB36_SetPrimaryChipLifecycleToAnalysis_103990()
+{
+    testCaseDescription("Verify that positive response messages are returned when valid request messages for each supported SFID are sent for RID 0xFB36.");
+    StartLogging_Anchor("TCS_PK_HGT_AnchorUDSServer_RoutineControl_RIDFB36_SetPrimaryChipLifecycleToAnalysis_103990");
+    PreCondition();
+    testCaseComment("Actions");   
+    TestStep("1","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("2,3","Send Security Seed Request 61 and Key 62 in DiagAnchor");    
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("4","Send request 31 01 FB 36 to enable Routine control request");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"31 01 FB 36 38 4C 51 32 59 59 45 4C 56 38 51 35 46 58 42 38 59 34 4F 47 4B 39 41 38 37 35 32 30 30 4D 49 41", "71 01 FB 36 00");
+    PostCondition();
+  testWaitForTimeout(1000);
+    stopLogging();
+}
+

@@ -1,0 +1,6 @@
+[item:PK.cna]
+domain = PK
+class = CANAPE
+label = pk
+elementAttribute:RoleID = role_file_out_0008
+

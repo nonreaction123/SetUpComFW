@@ -1,0 +1,208 @@
+/*@!Encoding:1252*/
+variables
+{
+  dword DownloadMaxNumberOfBlockLength = 0;
+}
+
+//----------------------------------------------------------------------------
+//! \brief  Request a download with size and length together
+//! 
+//----------------------------------------------------------------------------
+testcase RequestDownload( double dataFormatIdentifier               //<! one-byte value with each nibble encoded separately. The high nibble specifies the 
+                                                                    //<! “compressionMethod” and the low nibble specifies the “encryptingMethod”
+                          ,double addressAndLengthFormatIdentifier  //<! Code that indicates the number of bytes that corresponde to the address and the length
+                          ,double memoryAddressAndSize              //<! Memory address and size together
+                          ,long expectedErrorCode                   //<! Expected Error Code
+                          ,int timeOutForResponse                   //<! Timeout for the response
+                          ,char identifier[])                       //<! testcase identifier
+{
+  diagRequest Download_Request req;
+  diagResponse * resp;
+
+  
+  diagSetParameter(req, "addressAndLengthFormatIdentifier", addressAndLengthFormatIdentifier);
+  diagSetParameter(req, "FormatIdentifier",  dataFormatIdentifier);
+  diagSetParameter(req, "Memory_Address_and_Size",memoryAddressAndSize);
+  
+  utility_SendRequestCheckResponseCode( req,  resp, expectedErrorCode, timeOutForResponse, identifier, 1);
+}
+
+//----------------------------------------------------------------------------
+//! \brief  Request a download with separate parameters for address and size
+//! 
+//----------------------------------------------------------------------------
+testcase RequestDownload(  double dataFormatIdentifier              //<! one-byte value with each nibble encoded separately. The high nibble specifies the 
+                                                                    //<! “compressionMethod” and the low nibble specifies the “encryptingMethod” 
+                          ,double addressAndLengthFormatIdentifier  //<! Code that indicates the number of bytes that corresponde to the address and the length
+                          ,double memoryAddress                     //<! Memory address
+                          ,double memorySize                        //<! Memory size 
+                          ,long expectedErrorCode                   //<! Expected Error Code
+                          ,int timeOutForResponse                   //<! Timeout for the response
+                          ,char identifier[])                       //<! testcase identifier
+{
+  diagRequest Download_Request req;
+  diagResponse * resp;
+  
+  diagSetParameter(req, "addressAndLengthFormatIdentifier", addressAndLengthFormatIdentifier);
+  diagSetParameter(req, "FormatIdentifier",  dataFormatIdentifier);
+  diagSetParameter(req, "Address", memoryAddress);
+  diagSetParameter(req, "Size", memorySize );
+  if (1 == utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1))
+  {
+    long lfid;
+    int ii;
+      
+    lfid = resp.GetParameter("FormatIdentifier");
+    lfid >>= 4;
+    DownloadMaxNumberOfBlockLength = 0;
+    
+    for (ii = 0; ii < lfid; ii++)
+    {
+      byte respByte;
+      
+      respByte = resp.GetPrimitiveByte(2 + ii);
+      DownloadMaxNumberOfBlockLength <<= 8;
+      DownloadMaxNumberOfBlockLength += respByte;
+    }
+  }
+}
+
+//----------------------------------------------------------------------------
+//! \brief  Transfer of data during a download transaction
+//!         and prints test results
+//----------------------------------------------------------------------------
+testcase TransferDataTest( byte data[]                              //<! Data to be transfered
+                      ,long length                              //<! Length of the data to be transfered
+                      ,byte counter                             //<! Sequential number of the current transfer.
+                      ,long expectedErrorCode                   //<! Expected Error Code
+                      ,dword timeOutForResponse                   //<! Timeout for the response
+                      ,char identifier[] )                       //<! testcase identifier
+{
+  diagRequest Download_Transmit req;
+  diagResponse * resp;
+  
+  {
+    char temp[64];
+  
+    snprintf(temp, elcount(temp),
+          "%s0x%02X\n",
+          "Transferring Data, seq=",
+          counter
+          );
+    testCaseTitle("TransferData", temp);
+  }
+  
+  diagSetParameter(req, "blockSequenceCounter" , counter);
+  diagSetParameterRaw(req, "Data" , data , length);
+  utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+  
+}
+
+
+//----------------------------------------------------------------------------
+//! \brief  Transfer of data during a download transaction
+//!         but does not print test results
+//----------------------------------------------------------------------------
+long TransferDataFunction( byte data[]                              //<! Data to be transfered
+                      ,long length                              //<! Length of the data to be transfered
+                      ,byte counter                             //<! Sequential number of the current transfer.
+                      ,long expectedErrorCode                   //<! Expected Error Code
+                      ,int timeOutForResponse                   //<! Timeout for the response
+                      ,char identifier[] )                       //<! testcase identifier
+{
+  diagRequest Download_Transmit req;
+  diagResponse * resp;
+  long returnVal;
+  
+  diagSetParameter(req, "blockSequenceCounter" , counter);
+  diagSetParameterRaw(req, "Data" , data , length);
+  returnVal = utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 0);
+  
+  return returnVal;
+  
+}
+
+//----------------------------------------------------------------------------
+//! \brief  Finalise a download transaction
+//! 
+//----------------------------------------------------------------------------
+testcase TransferExit(long expectedErrorCode                   //<! Expected Error Code
+                      ,int timeOutForResponse                   //<! Timeout for the response
+                      ,char identifier[])                       //<! testcase identifier)
+{
+  diagRequest Download_Stop req;
+  diagResponse * resp;
+  
+  utility_SendRequestCheckResponseCode( req,  
+                                        resp,
+                                        expectedErrorCode,
+                                        timeOutForResponse,
+                                        identifier, 1);
+}
+
+
+//----------------------------------------------------------------------------
+//! \brief  Transfer all the application data printing only one result
+//!         
+//----------------------------------------------------------------------------
+testcase transferApplication(long dataLength,   //<! Total length of data to be programmed
+                            long startAddress,  //<! Address to write the data into
+                            char identifier[]) //<!Test identifier
+{
+    //Write data
+  byte dataProgrammed = 0;
+  byte buffer[0x400]; //1K
+  long localDataLeft;
+  long currentAddress;
+  byte transferCounter;
+  long returnVal;
+    //Downloading
+  localDataLeft = dataLength;
+  currentAddress= startAddress;
+  transferCounter = 1;
+
+    
+  //For each segment in Logical block, do step D to H
+  while(localDataLeft > 0)
+  {
+    if(localDataLeft >= TRANSFER_LENGTH)
+    {
+      fileGetBinaryBlock ( buffer , TRANSFER_LENGTH , fileFwHandle);
+      returnVal = TransferDataFunction( buffer,  TRANSFER_LENGTH, transferCounter, UDS_ERROR_CODE_OK, 1000, identifier);
+      if(returnVal == RESPONSE_CHECK_IS_NOK)
+      {
+         TestStepFail( identifier, "Unexpected response" );
+         break;
+      }
+      localDataLeft -= TRANSFER_LENGTH;
+      currentAddress += TRANSFER_LENGTH;
+      transferCounter++;
+
+    }
+    else
+    {
+      fileGetBinaryBlock ( buffer , localDataLeft , fileFwHandle);
+      returnVal = TransferDataFunction( buffer,  TRANSFER_LENGTH, transferCounter, UDS_ERROR_CODE_OK, 1000, identifier);
+      if(returnVal == RESPONSE_CHECK_IS_NOK)
+      {
+         TestStepFail( identifier, "Unexpected response" );
+         break;
+      }
+      localDataLeft -= localDataLeft;
+      currentAddress += localDataLeft;
+
+    }
+  } 
+}

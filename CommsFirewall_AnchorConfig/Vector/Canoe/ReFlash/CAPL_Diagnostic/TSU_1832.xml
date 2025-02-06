@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<testmodule title="HGT_PK-Diagnostics" version="">
+
+
+			
+<testgroup title="TSU_PK_HGT_DVPVTest_Anchor">
+
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F110_ReadDiagnosticIdentification_29394"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F18C_ReadECUSerialNumber_32265"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F192_System_Supplier_ECU_Hardware_Number_Data_Identifier_32546"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE61_BoschECU_SerialNumber_30162"></capltestcase>
+<capltestcase name="TCS_PK_Honda_AnchorUDSServer_ReadDataByIdentifier_F112_ECUHardwareNumber_63426"></capltestcase>
+<capltestcase name="TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFED8_ECUType_ExtendedSession_63798"></capltestcase>
+</testgroup>
+	
+
+</testmodule>

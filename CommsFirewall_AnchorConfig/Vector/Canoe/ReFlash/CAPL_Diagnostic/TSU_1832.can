@@ -1,0 +1,210 @@
+/*@!Encoding:1252*/
+includes
+{ 
+  #include "Lib\Diag_Req_Resp.cin"
+  #include "Lib\DiagUtilities_New.cin"
+  
+}
+
+variables
+{  
+  //const byte Bosch = 0x61;
+  Char LogfileName[1000];
+  Char TestcaseName[1000];
+  Char ECU_qualifier[1000] = "DiagAnchor2";
+  message Anchor1Nm Anchr1;
+  message Anchor2Nm Anchr2;
+  message Anchor3Nm Anchr3;
+  message Anchor4Nm Anchr4;
+  message Anchor5Nm Anchr5;
+  message Anchor6Nm Anchr6;
+  message Anchor7Nm Anchr7;
+  message Anchor8Nm Anchr8;
+  message Anchor9Nm Anchr9;
+}
+
+NM_Wakeup()
+{
+    output(Anchr1);
+    output(Anchr2);
+    output(Anchr3);
+    output(Anchr4);
+    output(Anchr5);
+    output(Anchr6);
+    output(Anchr7);
+    output(Anchr8);
+    output(Anchr9);
+    testwaitfortimeout(200);  
+}
+
+
+PreCondition(Char UseCaseName[])
+{
+    testCaseComment("Precondition");
+    //NM_Wakeup();
+
+    ///// Logging file in given path ///////
+    Strncat(LogfileName, "Logs/", 6);
+    Strncat(LogfileName, UseCaseName, elcount(TestcaseName));
+    Strncat(LogfileName, ".asc", elcount(TestcaseName));
+    setLogFileName(LogfileName);
+    StartLogging();
+    
+    Teststep("1","Start tester present");
+    diagStartTesterPresent(ECU_qualifier);
+    TestStep("2","Send request 10 01 to enter Diagnostic Default Session ");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+  
+}
+
+PreCondition_Anchor(Char UseCaseName[])
+{
+    testCaseComment("Precondition");
+    //NM_Wakeup();
+
+    ////// Logging file in given path ///////
+    Strncat(LogfileName, "Logs/", 6);
+    Strncat(LogfileName, UseCaseName, elcount(TestcaseName));
+    Strncat(LogfileName, ".asc", elcount(TestcaseName));
+    setLogFileName(LogfileName);
+    StartLogging();
+
+    Teststep("1","Start tester present");
+    diagStartTesterPresent(ECU_qualifier);
+    TestStep("2","Send request 10 01 to enter Diagnostic Default Session ");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+}
+
+PostCondition()
+{
+    testCaseComment("PostCondition");
+    TestStep("1","Send request 10 01 to enter Diagnostic Default Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Stop tester present");
+    StopTesterPresent();
+    stopLogging();
+    testwaitfortimeout(500);
+}
+
+PostCondition_Anchor()
+{
+    testCaseComment("PostCondition");
+    TestStep("1","Send request 10 01 to enter Diagnostic Default Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Stop tester present");
+    StopTesterPresent();
+    stopLogging();
+    testwaitfortimeout(500);  
+}
+
+// MainTest()
+// {
+
+// }
+////////// Honda format Plant Data information into Anchors //////////
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F110_ReadDiagnosticIdentification_29394()
+{
+    PreCondition_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F110_ReadDiagnosticIdentification_29394");
+    testCaseComment("Actions");
+    TestStep("1","Send request 22 F1 10 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 10", 18);
+    TestStep("2","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send request 22 F1 10 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 10", 18);
+    TestStep("4,5","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("6","Send request 10 02 to enter Progamming Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("7","Send request 22 F1 10 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 10", 18);    
+    PostCondition_Anchor();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F18C_ReadECUSerialNumber_32265()
+{
+    PreCondition_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F18C_ReadECUSerialNumber_32265");
+    testCaseComment("Actions");
+    TestStep("1","Send request 22 F1 8C to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 8C", 33);
+    TestStep("2","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send request 22 F1 8C to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 8C", 33);
+    TestStep("4,5","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("6","Send request 10 02 to enter Progamming Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("7","Send request 22 F1 8C to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 8C", 33);   
+    PostCondition_Anchor();
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F192_System_Supplier_ECU_Hardware_Number_Data_Identifier_32546()
+{
+    PreCondition_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_F192_System_Supplier_ECU_Hardware_Number_Data_Identifier_32546");
+    testCaseComment("Actions");
+    TestStep("1","Send request 22 F1 92 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 92", 15);
+    TestStep("2","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send request 22 F1 92 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 92", 15);
+    TestStep("4,5","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("6","Send request 10 02 to enter Progamming Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("7","Send request 22 F1 92 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 92", 15);   
+    PostCondition_Anchor();     
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE61_BoschECU_SerialNumber_30162()
+{
+    PreCondition_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFE61_BoschECU_SerialNumber_30162");
+    testCaseComment("Actions");
+    TestStep("1","Send request 22 FE 61 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE 61", 35);
+    TestStep("2","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send request 22 FE 61 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE 61", 35);
+    TestStep("4,5","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);
+    TestStep("6","Send request 22 FE 61 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE 61", 35);   
+    PostCondition_Anchor();       
+}
+
+testcase TCS_PK_Honda_AnchorUDSServer_ReadDataByIdentifier_F112_ECUHardwareNumber_63426()
+{
+    PreCondition_Anchor("TCS_PK_Honda_AnchorUDSServer_ReadDataByIdentifier_F112_ECUHardwareNumber_63426");  
+    testCaseComment("Actions");
+    TestStep("1","Send request 22 F1 12 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 12", 34);     
+    TestStep("2","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send request 22 F1 12 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 12", 34);     
+    TestStep("4,5","Send Security Seed Request 61 and Key 62 in DiagAnchor");  
+    Security_Seed_Key_Access(Anch2,Physical,Bosch);    
+    TestStep("6","Send request 10 02 to enter Progamming Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 02","50 02 00 32 01 F4");
+    TestStep("7","Send request 22 F1 12 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 F1 12", 34);     
+    PostCondition_Anchor();      
+}
+
+testcase TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFED8_ECUType_ExtendedSession_63798()
+{
+    PreCondition_Anchor("TCS_PK_HGT_AnchorUDSServer_ReadDataByIdentifier_DIDFED8_ECUType_ExtendedSession_63798");
+    testCaseComment("Actions");
+    TestStep("1","Send request 22 FE D8 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"22 FE D8", "7F 22 31");
+    TestStep("2","Send request 10 03 to enter Extended Diagnostic Session");
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 03","50 03 00 32 01 F4");
+    TestStep("3","Send request 22 FE D8 to request ReadDataByIdentifier Service");
+    SendDiag_Request_Verify_Response_Length(ECU_qualifier,"22 FE D8", 5);
+    PostCondition_Anchor();
+}

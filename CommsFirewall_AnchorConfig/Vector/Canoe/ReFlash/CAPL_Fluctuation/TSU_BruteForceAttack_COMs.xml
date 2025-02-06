@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<testmodule title="HGT_PK-Comms_Firewall" version="">
+
+
+			
+<testgroup title="TSU_PK_HGT_COMS_Firewall_BruteForceAttack">
+
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_BoschSecurityAccess_231235"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_InCar1SecurityAccess_231239"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationHtoL_BruteForceAttack_InvalidKey_SecOCexchangeKey_231243"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_ControlStageBySignal_BruteForceAttack_InvalidKey_InCar1SecurityAccess_231241"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_ControlStageBySignal_BruteForceAttack_InvalidKey_SecOCexchangeKey_231244"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationHtoL_BruteForceAttack_InvalidKey_BoschSecurityAccess_231236"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationLtoH_BruteForceAttack_InvalidKey_SecOCexchangeKey_231242"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_ControlStageBySignal_BruteForceAttack_InvalidKey_BoschSecurityAccess_231237"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationHtoL_BruteForceAttack_InvalidKey_InCar1SecurityAccess_231240"></capltestcase>
+
+
+</testgroup>
+	
+
+</testmodule>

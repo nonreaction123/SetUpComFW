@@ -1,0 +1,321 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  enum TagLocation_en
+  {
+    TAG_LOC_UNKNOWN             = 0x00,
+    TAG_LOC_RKE_ZONE            = 0x01,
+    TAG_LOC_WELCOME_LIGHT_ZONE  = 0x02,
+    TAG_LOC_LEFT_DOOR           = 0x04,
+    TAG_LOC_RIGHT_DOOR          = 0x08,
+    TAG_LOC_OUTSIDE_TRUNK       = 0x10,
+    TAG_LOC_INSIDE_VEHICLE      = 0x20
+  };
+  
+  timer heartbeatTimer;  
+  
+  byte leftDoor = 0;
+  char leftDoor_tagText[40];
+  byte rightDoor = 0; 
+  char rightDoor_tagText[40];
+  byte insideVehicle = 0;
+  char insideVehicle_tagText[40];
+  byte outsideTrunk = 0;
+  char outsideTrunk_tagText[40];
+  byte welcomeLight = 0;
+  char welcomeLight_tagText[40];
+}
+
+on start
+{
+  setTimer(heartbeatTimer, 1);
+}
+
+on busOff
+{
+  resetCanEx(1);
+}
+
+on timer heartbeatTimer
+{
+  message CAN1.0x7FF heartbeatMsg;
+  
+  heartbeatMsg.dlc = 0;
+  output(heartbeatMsg);
+  
+  setTimer(heartbeatTimer, 1);
+}
+
+on signal TagLocation_0
+{
+  KeyLocator_DisplayLocation(0, this.raw);
+}
+
+on signal TagLocation_1
+{
+  KeyLocator_DisplayLocation(1, this.raw);
+}
+
+on signal TagLocation_2
+{
+  KeyLocator_DisplayLocation(2, this.raw);
+}
+
+on signal TagLocation_3
+{
+  KeyLocator_DisplayLocation(3, this.raw);
+}
+
+void KeyLocator_DisplayLocation( 
+  byte tagIdx,
+  byte tagLocationSignal
+  )
+{
+  //*** check for LEFT DOOR ***
+  if (0 != (tagLocationSignal & (byte)TAG_LOC_LEFT_DOOR))
+  {
+    leftDoor = leftDoor | (1 << tagIdx);
+  }
+  else
+  {
+    leftDoor = leftDoor & (0xFF - (1 << tagIdx));
+  }
+  
+  if (leftDoor > 0)
+  {
+    @sysvar::KEY_LOCATOR::leftDoor_tag0 = 0;
+    @sysvar::KEY_LOCATOR::leftDoor_tag1 = 0;
+    @sysvar::KEY_LOCATOR::leftDoor_tag2 = 0;
+    @sysvar::KEY_LOCATOR::leftDoor_tag3 = 0;
+    
+    strncpy(leftDoor_tagText, "", 40); 
+    strncat(leftDoor_tagText, "Tag: ", 40); 
+    if (0 != (leftDoor & 1 << 0)) 
+    {
+      strncat(leftDoor_tagText, "0 ", 40); 
+      @sysvar::KEY_LOCATOR::leftDoor_tag0 = 1;
+    }
+    if (0 != (leftDoor & 1 << 1))
+    {
+      strncat(leftDoor_tagText, "1 ", 40); 
+      @sysvar::KEY_LOCATOR::leftDoor_tag1 = 1;
+    }
+    if (0 != (leftDoor & 1 << 2))
+    {
+      strncat(leftDoor_tagText, "2 ", 40); 
+      @sysvar::KEY_LOCATOR::leftDoor_tag2 = 1;
+    }
+    if (0 != (leftDoor & 1 << 3))
+    {
+      strncat(leftDoor_tagText, "3 ", 40); 
+      @sysvar::KEY_LOCATOR::leftDoor_tag3 = 1;
+    }
+    
+    sysSetVariableString(sysvar::KEY_LOCATOR::leftDoor_tagText, leftDoor_tagText);
+  }
+  else
+  {
+    @sysvar::KEY_LOCATOR::leftDoor_tag0 = 0;
+    @sysvar::KEY_LOCATOR::leftDoor_tag1 = 0;
+    @sysvar::KEY_LOCATOR::leftDoor_tag2 = 0;
+    @sysvar::KEY_LOCATOR::leftDoor_tag3 = 0;
+    
+    strncpy(leftDoor_tagText, "", 40); 
+    sysSetVariableString(sysvar::KEY_LOCATOR::leftDoor_tagText, leftDoor_tagText);
+  }
+   
+  //*** check for RIGHT DOOR ***
+  if (0 != (tagLocationSignal & (byte)TAG_LOC_RIGHT_DOOR))
+  {
+    rightDoor = rightDoor | (1 << tagIdx);
+  }
+  else
+  {
+    rightDoor = rightDoor & (0xFF - (1 << tagIdx));
+  }
+  
+  if (rightDoor > 0)
+  {
+    @sysvar::KEY_LOCATOR::rightDoor_tag0 = 0;
+    @sysvar::KEY_LOCATOR::rightDoor_tag1 = 0;
+    @sysvar::KEY_LOCATOR::rightDoor_tag2 = 0;
+    @sysvar::KEY_LOCATOR::rightDoor_tag3 = 0;
+    
+    strncpy(rightDoor_tagText, "", 40); 
+    strncat(rightDoor_tagText, "Tag: ", 40); 
+    if (0 != (rightDoor & 1 << 0))
+    {
+      strncat(rightDoor_tagText, "0 ", 40); 
+      @sysvar::KEY_LOCATOR::rightDoor_tag0 = 1;
+    }
+    if (0 != (rightDoor & 1 << 1))
+    {
+      strncat(rightDoor_tagText, "1 ", 40); 
+      @sysvar::KEY_LOCATOR::rightDoor_tag1 = 1;
+    }      
+    if (0 != (rightDoor & 1 << 2))
+    {
+      strncat(rightDoor_tagText, "2 ", 40); 
+      @sysvar::KEY_LOCATOR::rightDoor_tag2 = 1;
+    }
+    if (0 != (rightDoor & 1 << 3))
+    {
+      strncat(rightDoor_tagText, "3 ", 40); 
+      @sysvar::KEY_LOCATOR::rightDoor_tag3 = 1;
+    }
+   
+    sysSetVariableString(sysvar::KEY_LOCATOR::rightDoor_tagText, rightDoor_tagText);
+  }
+  else
+  {
+    @sysvar::KEY_LOCATOR::rightDoor_tag0 = 0;
+    @sysvar::KEY_LOCATOR::rightDoor_tag1 = 0;
+    @sysvar::KEY_LOCATOR::rightDoor_tag2 = 0;
+    @sysvar::KEY_LOCATOR::rightDoor_tag3 = 0;
+        
+    strncpy(rightDoor_tagText, "", 40); 
+    sysSetVariableString(sysvar::KEY_LOCATOR::rightDoor_tagText, rightDoor_tagText);
+  }
+  
+  //*** check for INSIDE VEHICLE ***
+  if (0 != (tagLocationSignal & (byte)TAG_LOC_INSIDE_VEHICLE))
+  {
+    insideVehicle = insideVehicle | (1 << tagIdx);
+  }
+  else
+  {
+    insideVehicle = insideVehicle & (0xFF - (1 << tagIdx));
+  }
+  
+  if (insideVehicle > 0)
+  {
+    @sysvar::KEY_LOCATOR::insideVehicle_tag0 = 0;
+    @sysvar::KEY_LOCATOR::insideVehicle_tag1 = 0;
+    @sysvar::KEY_LOCATOR::insideVehicle_tag2 = 0;
+    @sysvar::KEY_LOCATOR::insideVehicle_tag3 = 0;
+        
+    strncpy(insideVehicle_tagText, "", 40); 
+    strncat(insideVehicle_tagText, "Tag: ", 40); 
+    if (0 != (insideVehicle & 1 << 0)) 
+    {
+      strncat(insideVehicle_tagText, "0 ", 40); 
+      @sysvar::KEY_LOCATOR::insideVehicle_tag0 = 1;
+    }
+    if (0 != (insideVehicle & 1 << 1))
+    {
+      strncat(insideVehicle_tagText, "1 ", 40); 
+      @sysvar::KEY_LOCATOR::insideVehicle_tag1 = 1;
+    }
+    if (0 != (insideVehicle & 1 << 2))
+    {
+      strncat(insideVehicle_tagText, "2 ", 40); 
+      @sysvar::KEY_LOCATOR::insideVehicle_tag2 = 1;
+    }
+    if (0 != (insideVehicle & 1 << 3)) 
+    {
+      strncat(insideVehicle_tagText, "3 ", 40); 
+      @sysvar::KEY_LOCATOR::insideVehicle_tag3 = 1;
+    }
+    
+    sysSetVariableString(sysvar::KEY_LOCATOR::insideVehicle_tagText, insideVehicle_tagText);
+  }
+  else
+  {
+    @sysvar::KEY_LOCATOR::insideVehicle_tag0 = 0;
+    @sysvar::KEY_LOCATOR::insideVehicle_tag1 = 0;
+    @sysvar::KEY_LOCATOR::insideVehicle_tag2 = 0;
+    @sysvar::KEY_LOCATOR::insideVehicle_tag3 = 0;
+        
+    strncpy(insideVehicle_tagText, "", 40); 
+    sysSetVariableString(sysvar::KEY_LOCATOR::insideVehicle_tagText, insideVehicle_tagText);
+  }  
+  
+  //*** check for OUTSIDE TRUNK ***
+  if (0 != (tagLocationSignal & (byte)TAG_LOC_OUTSIDE_TRUNK))
+  {
+    outsideTrunk = outsideTrunk | (1 << tagIdx);
+  }
+  else
+  {
+    outsideTrunk = outsideTrunk & (0xFF - (1 << tagIdx));
+  }
+  
+  if (outsideTrunk > 0)
+  {
+    @sysvar::KEY_LOCATOR::outsideTrunk_tag0 = 0;
+    @sysvar::KEY_LOCATOR::outsideTrunk_tag1 = 0;
+    @sysvar::KEY_LOCATOR::outsideTrunk_tag2 = 0;
+    @sysvar::KEY_LOCATOR::outsideTrunk_tag3 = 0;
+        
+    strncpy(outsideTrunk_tagText, "", 40); 
+    strncat(outsideTrunk_tagText, "Tag: ", 40); 
+    if (0 != (outsideTrunk & 1 << 0))
+    {
+      strncat(outsideTrunk_tagText, "0 ", 40); 
+      @sysvar::KEY_LOCATOR::outsideTrunk_tag0 = 1;
+    }
+    if (0 != (outsideTrunk & 1 << 1))
+    {
+      strncat(outsideTrunk_tagText, "1 ", 40); 
+      @sysvar::KEY_LOCATOR::outsideTrunk_tag1 = 1;
+    }
+    if (0 != (outsideTrunk & 1 << 2))
+    {
+      strncat(outsideTrunk_tagText, "2 ", 40); 
+      @sysvar::KEY_LOCATOR::outsideTrunk_tag2 = 1;
+    }
+    if (0 != (outsideTrunk & 1 << 3))
+    {
+      strncat(outsideTrunk_tagText, "3 ", 40); 
+      @sysvar::KEY_LOCATOR::outsideTrunk_tag3 = 1;
+    }
+    
+    sysSetVariableString(sysvar::KEY_LOCATOR::outsideTrunk_tagText, outsideTrunk_tagText);
+  }
+  else
+  {
+    @sysvar::KEY_LOCATOR::outsideTrunk_tag0 = 0;
+    @sysvar::KEY_LOCATOR::outsideTrunk_tag1 = 0;
+    @sysvar::KEY_LOCATOR::outsideTrunk_tag2 = 0;
+    @sysvar::KEY_LOCATOR::outsideTrunk_tag3 = 0;
+        
+    strncpy(outsideTrunk_tagText, "", 40); 
+    sysSetVariableString(sysvar::KEY_LOCATOR::outsideTrunk_tagText, outsideTrunk_tagText);
+  }    
+  
+  //*** check for WELCOME LIGHT ***
+  if (0 != (tagLocationSignal & (byte)TAG_LOC_WELCOME_LIGHT_ZONE))
+  {
+    welcomeLight = welcomeLight | (1 << tagIdx);
+  }
+  else
+  {
+    welcomeLight = welcomeLight & (0xFF - (1 << tagIdx));
+  }
+  
+  if (welcomeLight > 0)
+  {
+    @sysvar::KEY_LOCATOR::welcomeLight = 1;
+        
+    strncpy(welcomeLight_tagText, "", 40); 
+    strncat(welcomeLight_tagText, "Tag: ", 40); 
+    if (0 != (welcomeLight & 1 << 0)) strncat(welcomeLight_tagText, "0 ", 40); 
+    if (0 != (welcomeLight & 1 << 1)) strncat(welcomeLight_tagText, "1 ", 40); 
+    if (0 != (welcomeLight & 1 << 2)) strncat(welcomeLight_tagText, "2 ", 40); 
+    if (0 != (welcomeLight & 1 << 3)) strncat(welcomeLight_tagText, "3 ", 40); 
+    
+    sysSetVariableString(sysvar::KEY_LOCATOR::welcomeLight_tagText, welcomeLight_tagText);
+  }
+  else
+  {
+    @sysvar::KEY_LOCATOR::welcomeLight = 0;
+        
+    strncpy(welcomeLight_tagText, "", 40); 
+    sysSetVariableString(sysvar::KEY_LOCATOR::welcomeLight_tagText, welcomeLight_tagText);
+  }    
+}

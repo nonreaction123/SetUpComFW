@@ -1,0 +1,3 @@
+AUTO_DETECT_ERR_HANDLING=WRITE_LOG_ENTRY
+LOAD_INFO_LOG_ENTRIES=false
+eclipse.preferences.version=1

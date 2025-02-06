@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="" interface="">
+    <namespace name="TRIGGER_UWB_Tag1" comment="" interface="">
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStartRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStopRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="strURSK" comment="" bitcount="0" isSigned="true" encoding="65001" type="string" startValue="000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ConfigID" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ProtocolVersion" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" startValue="256" minValue="256" minValuePhys="256" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32HopModeKey" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="16909060" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32SessionID" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="3946840064" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32StsIndex0" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="676799015" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u64UWBTime0" comment="" bitcount="64" isSigned="false" encoding="65001" type="longlong" startValue="0" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Channel" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" startValue="5" minValue="5" minValuePhys="5" maxValue="9" maxValuePhys="9" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8ChapsPerSlot" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="6" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8HoppingCfg" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="128" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8KeyRef" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="254" maxValuePhys="254" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8PulseShapeCombo" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8RANMultiplier" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Responders" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="7" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SlotsPerRound" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="16" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SyncCode" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" startValue="10" minValue="9" minValuePhys="9" maxValue="12" maxValuePhys="12" />
+    </namespace>
+    <namespace name="TRIGGER_UWB_Tag2" comment="" interface="">
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStartRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStopRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="strURSK" comment="" bitcount="0" isSigned="true" encoding="65001" type="string" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ConfigID" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ProtocolVersion" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" startValue="256" minValue="256" minValuePhys="256" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32HopModeKey" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32SessionID" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32StsIndex0" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u64UWBTime0" comment="" bitcount="64" isSigned="false" encoding="65001" type="longlong" startValue="0" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Channel" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="5" minValuePhys="5" maxValue="9" maxValuePhys="9" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8ChapsPerSlot" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8HoppingCfg" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8KeyRef" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" startValue="2" minValue="0" minValuePhys="0" maxValue="254" maxValuePhys="254" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8PulseShapeCombo" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8RANMultiplier" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Responders" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SlotsPerRound" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SyncCode" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="9" minValuePhys="9" maxValue="12" maxValuePhys="12" />
+    </namespace>
+    <namespace name="TRIGGER_UWB_Tag3" comment="" interface="">
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStartRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStopRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="strURSK" comment="" bitcount="0" isSigned="true" encoding="65001" type="string" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ConfigID" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ProtocolVersion" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" startValue="256" minValue="256" minValuePhys="256" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32HopModeKey" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32SessionID" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32StsIndex0" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u64UWBTime0" comment="" bitcount="64" isSigned="false" encoding="65001" type="longlong" startValue="0" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Channel" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="5" minValuePhys="5" maxValue="9" maxValuePhys="9" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8ChapsPerSlot" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8HoppingCfg" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8KeyRef" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" startValue="3" minValue="0" minValuePhys="0" maxValue="254" maxValuePhys="254" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8PulseShapeCombo" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8RANMultiplier" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Responders" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SlotsPerRound" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SyncCode" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="9" minValuePhys="9" maxValue="12" maxValuePhys="12" />
+    </namespace>
+    <namespace name="TRIGGER_UWB_Tag4" comment="" interface="">
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStartRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStopRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="strURSK" comment="" bitcount="0" isSigned="true" encoding="65001" type="string" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ConfigID" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ProtocolVersion" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" startValue="256" minValue="256" minValuePhys="256" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32HopModeKey" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32SessionID" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32StsIndex0" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u64UWBTime0" comment="" bitcount="64" isSigned="false" encoding="65001" type="longlong" startValue="0" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Channel" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="5" minValuePhys="5" maxValue="9" maxValuePhys="9" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8ChapsPerSlot" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8HoppingCfg" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8KeyRef" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="254" maxValuePhys="254" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8PulseShapeCombo" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8RANMultiplier" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Responders" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SlotsPerRound" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SyncCode" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="9" minValuePhys="9" maxValue="12" maxValuePhys="12" />
+    </namespace>
+    <namespace name="TRIGGER_UWB_Tag5" comment="" interface="">
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStartRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStopRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="strURSK" comment="" bitcount="0" isSigned="true" encoding="65001" type="string" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ConfigID" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ProtocolVersion" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" startValue="256" minValue="256" minValuePhys="256" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32HopModeKey" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32SessionID" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32StsIndex0" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u64UWBTime0" comment="" bitcount="64" isSigned="false" encoding="65001" type="longlong" startValue="0" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Channel" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="5" minValuePhys="5" maxValue="9" maxValuePhys="9" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8ChapsPerSlot" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8HoppingCfg" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8KeyRef" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" startValue="5" minValue="0" minValuePhys="0" maxValue="254" maxValuePhys="254" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8PulseShapeCombo" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8RANMultiplier" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Responders" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SlotsPerRound" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SyncCode" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="9" minValuePhys="9" maxValue="12" maxValuePhys="12" />
+    </namespace>
+    <namespace name="TRIGGER_UWB_Tag6" comment="" interface="">
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStartRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="btnStopRanging" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+        <valuetable name="On_Off" definesMinMax="true">
+          <valuetableentry value="0" lowerBound="0" upperBound="0" description="Off" displayString="Off" />
+          <valuetableentry value="1" lowerBound="1" upperBound="1" description="On" displayString="On" />
+          <valuetableentry value="2" lowerBound="2" upperBound="2" description="Invalid" displayString="Invalid" />
+        </valuetable>
+      </variable>
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="strURSK" comment="" bitcount="0" isSigned="true" encoding="65001" type="string" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ConfigID" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u16ProtocolVersion" comment="" bitcount="16" isSigned="false" encoding="65001" type="int" startValue="256" minValue="256" minValuePhys="256" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32HopModeKey" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32SessionID" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u32StsIndex0" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="4294967295" maxValuePhys="4294967295" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u64UWBTime0" comment="" bitcount="64" isSigned="false" encoding="65001" type="longlong" startValue="0" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Channel" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="5" minValuePhys="5" maxValue="9" maxValuePhys="9" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8ChapsPerSlot" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8HoppingCfg" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8KeyRef" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" startValue="6" minValue="0" minValuePhys="0" maxValue="254" maxValuePhys="254" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8PulseShapeCombo" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8RANMultiplier" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8Responders" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SlotsPerRound" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" minValue="0" minValuePhys="0" maxValue="256" maxValuePhys="256" />
+      <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="u8SyncCode" comment="" bitcount="8" isSigned="false" encoding="65001" type="int" minValue="9" minValuePhys="9" maxValue="12" maxValuePhys="12" />
+    </namespace>
+  </namespace>
+</systemvariables>

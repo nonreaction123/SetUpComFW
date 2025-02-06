@@ -1,0 +1,546 @@
+/*@!Encoding:1252*/
+includes
+{ 
+  #include "Lib\Diag_Req_Resp.cin"
+  #include "Lib\DiagUtilities_New.cin"
+  #include "Lib\InvalidFrame.cin"
+  #include "Lib\PowerFluctuation.cin"
+}
+
+variables
+{ 
+  
+  //const byte Bosch = 0x61;
+  Char LogfileName[1000];
+  Char TestcaseName[1000];
+  Char ECU_qualifier[1000] = "DiagAnchor2";
+  Char Pos_F192[1000] = "62 F1 92 46 30 30 35 56 30 33 34 35 33 30 30"; // F005V0345300 (Modify the value in corresponds build package).
+  Char Pos_F195[1000] = "62 F1 95 02 06 00 05 06 00 05"; // Modify the value in corresponds build version. //62 F1 95 02 06 00 04 06 00 04
+  message Anchor1Nm Anchr1;
+  message Anchor2Nm Anchr2;
+  message Anchor3Nm Anchr3;
+  message Anchor4Nm Anchr4;
+  message Anchor5Nm Anchr5;
+  message Anchor6Nm Anchr6;
+  message Anchor7Nm Anchr7;
+  message Anchor8Nm Anchr8;
+  message Anchor9Nm Anchr9;
+  timer Wait_Time;
+  
+}
+
+
+on timer Wait_Time
+{
+  write("1");
+}
+
+//Wake up Can
+NM_Wakeup()
+{
+    output(Anchr1);
+    output(Anchr2);
+    output(Anchr3);
+    output(Anchr4);
+    output(Anchr5);
+    output(Anchr6);
+    output(Anchr7);
+    output(Anchr8);
+    output(Anchr9);
+    testwaitfortimeout(200);  
+}
+
+
+PreCondition()
+{
+    testCaseComment("Precondition");
+    Teststep("1","Start tester present");
+    diagStartTesterPresent(ECU_qualifier);
+    TestStep("2","Send request 10 01 to enter Diagnostic Default Session ");
+    SendDiag_Request_Verify_Response_Step(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("3","Verify Anchor Software ");
+    VerifyAnchorSoftware(ECU_qualifier,"22 F1 95","50");
+}
+
+PostCondition()
+{
+    testCaseComment("PostCondition");
+    TestStep("1","Send request 10 01 to enter Diagnostic Default Session");
+    SendDiag_Request_Verify_Response_Step(ECU_qualifier,"10 01","50 01 00 32 01 F4");
+    TestStep("2","Stop tester present");
+    diagStopTesterPresent(ECU_qualifier);
+    testwaitfortimeout(500);
+}
+
+
+StartLogging_Anchor(Char UseCaseName[])
+{
+    Strncat(LogfileName, "Logs/", 6);
+    Strncat(LogfileName, UseCaseName, elcount(TestcaseName));
+    Strncat(LogfileName, ".asc", elcount(TestcaseName));
+    setLogFileName(LogfileName);
+    StartLogging();
+}
+
+////////////////////////////////////////////////
+testcase TCS_PK_HGT_COMFW_PowerFluctuationLtoH_SingleFrame_InvalidCANID_StandardCAN_AnchorRejectInvalid_210686()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COM_FIREWALL_PowerFluctuation_SingleFrame_AnchorRejectInvalidRoutine_1_210686");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_ID_Standard_CAN_Single_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationLowtoHigh();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_CAN_ID_Standard_CAN_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANID_StandardCAN_AnchorRejectInvalid_210687()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANID_StandardCAN_AnchorRejectInvalid_210687");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_ID_Standard_CAN_Single_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationHightoLow();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_CAN_ID_Standard_CAN_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANID_StandardCAN_AnchorRejectInvalid_210691()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANID_StandardCAN_AnchorRejectInvalid_210691");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_ID_Standard_CAN_Single_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    ControlStageBySignal();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_CAN_ID_Standard_CAN_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+///////////////////////////////////////////////////////////////
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationLToH_SingleFrame_InvalidCANID_ExtendedCAN_AnchorRejectInvalid_210689()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLToH_SingleFrame_InvalidCANID_ExtendedCAN_AnchorRejectInvalid_210689");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_ID_Extended_CAN_Single_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationLowtoHigh();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_CAN_ID_Extended_CAN_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANID_ExtendedCAN_AnchorRejectInvalid_210692()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANID_ExtendedCAN_AnchorRejectInvalid_210692");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_ID_Extended_CAN_Single_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationHightoLow();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_CAN_ID_Extended_CAN_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANID_ExtendedCAN_AnchorRejectInvalid_211070()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANID_ExtendedCAN_AnchorRejectInvalid_211070");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_ID_Extended_CAN_Single_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    ControlStageBySignal();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_CAN_ID_Extended_CAN_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+
+///////////////////////////////////////////////////////////////
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationLtoH_SingleFrame_InvalidCANData_StandardCAN_AnchorRejectInvalid_211071()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLtoH_SingleFrame_InvalidCANData_StandardCAN_AnchorRejectInvalid_211071");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Standard_Single_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationLowtoHigh();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_CAN_Data_Standard_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANData_StandardCAN_AnchorRejectInvalid_212030()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANData_StandardCAN_AnchorRejectInvalid_212030");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Standard_Single_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationHightoLow();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_CAN_Data_Standard_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANData_StandardCAN_AnchorRejectInvalid_212031()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANData_StandardCAN_AnchorRejectInvalid_212031");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Standard_Single_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    ControlStageBySignal();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_CAN_Data_Standard_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+
+///////////////////////////////////////////////////////////////
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationLToH_SingleFrame_InvalidCANData_ExtendedCAN_AnchorRejectInvalid_228548()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLToH_SingleFrame_InvalidCANData_ExtendedCAN_AnchorRejectInvalid_228548");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Extended_Single_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationLowtoHigh();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_CAN_Data_Extended_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANData_ExtendedCAN_AnchorRejectInvalid_228553()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANData_ExtendedCAN_AnchorRejectInvalid_228553");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Extended_Single_Frame();
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationHightoLow();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+    Stop_Send_Invalid_CAN_Data_Extended_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANData_ExtendedCAN_AnchorRejectInvalid_228554()
+{
+    @sysvar::Invalid_CAN_Frame::Invalid_CAN_times::Invalid_CAN_attack_times = 0;
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANData_ExtendedCAN_AnchorRejectInvalid_228554");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Extended_Single_Frame();
+
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    ControlStageBySignal();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_CAN_Data_Extended_Single_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+
+///////////////////////////////////////////////////////////////
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationLToH_MultipleFrame_InvalidCANData_AnchorRejectInvalid_229882()
+{
+    
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLToH_MultipleFrame_InvalidCANData_AnchorRejectInvalid_229882");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Multiple_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationLowtoHigh();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_Multiple_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationHToL_MultipleFrame_InvalidCANData_AnchorRejectInvalid_229883()
+{
+    
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationHToL_MultipleFrame_InvalidCANData_AnchorRejectInvalid_229883");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Multiple_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationHightoLow();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_Multiple_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_COMFW_ControlStageBySignal_MultipleFrame_InvalidCANData_AnchorRejectInvalid_229885()
+{
+    
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_ControlStageBySignal_MultipleFrame_InvalidCANData_AnchorRejectInvalid_229885");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Multiple_Frame();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    ControlStageBySignal();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_Multiple_Frame();
+    PostCondition();
+    stopLogging();
+}
+
+///////////////////////////////////////////////////////////////
+
+testcase TCS_PK_HGT_COMFW_PowerFluctuationLToH_Sequence_InvalidCANData_AnchorRejectInvalid_229887()
+{
+    
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_PowerFluctuationLToH_Sequence_InvalidCANData_AnchorRejectInvalid_229887");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Sequence();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationLowtoHigh();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_Sequence();
+    PostCondition();
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_COMFW_ControlStageBySignal_Sequence_InvalidCANData_AnchorRejectInvalid_229888()
+{
+    
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_ControlStageBySignal_Sequence_InvalidCANData_AnchorRejectInvalid_229888");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Sequence();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    PowerFluctuationHightoLow();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_Sequence();
+    PostCondition();
+    stopLogging();
+}
+
+testcase TCS_PK_HGT_COMFW_ControlStageBySignal_Sequence_InvalidCANData_AnchorRejectInvalid_229889()
+{
+    
+    testCaseDescription("Test case verify that ECU don't accept invalid msg.");
+    StartLogging_Anchor("TCS_PK_HGT_COMFW_ControlStageBySignal_Sequence_InvalidCANData_AnchorRejectInvalid_229889");
+    PreCondition();  
+    testCaseComment("Actions");  
+    TestStep("1","Inject invalid CAN frame to CAN Backbone with Request Extended Sessions");
+    Send_Invalid_CAN_Data_Sequence();
+    //setTimer(Wait_Time,5);  //wait for PF
+    testWaitForTimeout(3500);
+    TestStep("2","Inject Power Fluctuation");
+    ControlStageBySignal();
+    testWaitForTimeout(500);
+    TestStep("3","Read DID FE14");
+    SendDiag_Request_Verify_Negative_Response(ECU_qualifier,"31 01 03 22 01 FE 14","7F 31 7F");
+    TestStep("4","Send valid request 10 01 to enter Default Diagnostic Session");
+    diagStartTesterPresent(ECU_qualifier);
+    SendDiag_Request_Verify_Response(ECU_qualifier,"10 01","50 01 00 32 01 F4");   
+
+    Stop_Send_Invalid_Sequence();
+    PostCondition();
+    stopLogging();
+}

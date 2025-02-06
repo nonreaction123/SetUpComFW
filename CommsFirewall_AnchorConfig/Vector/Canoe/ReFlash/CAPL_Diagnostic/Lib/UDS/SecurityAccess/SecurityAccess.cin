@@ -1,0 +1,350 @@
+/*@!Encoding:1252*/
+includes
+{
+	
+}
+
+variables
+{
+  //Request seed
+  diagRequest Request_Seed_Bosch_Request SA_Bosch_rqRequestSeed;
+  //SeedResponse
+  diagResponse Request_Seed_Bosch_Request SA_Bosch_rspRequestSeed;
+  //SendKey
+  diagRequest Send_Key_Bosch_Send SA_Bosch_rqSendKey;
+  
+  //Request seed
+  diagRequest Request_Seed_InCar1_Request SA_InCar1_rqRequestSeed;
+  //SeedResponse
+  diagResponse Request_Seed_InCar1_Request SA_InCar1_rspRequestSeed;
+  
+  //SendKey
+  diagRequest Send_Key_InCar1_Send SA_InCar1_rqSendKey;
+  
+  int i;
+  char tmp[8];    // Temporary buffer containing single HEX value
+  char out[512];  // Bigger output string and "local" to function
+  char buffer[100];
+  dword keySizeOut;
+  byte securityKey[64];
+  byte gSeedArray[48] = {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF};
+}
+
+void printHex(byte ByteArray[], int ByteArraySize)
+{
+  for (i = 0; i<ByteArraySize; i++)
+  { 
+    snprintf(tmp, elcount(tmp), "%.2X", ByteArray[i]);  // byte to HEX convert
+    strncat(out, tmp, elcount(out));  // Concatenate HEX value to output string
+  }
+ 
+  writeEx(0, 1,"%s", out);
+  
+  for (i = 0; i < 301; i++) out[i] = 0;
+  for (i = 0; i < 8; i++) tmp[i] = 0;
+  
+}
+
+testcase tc_SA_SecurityUnlockL1(char Identifier[])
+{
+    tf_SA_SecurityUnlockL1(Identifier);
+}
+
+testfunction tf_SA_SecurityUnlockL1(char Identifier[])
+{
+    nf_SA_SecurityUnlockL1(Identifier, 1);
+}
+
+
+long nf_SA_SecurityUnlockL1(
+    char Identifier[],
+    byte isTest                 //<! Is test
+    )
+{
+    int gSecurityLevel;  
+    char gVariant[200]    = "";
+    char gOption[200]     = "";
+    long returnVal;
+    char TestErrorMsg[50]="";
+    char ErrorCodeKeyGen[5] = "";
+    long KeyGenRetVal = 0;
+    write( "Security Lvl %d ",sysGetVariableDWord(sysvar::PROGRAM_ECU::SecurityLevel));  
+      
+    if (1 == @sysvar::PROGRAM_ECU::progAnchorBle)
+    {
+      getAnchorVariant(gVariant);
+    }
+    else if (1 == @sysvar::PROGRAM_ECU::progMasterBle)
+    {
+      getMbleVariant(gVariant);
+    }
+    else
+    {
+      //Do nothing
+    }
+    write("Variant: %s", gVariant);
+    if(sysGetVariableDWord(sysvar::PROGRAM_ECU::SecurityLevel) == 1)
+    {
+      gSecurityLevel = 0x65;
+      ts_RequestInCar1SeedAnchor();
+    }
+    else
+    {
+      gSecurityLevel = 0x61;
+      ts_RequestBoschSeedAnchor();
+    }
+    
+
+    write("Seed: ");
+    printHex(gSeedArray, 48);
+    
+    if (1 == SA_isSeedAllZero(gSeedArray))
+    {   // Already unlock
+        if (1 == isTest)
+        {
+            testStepPass(Identifier, "Unlocking Security L1 - already unlocked.");
+        }
+        returnVal = 1;
+    }
+    else
+    {   
+        //Calculate the key
+        KeyGenRetVal = DiagGenerateKeyFromSeed( gSeedArray, elCount(gSeedArray), gSecurityLevel, gVariant, "", securityKey, elCount(securityKey), keySizeOut);
+        if(0 == KeyGenRetVal) //diagSetTarget already set the proper ECU
+        {
+          TestStepPass("Key generated successfully.");
+          write("Key: ");
+          printHex(securityKey, elCount(securityKey));
+          // Still locked, Send Key
+           
+          if(sysGetVariableDWord(sysvar::PROGRAM_ECU::SecurityLevel) == 1)
+          {
+            ts_SendInCar1hKeyAnchor(); 
+          }
+          else
+          {
+            ts_SendBoschKeyAnchor(); 
+          }
+        }
+        else
+        {
+          strncpy(TestErrorMsg, "", 1); // clear buff
+          strncat(TestErrorMsg, "Key generation was unsuccessfully. Code: ", 45);
+          ltoa(KeyGenRetVal, ErrorCodeKeyGen, 10);
+          strncat(TestErrorMsg, ErrorCodeKeyGen, 50); 
+          TestStepFail(TestErrorMsg);
+        }
+    }
+    return returnVal;
+}
+
+
+
+byte SA_isSeedAllZero(byte gSeedArray[])
+{
+    byte result;
+    dword ii;
+    
+    result = 1; // pre-set to all zero
+    for (ii = 0; ii < elcount(gSeedArray); ii++)
+    {
+        if (0 != gSeedArray[ii])
+        {
+            result = 0;               
+            break;
+        }
+    }
+    return result;    
+}
+
+void getAnchorVariant(char Variant[])
+{
+  dword nAnchorID = 0;  
+  char anchName[100] = "";
+  
+  // sysvar::PROGRAM_ECU::AnchorID [0..8] -> Anchor1..Anchor9
+  // sysvar::PROGRAM_ECU::AnchorID [9] -> AnchorF
+  nAnchorID = (sysGetVariableDWord(sysvar::PROGRAM_ECU::AnchorID) + 1); //
+    
+  switch(nAnchorID)
+  {
+    case (1):
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchor1Version, anchName, elCount(anchName));
+      getAnchorsubVariant(anchName, Variant);
+      break;
+    case (2):
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchor2Version, anchName, elCount(anchName));
+      getAnchorsubVariant(anchName, Variant);
+      break;
+    case (3):
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchor3Version, anchName, elCount(anchName));
+      getAnchorsubVariant(anchName, Variant);
+      break;
+    case (4):
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchor4Version, anchName, elCount(anchName));
+      getAnchorsubVariant(anchName, Variant);
+      break;
+    case (5):
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchor5Version, anchName, elCount(anchName));
+      getAnchorsubVariant(anchName, Variant);
+      break;
+    case (6):
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchor6Version, anchName, elCount(anchName));
+      getAnchorsubVariant(anchName, Variant);
+      break;
+    case (7):
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchor7Version, anchName, elCount(anchName));
+      getAnchorsubVariant(anchName, Variant);
+      break;
+    case (8):
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchor8Version, anchName, elCount(anchName));
+      getAnchorsubVariant(anchName, Variant);
+      break;
+    case (9):
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchor9Version, anchName, elCount(anchName));
+      getAnchorsubVariant(anchName, Variant);
+      break;
+    case (10):
+      sysGetVariableString(sysvar::PROGRAM_ECU::strAnchorFVersion, anchName, elCount(anchName));
+      getAnchorsubVariant(anchName, Variant);
+      break;
+    default:
+      break;
+  }
+  //Debug info
+  write("AppVersion: %s", anchName);
+  
+}
+
+void getMbleVariant(char Variant[])
+{    
+  char BleName[100] = "";   
+  sysGetVariableString(sysvar::PROGRAM_ECU::strMasterBleVersion, BleName, elCount(BleName));
+  getAnchorsubVariant(BleName, Variant);     
+  //Debug info
+  write("AppVersion: %s", BleName);  
+}
+
+void getAnchorsubVariant(char VariantExtractFrom[], char VariantExtracted[] )
+{
+  char retCharVariant[20]="";  
+  if(sysGetVariableDWord(sysvar::PROGRAM_ECU::SecurityLevel) == 1)
+  {
+     strncpy(VariantExtracted, "UDS_INCAR_LVL", elCount("UDS_INCAR_LVL"));
+  }
+  else
+  {
+     strncpy(VariantExtracted, "UDS_BOSCH_LVL", elCount("UDS_BOSCH_LVL"));
+  }      
+}
+
+void ts_RequestBoschSeedAnchor()
+{
+ 
+  SA_Bosch_rqRequestSeed.SendRequest();
+  //Wait until request has been sent completely
+  if (TestWaitForDiagRequestSent(SA_Bosch_rqRequestSeed, 100) == 1)
+  {
+    TestStepPass("Request seed was sent successfully.");
+    if(UdsUtil_testWaitForDiagPositiveResponse(SA_Bosch_rqRequestSeed, 500) == 1)
+    {
+      diagGetLastResponse (SA_Bosch_rqRequestSeed, SA_Bosch_rspRequestSeed);
+      diagGetParameterRaw (SA_Bosch_rspRequestSeed, "Seed", gSeedArray, elcount(gSeedArray));
+
+      TestStepPass("Request seed response has arrived.");
+    }
+    else
+    {
+      TestStepFail("Request seed response has not arrived.");
+    }
+  }
+  else
+  {
+    TestStepFail("Request seed was sent unsuccessfully.");
+  }
+  
+}
+
+void ts_RequestInCar1SeedAnchor()
+{
+ 
+  SA_InCar1_rqRequestSeed.SendRequest();
+  //Wait until request has been sent completely
+  if (TestWaitForDiagRequestSent(SA_InCar1_rqRequestSeed, 100) == 1)
+  {
+    TestStepPass("Request seed was sent successfully.");
+    if(UdsUtil_testWaitForDiagPositiveResponse(SA_InCar1_rqRequestSeed, 100) == 1)
+    {
+      diagGetLastResponse (SA_InCar1_rqRequestSeed, SA_InCar1_rspRequestSeed);
+      diagGetParameterRaw (SA_InCar1_rspRequestSeed, "Seed", gSeedArray, elcount(gSeedArray));
+
+      TestStepPass("Request seed response has arrived.");
+    }
+    else
+    {
+      TestStepFail("Request seed response has not arrived.");
+    }
+  }
+  else
+  {
+    TestStepFail("Request seed was sent unsuccessfully.");
+  }
+  
+}
+
+void ts_SendBoschKeyAnchor()
+{
+  
+  SA_Bosch_rqSendKey.SetParameterRaw( "SecurityKey", securityKey, elcount( securityKey));
+  //Wait until request has been sent completely
+  SA_Bosch_rqSendKey.SendRequest();
+
+  if (TestWaitForDiagRequestSent(SA_Bosch_rqSendKey, 100) == 1)
+  {
+    TestStepPass("Key was sent successfully.");
+    if(UdsUtil_testWaitForDiagPositiveResponse(SA_Bosch_rqSendKey, 3000) == 1)
+    {
+      TestStepPass("ECU is unlocked.");
+    }
+    else
+    {
+      TestStepFail("ECU could not be unlocked.");
+    }
+  }
+  else
+  {
+    TestStepFail("Key was sent unsuccessfully.");
+  }
+
+}
+
+void ts_SendInCar1hKeyAnchor()
+{
+  
+  SA_InCar1_rqSendKey.SetParameterRaw( "SecurityKey", securityKey, elcount( securityKey));
+  //Wait until request has been sent completely
+  SA_InCar1_rqSendKey.SendRequest();
+
+  if (TestWaitForDiagRequestSent(SA_InCar1_rqSendKey, 100) == 1)
+  {
+    TestStepPass("Key was sent successfully.");
+    if(UdsUtil_testWaitForDiagPositiveResponse(SA_InCar1_rqSendKey, 3000) == 1)
+    {
+      TestStepPass("ECU is unlocked.");
+    }
+    else
+    {
+      TestStepFail("ECU could not be unlocked.");
+    }
+  }
+  else
+  {
+    TestStepFail("Key was sent unsuccessfully.");
+  }
+
+}
+
+
+
+
+

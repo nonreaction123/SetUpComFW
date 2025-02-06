@@ -1,0 +1,92 @@
+/*@!Encoding:1252*/
+includes
+{
+}
+
+variables
+{
+  msTimer Invalid_Keys_ms_100; // for delay 100ms 
+  message 702 Invalid_Keys_61;  // Wrong Keys (701 due to Anchor 1)
+  message 702 Invalid_Keys_62;  // Wrong Keys (701 due to Anchor 1)
+  char Invalid_Keys_62_String[100];
+  int i;
+
+  //byte check_byte0;
+}
+
+//dword string_To_Bytes(char buff_in[], byte buff_out[])
+//{
+//	dword counter, i;
+//	byte temp_byte;
+//	byte second_nibble;
+//
+//  counter=0; second_nibble=0; i=0;
+//  
+//  if(elcount(buff_out)<strlen(buff_in)/3)
+//  {
+//    write("Function string_To_Bytes received wrong parameter! buff_out array size to small ");
+//    return 0;
+//  }
+//
+//  while(buff_in[counter])
+//	{
+//		if (buff_in[counter] == 0x20)
+//		{
+//			counter++;
+//			continue;
+//		}
+//		if (!second_nibble)
+//		{
+//			temp_byte = char_To_Byte(buff_in[counter]);
+//			second_nibble = 1;
+//		}
+//		else
+//		{
+//      buff_out[i++] = (temp_byte << 4) + char_To_Byte(buff_in[counter]);
+//			second_nibble = 0;
+//		}
+//		counter++;
+//	}
+//  //write("buff_out:%02X\n",buff_out[0]);
+//	return i;
+//}
+
+//Set timer for Invalid Single Frame Communication
+on timer Invalid_Keys_ms_100
+{
+  output(Invalid_Keys_61);
+  testWaitForTimeout(100);
+  output(Invalid_Keys_62);
+  setTimer(Invalid_Keys_ms_100, 200);
+}
+
+on key 'a' {
+  Start_Send_Invalid_Keys();
+  
+}
+
+on key 'b' {
+  Stop_Send_Invalid_Keys();
+  
+}
+
+void Start_Send_Invalid_Keys ()
+{
+  Invalid_Keys_61.byte(0) = 0x27;
+  Invalid_Keys_61.byte(1) = 0x61;
+  //Invalid_Keys_62_String = "27 62 8A A5 54 37 3B";
+  //string_To_Bytes(Invalid_Keys_62_String,Invalid_Keys_62);
+  Invalid_Keys_62.byte(0) = 0x27;
+  Invalid_Keys_62.byte(1) = 0x62;
+  for (i = 0; i < 64; i++) Invalid_Keys_62.byte(i+2) = 0x01;
+  setTimer(Invalid_Keys_ms_100,200); 
+  TeststepPass("","No Response received");
+}
+
+void Stop_Send_Invalid_Keys ()
+{
+  cancelTimer(Invalid_Keys_ms_100); 
+  TeststepPass("","No Response received");
+}
+
+

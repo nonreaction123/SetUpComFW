@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+	<namespace comment="" interface="" name="">
+		<namespace comment="" interface="" name="PROGRAM_ECU">
+			<variable anlyzLocal="2" arrayLength="10" bitcount="32" comment="" encoding="65001" isSigned="true" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="boAnchor" readOnly="false" type="intarray" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor1R4Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor1Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor2R4Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor2Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor3R4Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor3Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor4R4Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor4Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor5R4Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor5Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor6R4Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor6Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor7R4Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor7Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor8R4Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor8Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor9R4BinVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchor9Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchorBleBinVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchorBleFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchorFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchorFR4BinVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchorFVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchorR4BinVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchorR4File" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchorR4PkgFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strAnchorR4PkgVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strCalBinVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strCalibrationFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterBleBinVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterBleFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterBleVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterMcuBinVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterMcuFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterMcuVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterR4BinVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterR4File" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterR4PkgFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterR4PkgVersion" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterR4RxConfigFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterR4TxConfigFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMasterR4Version" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMR4RxConfigFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strMR4TxConfigFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strProgressText" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strR4RxConfigFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="0" comment="" encoding="65001" isSigned="true" name="strR4TxConfigFile" readOnly="false" type="string" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="B2_Version" readOnly="false" startValue="1" type="int" unit="1" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="B21_Version" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="boContinuousRun" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="boProgSessionReqIgnOff" readOnly="true" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="btnStartProgram" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="progAnchorBle" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="progCalib" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="progm_anchorUwb_b21" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="progm_dialog_b21" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="progMasterBle" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="progMasterMcu" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="progMasterRanger4" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="swVariant" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" maxValue="4" maxValuePhys="4" minValue="0" minValuePhys="0" name="programmingState" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" name="boABleS32" readOnly="false" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" name="boABleTI" readOnly="false" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" name="boAR4binfile" readOnly="false" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" name="boAR4pkgfile" readOnly="false" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" name="boMBleS32" readOnly="false" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" name="boMBleTI" readOnly="false" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" name="boMR4binfile" readOnly="false" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" name="boMR4pkgfile" readOnly="false" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" name="progressPercent" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="false" name="totalLength" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="true" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="programmingDone" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="true" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="programmingInProgress" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="true" maxValue="1" maxValuePhys="1" minValue="0" minValuePhys="0" name="SecurityLevel" readOnly="false" startValue="0" type="int" unit="" valueSequence="false">
+				<valuetable definesMinMax="false" name="Custom">
+					<valuetableentry description="Bosch" displayString="Bosch" lowerBound="0" upperBound="0" value="0"/>
+					<valuetableentry description="InCar" displayString="InCar" lowerBound="1" upperBound="1" value="1"/>
+				</valuetable>
+			</variable>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="true" maxValue="8" maxValuePhys="8" minValue="0" minValuePhys="0" name="AnchorID" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+			<variable anlyzLocal="2" bitcount="32" comment="" encoding="65001" isSigned="true" name="transferredLength" readOnly="false" startValue="0" type="int" unit="" valueSequence="false"/>
+		</namespace>
+	</namespace>
+</systemvariables>

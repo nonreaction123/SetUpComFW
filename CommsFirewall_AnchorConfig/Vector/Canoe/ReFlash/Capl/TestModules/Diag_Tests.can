@@ -1,0 +1,116 @@
+/*@!Encoding:1252*/
+includes
+{
+  #include "capl\utility.cin"
+  #include "capl\SecurityAccess.cin"
+  #include "capl\DiagnosticSession.cin"
+  #pragma library("ServerSimulator.dll")
+}
+
+variables
+{
+  enum Sessions
+  {
+    enDefaultSession,
+    enExtendedSession,
+    enSecuritySession,
+    enBoschSession,
+    enBootDefaultSession,
+    enReprogrammingSession
+  };
+  
+  enum Security
+  {
+    enNoSecurity,
+    enNissanSecurity,
+    enBoschSecurity
+  };
+  
+  enum Sessions currSession;
+  enum Security currSecurity;    
+}
+
+
+
+//----------------------------------------------------------------------------
+//! \brief  Enter extended session
+//! 
+//----------------------------------------------------------------------------
+testfunction Level3_SecurityUnlock()
+{
+  byte SeedArray[258];
+  byte ReturnArray[64];
+  int  SeedArraySize   = 32;
+  int  SecurityLevel   = 0x3;
+  byte KeyArray[16];
+  int  MaxKeyArraySize = 16;
+  dword ActualSize   = 0;
+  long result;
+  int ii;
+  byte respData[1000];
+  long respSize;
+
+
+  diagRequest Request_Seed_Nissan_Security_Level_Request SeedReq;
+  
+  diagRequest Send_Key_Nissan_Security_Level_Send KeyReq;
+  //Request seed from ECU
+  DiagSendRequest(SeedReq);
+
+  //Wait for response and write seed from response parameter to array 
+  TestWaitForDiagResponse(SeedReq, 5000);
+  testWaitForTimeout(100);
+  respSize = SeedReq.GetRespPrimitiveSize();
+    write( "respSize: %ld ",respSize); 
+    for (ii = 0; ii < respSize - 2; ii++)
+    {
+        SeedArray[ii] = SeedReq.GetRespPrimitiveByte(ii + 2);
+    }
+    for (ii = 0; ii < 16; ii++)
+    {    
+       write("%lx", SeedArray[ii]);
+    }
+    //Calculate key
+    result = dllServerRequest(SeedArray, respSize, ReturnArray, elcount(ReturnArray));
+    write( "get seed request response %d", result); 
+    if( result != 64 )
+    {
+      TestStepFail( "27 61", "Error generating key" );
+    }
+    else
+    {
+      write( "generating key succeed");
+      for (ii = 0; ii < 16; ii++)
+      {    
+        write("%lx", ReturnArray[ii]);
+      }
+      DiagSetParameterRaw(KeyReq, "SecurityKey", ReturnArray, result);
+
+      //Send Key to unlock ECU
+      //utility_SendAndCheckPositiveResponse( KeyReq, "27 62", 1000 );
+        testWaitForTimeout(100);
+        DiagSendRequest(KeyReq);
+       testWaitForDiagRequestSent(KeyReq, 2000);
+
+    }
+
+}
+
+
+MainTest()
+{
+  // ----- add information to test report 
+  TestModuleTitle("Security Unlock"); 
+  utility_initBusContext();
+
+  // Initial setup
+  DiagSetTarget( "CAN_1" );
+
+
+  //ProgrammingSession();
+
+  Level3_SecurityUnlock();
+
+  
+}
+

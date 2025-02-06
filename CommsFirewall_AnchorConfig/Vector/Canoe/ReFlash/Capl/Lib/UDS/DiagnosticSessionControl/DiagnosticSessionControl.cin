@@ -1,0 +1,139 @@
+/*@!Encoding:1252*/
+//----------------------------------------------------------------------------
+//! \brief  Enter default session
+//! 
+//----------------------------------------------------------------------------
+testcase tc_DSC_DefaultSession(
+    char identifier[],      //<! Test identifier)
+    long expectedErrorCode, //<! Expected Error code
+    int timeOutForResponse  //<! Timeout in miliseconds
+    )     
+{
+    tf_DSC_DefaultSession(identifier, expectedErrorCode, timeOutForResponse);
+}
+
+testfunction tf_DSC_DefaultSession(
+    char identifier[],      //<! Test identifier)
+    long expectedErrorCode, //<! Expected Error code
+    int timeOutForResponse  //<! Timeout in miliseconds
+    )     
+{
+    diagRequest DefaultSession_Start req;
+    diagResponse * resp;
+    long returnVal;
+  
+    returnVal =  utility_SendRequestCheckResponseCode(  req,  
+                                                        resp,
+                                                        expectedErrorCode,
+                                                        timeOutForResponse,
+                                                        identifier, 1);   
+  
+    //Give some time for the reset to finish
+    //testWaitForTimeout(1000);
+}
+
+//----------------------------------------------------------------------------
+//! \brief  Enter programming session
+//! 
+//----------------------------------------------------------------------------
+testcase tc_DSC_ProgrammingSession(
+    char identifier[],      //<! Test identifier
+    long expectedErrorCode, //<! Expected Error code
+    int timeOutForResponse  //<! Timeout in miliseconds
+    )
+{
+    tf_DSC_ProgrammingSession(identifier,expectedErrorCode,timeOutForResponse);
+}
+
+testfunction tf_DSC_ProgrammingSession(
+    char identifier[],      //<! Test identifier
+    long expectedErrorCode, //<! Expected Error code
+    int timeOutForResponse  //<! Timeout in miliseconds
+    )
+{
+    diagRequest     ProgrammingSession_Start req;
+    diagRequest     ExtendedDiagnosticSession_Start ExtSessReq;
+    diagResponse  * resp;
+    long            returnVal;
+    
+    //Enter Programming Session
+    returnVal =  utility_SendRequestCheckResponseCode(  req,  
+                                                        resp,
+                                                        expectedErrorCode,
+                                                        timeOutForResponse,
+                                                        identifier, 1);   
+    // No wait - FBL gives positive response.
+}
+
+//----------------------------------------------------------------------------
+//! \brief  Enter extended session
+//! 
+//----------------------------------------------------------------------------
+testcase tc_DSC_ExtendedSession(
+    char identifier[],      //<! Test identifier)
+    long expectedErrorCode, //<! Expected Error code
+    int timeOutForResponse //<! Timeout in miliseconds
+    )     
+{
+    tf_DSC_ExtendedSession(identifier, expectedErrorCode, timeOutForResponse);
+}
+
+
+testfunction tf_DSC_ExtendedSession(
+    char identifier[],      //<! Test identifier)
+    long expectedErrorCode, //<! Expected Error code
+    int timeOutForResponse  //<! Timeout in miliseconds
+    )     
+{
+    nf_DSC_ExtendedSession_Fuzzy(identifier,  
+                                expectedErrorCode,
+                                timeOutForResponse,
+                                1);
+}
+
+
+//----------------------------------------------------------------------------
+//! \brief  Enter extended session (Fuzzy)
+//! 
+//----------------------------------------------------------------------------
+testcase tc_DSC_ExtendedSession_Fuzzy(
+    char identifier[],          //<! Test identifier
+    long expectedErrorCode,     //<! Expected Error code
+    int timeOutForResponse,     //<! Timeout in miliseconds
+    byte isTest                 //<! Is test
+    ) 
+{
+    tf_DSC_ExtendedSession_Fuzzy(identifier, expectedErrorCode, timeOutForResponse, isTest);
+}
+
+testfunction tf_DSC_ExtendedSession_Fuzzy(
+    char identifier[],          //<! Test identifier
+    long expectedErrorCode,     //<! Expected Error code
+    int timeOutForResponse,     //<! Timeout in miliseconds
+    byte isTest                 //<! Is test
+    ) 
+{
+    nf_DSC_ExtendedSession_Fuzzy(identifier,  
+                                expectedErrorCode,
+                                timeOutForResponse,
+                                isTest);
+}
+
+long nf_DSC_ExtendedSession_Fuzzy(
+    char identifier[],          //<! Test identifier
+    long expectedErrorCode,     //<! Expected Error code
+    int timeOutForResponse,     //<! Timeout in miliseconds
+    byte isTest                 //<! Is test
+    )
+{
+    diagRequest ExtendedDiagnosticSession_Start req;
+    diagResponse * resp;
+    long returnVal;
+  
+    returnVal =  utility_SendRequestCheckResponseCode( req,  
+                                             resp,
+                                             expectedErrorCode,
+                                             timeOutForResponse,
+                                             identifier, isTest);     
+    return returnVal;
+}

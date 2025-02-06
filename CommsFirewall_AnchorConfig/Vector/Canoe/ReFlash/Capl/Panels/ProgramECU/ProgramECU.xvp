@@ -1,0 +1,376 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="ProgramECU">
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl6" Children="Controls" ControlName="grpStartProgramming">
+      <Object Type="Vector.CANalyzer.Panels.Design.CheckBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="CheckBoxControl3" Children="Controls" ControlName="Check Box">
+        <Property Name="Name">CheckBoxControl3</Property>
+        <Property Name="Size">102, 17</Property>
+        <Property Name="Location">120, 32</Property>
+        <Property Name="Text">Continuous Run</Property>
+        <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;boContinuousRun;1;;;-1</Property>
+        <Property Name="TabIndex">1</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl1" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl1</Property>
+        <Property Name="Size">284, 52</Property>
+        <Property Name="Location">228, 14</Property>
+        <Property Name="Text">Note:
+    You may have to register the file as "User Files" first.
+    Go to Configuration-&gt;Options-&gt;Extensions-&gt;User Files.
+    Add the file you want to use.
+</Property>
+        <Property Name="ForeColor">HotTrack</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl1" Children="Controls" ControlName="btnStartProgram">
+        <Property Name="Name">ButtonControl1</Property>
+        <Property Name="Size">81, 30</Property>
+        <Property Name="Location">16, 24</Property>
+        <Property Name="Font">Microsoft Sans Serif, 12pt</Property>
+        <Property Name="Text">Start</Property>
+        <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;btnStartProgram;1;;;-1</Property>
+        <Property Name="TabIndex">0</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl6</Property>
+      <Property Name="Size">512, 72</Property>
+      <Property Name="Location">16, 589</Property>
+      <Property Name="Text">2. Start Programming</Property>
+      <Property Name="TabIndex">6</Property>
+      <Property Name="IsVisibleByLoad">False</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl5" Children="Controls" ControlName="grpProgramSelect">
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl9" Children="Controls" ControlName="grpCalibration">
+        <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl10" Children="Controls" ControlName="grpApplication">
+          <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl5" Children="Controls" ControlName="iobSWVersion">
+            <Property Name="Name">TextBoxControl5</Property>
+            <Property Name="Size">352, 20</Property>
+            <Property Name="Location">24, 72</Property>
+            <Property Name="AlarmUpperTextColor">WindowText</Property>
+            <Property Name="ValueDecimalPlaces">0</Property>
+            <Property Name="AlarmLowerBkgColor">Salmon</Property>
+            <Property Name="ValueDisplay">Text</Property>
+            <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+            <Property Name="AlarmLowerTextColor">WindowText</Property>
+            <Property Name="AlarmGeneralSettings">1;0;0;0</Property>
+            <Property Name="DisplayLabel">Left</Property>
+            <Property Name="DescriptionText">ST SW Version:</Property>
+            <Property Name="DescriptionSize">85, 20</Property>
+            <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;strSwVersion;4;;;-1</Property>
+            <Property Name="TabIndex">2</Property>
+            <Property Name="ReadOnlyControl">True</Property>
+          </Object>
+          <Object Type="Vector.CANalyzer.Panels.Design.PathControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="PathControl5" Children="Controls" ControlName="Path Dialog">
+            <Property Name="Name">PathControl5</Property>
+            <Property Name="Size">352, 23</Property>
+            <Property Name="Location">24, 40</Property>
+            <Property Name="DlgTitle">Select ConfigData binary file to program</Property>
+            <Property Name="FileDlgFilter">BIN file|*.bin</Property>
+            <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;strApplicationFile;4;;;-1</Property>
+            <Property Name="TabIndex">1</Property>
+          </Object>
+          <Object Type="Vector.CANalyzer.Panels.Design.CheckBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="CheckBoxControl6" Children="Controls" ControlName="cbProgApplication">
+            <Property Name="Name">CheckBoxControl6</Property>
+            <Property Name="Size">120, 17</Property>
+            <Property Name="Location">8, 16</Property>
+            <Property Name="Text">Program Application</Property>
+            <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;progApp;1;;;-1</Property>
+            <Property Name="TabIndex">0</Property>
+          </Object>
+          <Property Name="Name">GroupBoxControl10</Property>
+          <Property Name="Size">384, 104</Property>
+          <Property Name="Location">4, 109</Property>
+          <Property Name="Text">Application</Property>
+          <Property Name="TabIndex">3</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl6" Children="Controls" ControlName="iobCalibVersion">
+          <Property Name="Name">TextBoxControl6</Property>
+          <Property Name="Size">342, 20</Property>
+          <Property Name="Location">24, 64</Property>
+          <Property Name="AlarmUpperTextColor">WindowText</Property>
+          <Property Name="ValueDecimalPlaces">0</Property>
+          <Property Name="AlarmLowerBkgColor">Salmon</Property>
+          <Property Name="ValueDisplay">Text</Property>
+          <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+          <Property Name="AlarmLowerTextColor">WindowText</Property>
+          <Property Name="AlarmGeneralSettings">1;0;0;0</Property>
+          <Property Name="DisplayLabel">Left</Property>
+          <Property Name="DescriptionText">Calib Version:</Property>
+          <Property Name="DescriptionSize">75, 20</Property>
+          <Property Name="SymbolConfiguration">5;16;PROGRAM_ECU;;;strConfigIDNumVersion;4;;;-1;;;</Property>
+          <Property Name="TabIndex">2</Property>
+          <Property Name="ReadOnlyControl">True</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.PathControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="PathControl6" Children="Controls" ControlName="Path Dialog">
+          <Property Name="Name">PathControl6</Property>
+          <Property Name="Size">352, 23</Property>
+          <Property Name="Location">24, 32</Property>
+          <Property Name="DlgTitle">Select ConfigData binary file to program</Property>
+          <Property Name="FileDlgFilter">BIN file|*.bin</Property>
+          <Property Name="SymbolConfiguration">5;16;PROGRAM_ECU;;;strConfigurationFile;4;;;-1;;;</Property>
+          <Property Name="TabIndex">1</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.CheckBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="CheckBoxControl7" Children="Controls" ControlName="cbProgCaibration">
+          <Property Name="Name">CheckBoxControl7</Property>
+          <Property Name="Size">117, 17</Property>
+          <Property Name="Location">28, 14</Property>
+          <Property Name="Text">Program Calibration</Property>
+          <Property Name="SymbolConfiguration">5;16;PROGRAM_ECU;;;progCalib;1;;;-1;;;</Property>
+          <Property Name="TabIndex">0</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl9</Property>
+        <Property Name="Size">384, 104</Property>
+        <Property Name="Location">8, 128</Property>
+        <Property Name="Text">Calibration</Property>
+        <Property Name="TabIndex">3</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl3" Children="Controls" ControlName="grpAnchor">
+        <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl3" Children="Controls" ControlName="iobAnchorVersion">
+          <Property Name="Name">TextBoxControl3</Property>
+          <Property Name="Size">352, 20</Property>
+          <Property Name="Location">24, 108</Property>
+          <Property Name="AlarmUpperTextColor">WindowText</Property>
+          <Property Name="ValueDecimalPlaces">0</Property>
+          <Property Name="AlarmLowerBkgColor">Salmon</Property>
+          <Property Name="ValueDisplay">Text</Property>
+          <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+          <Property Name="AlarmLowerTextColor">WindowText</Property>
+          <Property Name="AlarmGeneralSettings">1;0;0;100</Property>
+          <Property Name="DisplayLabel">Left</Property>
+          <Property Name="DescriptionText">Anchor SW Version:</Property>
+          <Property Name="DescriptionSize">106, 20</Property>
+          <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;strConfigIDNumVersion;4;;;-1</Property>
+          <Property Name="TabIndex">2</Property>
+          <Property Name="ReadOnlyControl">True</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.PathControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="PathControl3" Children="Controls" ControlName="pathConfigData">
+          <Property Name="Name">PathControl3</Property>
+          <Property Name="Size">352, 23</Property>
+          <Property Name="Location">24, 79</Property>
+          <Property Name="DlgTitle">Select ConfigData binary file to program</Property>
+          <Property Name="FileDlgFilter">BIN file|*.bin</Property>
+          <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;strAnchorFile;4;;;-1</Property>
+          <Property Name="TabIndex">1</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.CheckBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="CheckBoxControl4" Children="Controls" ControlName="cbProgAnchor">
+          <Property Name="Name">CheckBoxControl4</Property>
+          <Property Name="Size">102, 17</Property>
+          <Property Name="Location">8, 19</Property>
+          <Property Name="Text">Program Anchor</Property>
+          <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;progAnchorSW;1;;;-1</Property>
+          <Property Name="TabIndex">0</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl7" Children="Controls" ControlName="Group Box">
+          <Object Type="Vector.CANalyzer.Panels.Design.RadioButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="RadioButtonControl3" Children="Controls" ControlName="Radio Button">
+            <Property Name="Name">RadioButtonControl3</Property>
+            <Property Name="Size">65, 17</Property>
+            <Property Name="Location">361, 19</Property>
+            <Property Name="Text">Anchor6</Property>
+            <Property Name="SwitchValue">6</Property>
+            <Property Name="SymbolConfiguration">5;16;PROGRAM_ECU;;;AnchorID;1;;;-1;;;</Property>
+            <Property Name="TabIndex">5</Property>
+          </Object>
+          <Object Type="Vector.CANalyzer.Panels.Design.RadioButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="RadioButtonControl4" Children="Controls" ControlName="Radio Button">
+            <Property Name="Name">RadioButtonControl4</Property>
+            <Property Name="Size">65, 17</Property>
+            <Property Name="Location">290, 19</Property>
+            <Property Name="Text">Anchor5</Property>
+            <Property Name="SwitchValue">5</Property>
+            <Property Name="SymbolConfiguration">5;16;PROGRAM_ECU;;;AnchorID;1;;;-1;;;</Property>
+            <Property Name="TabIndex">6</Property>
+          </Object>
+          <Object Type="Vector.CANalyzer.Panels.Design.RadioButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="RadioButtonControl6" Children="Controls" ControlName="Radio Button">
+            <Property Name="Name">RadioButtonControl6</Property>
+            <Property Name="Size">65, 17</Property>
+            <Property Name="Location">148, 19</Property>
+            <Property Name="Text">Anchor3</Property>
+            <Property Name="SwitchValue">3</Property>
+            <Property Name="SymbolConfiguration">5;16;PROGRAM_ECU;;;AnchorID;1;;;-1;;;</Property>
+            <Property Name="TabIndex">8</Property>
+          </Object>
+          <Object Type="Vector.CANalyzer.Panels.Design.RadioButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="RadioButtonControl1" Children="Controls" ControlName="Radio Button">
+            <Property Name="Name">RadioButtonControl1</Property>
+            <Property Name="Size">65, 17</Property>
+            <Property Name="Location">6, 19</Property>
+            <Property Name="Text">Anchor1</Property>
+            <Property Name="SymbolConfiguration">5;16;PROGRAM_ECU;;;AnchorID;1;;;-1;;;</Property>
+            <Property Name="TabIndex">3</Property>
+          </Object>
+          <Object Type="Vector.CANalyzer.Panels.Design.RadioButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="RadioButtonControl2" Children="Controls" ControlName="Radio Button">
+            <Property Name="Name">RadioButtonControl2</Property>
+            <Property Name="Size">65, 17</Property>
+            <Property Name="Location">77, 19</Property>
+            <Property Name="Text">Anchor2</Property>
+            <Property Name="SwitchValue">2</Property>
+            <Property Name="SymbolConfiguration">5;16;PROGRAM_ECU;;;AnchorID;1;;;-1;;;</Property>
+            <Property Name="TabIndex">4</Property>
+          </Object>
+          <Object Type="Vector.CANalyzer.Panels.Design.RadioButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="RadioButtonControl5" Children="Controls" ControlName="Radio Button">
+            <Property Name="Name">RadioButtonControl5</Property>
+            <Property Name="Size">65, 17</Property>
+            <Property Name="Location">219, 19</Property>
+            <Property Name="Text">Anchor4</Property>
+            <Property Name="SwitchValue">4</Property>
+            <Property Name="SymbolConfiguration">5;16;PROGRAM_ECU;;;AnchorID;1;;;-1;;;</Property>
+            <Property Name="TabIndex">7</Property>
+          </Object>
+          <Property Name="Name">GroupBoxControl7</Property>
+          <Property Name="Size">438, 39</Property>
+          <Property Name="Location">60, 34</Property>
+          <Property Name="Text">Description</Property>
+          <Property Name="TabIndex">9</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl3</Property>
+        <Property Name="Size">498, 134</Property>
+        <Property Name="Location">8, 337</Property>
+        <Property Name="Text">Anchor SW</Property>
+        <Property Name="TabIndex">2</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl1" Children="Controls" ControlName="grpMasterDialog">
+        <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl1" Children="Controls" ControlName="iobMasterVersion">
+          <Property Name="Name">TextBoxControl1</Property>
+          <Property Name="Size">354, 20</Property>
+          <Property Name="Location">24, 60</Property>
+          <Property Name="AlarmUpperTextColor">WindowText</Property>
+          <Property Name="ValueDecimalPlaces">0</Property>
+          <Property Name="AlarmLowerBkgColor">Salmon</Property>
+          <Property Name="ValueDisplay">Text</Property>
+          <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+          <Property Name="AlarmLowerTextColor">WindowText</Property>
+          <Property Name="AlarmGeneralSettings">1;0;0;100</Property>
+          <Property Name="DisplayLabel">Left</Property>
+          <Property Name="DescriptionText">Master Dialog SW Version:</Property>
+          <Property Name="DescriptionSize">140, 20</Property>
+          <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;strConfigIDNumVersion;4;;;-1</Property>
+          <Property Name="TabIndex">2</Property>
+          <Property Name="ReadOnlyControl">True</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.PathControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="PathControl1" Children="Controls" ControlName="pathConfigData">
+          <Property Name="Name">PathControl1</Property>
+          <Property Name="Size">352, 23</Property>
+          <Property Name="Location">24, 31</Property>
+          <Property Name="DlgTitle">Select ConfigData binary file to program</Property>
+          <Property Name="FileDlgFilter">BIN file|*.bin</Property>
+          <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;strMasterFile;4;;;-1</Property>
+          <Property Name="TabIndex">1</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.CheckBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="CheckBoxControl1" Children="Controls" ControlName="cbProgMasterDialog">
+          <Property Name="Name">CheckBoxControl1</Property>
+          <Property Name="Size">133, 17</Property>
+          <Property Name="Location">8, 19</Property>
+          <Property Name="Text">Program Master Dialog</Property>
+          <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;progMasterSW;1;;;-1</Property>
+          <Property Name="TabIndex">0</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl1</Property>
+        <Property Name="Size">498, 90</Property>
+        <Property Name="Location">8, 241</Property>
+        <Property Name="Text">Master Dialog SW</Property>
+        <Property Name="TabIndex">0</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl2" Children="Controls" ControlName="grpApplication">
+        <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl8" Children="Controls" ControlName="grpApplication">
+          <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl4" Children="Controls" ControlName="iobSWVersion">
+            <Property Name="Name">TextBoxControl4</Property>
+            <Property Name="Size">352, 20</Property>
+            <Property Name="Location">24, 72</Property>
+            <Property Name="AlarmUpperTextColor">WindowText</Property>
+            <Property Name="ValueDecimalPlaces">0</Property>
+            <Property Name="AlarmLowerBkgColor">Salmon</Property>
+            <Property Name="ValueDisplay">Text</Property>
+            <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+            <Property Name="AlarmLowerTextColor">WindowText</Property>
+            <Property Name="AlarmGeneralSettings">1;0;0;0</Property>
+            <Property Name="DisplayLabel">Left</Property>
+            <Property Name="DescriptionText">ST SW Version:</Property>
+            <Property Name="DescriptionSize">85, 20</Property>
+            <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;strSwVersion;4;;;-1</Property>
+            <Property Name="TabIndex">2</Property>
+            <Property Name="ReadOnlyControl">True</Property>
+          </Object>
+          <Object Type="Vector.CANalyzer.Panels.Design.PathControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="PathControl4" Children="Controls" ControlName="Path Dialog">
+            <Property Name="Name">PathControl4</Property>
+            <Property Name="Size">352, 23</Property>
+            <Property Name="Location">24, 40</Property>
+            <Property Name="DlgTitle">Select ConfigData binary file to program</Property>
+            <Property Name="FileDlgFilter">BIN file|*.bin</Property>
+            <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;strApplicationFile;4;;;-1</Property>
+            <Property Name="TabIndex">1</Property>
+          </Object>
+          <Object Type="Vector.CANalyzer.Panels.Design.CheckBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="CheckBoxControl5" Children="Controls" ControlName="cbProgApplication">
+            <Property Name="Name">CheckBoxControl5</Property>
+            <Property Name="Size">120, 17</Property>
+            <Property Name="Location">8, 16</Property>
+            <Property Name="Text">Program Application</Property>
+            <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;progApp;1;;;-1</Property>
+            <Property Name="TabIndex">0</Property>
+          </Object>
+          <Property Name="Name">GroupBoxControl8</Property>
+          <Property Name="Size">384, 104</Property>
+          <Property Name="Location">4, 109</Property>
+          <Property Name="Text">Application</Property>
+          <Property Name="TabIndex">3</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl2" Children="Controls" ControlName="iobSWVersion">
+          <Property Name="Name">TextBoxControl2</Property>
+          <Property Name="Size">352, 20</Property>
+          <Property Name="Location">24, 72</Property>
+          <Property Name="AlarmUpperTextColor">WindowText</Property>
+          <Property Name="ValueDecimalPlaces">0</Property>
+          <Property Name="AlarmLowerBkgColor">Salmon</Property>
+          <Property Name="ValueDisplay">Text</Property>
+          <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+          <Property Name="AlarmLowerTextColor">WindowText</Property>
+          <Property Name="AlarmGeneralSettings">1;0;0;0</Property>
+          <Property Name="DisplayLabel">Left</Property>
+          <Property Name="DescriptionText">ST SW Version:</Property>
+          <Property Name="DescriptionSize">85, 20</Property>
+          <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;strSwVersion;4;;;-1</Property>
+          <Property Name="TabIndex">2</Property>
+          <Property Name="ReadOnlyControl">True</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.PathControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="PathControl2" Children="Controls" ControlName="Path Dialog">
+          <Property Name="Name">PathControl2</Property>
+          <Property Name="Size">352, 23</Property>
+          <Property Name="Location">24, 40</Property>
+          <Property Name="DlgTitle">Select ConfigData binary file to program</Property>
+          <Property Name="FileDlgFilter">BIN file|*.bin</Property>
+          <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;strApplicationFile;4;;;-1</Property>
+          <Property Name="TabIndex">1</Property>
+        </Object>
+        <Object Type="Vector.CANalyzer.Panels.Design.CheckBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="CheckBoxControl2" Children="Controls" ControlName="cbProgApplication">
+          <Property Name="Name">CheckBoxControl2</Property>
+          <Property Name="Size">120, 17</Property>
+          <Property Name="Location">8, 16</Property>
+          <Property Name="Text">Program Application</Property>
+          <Property Name="SymbolConfiguration">4;16;PROGRAM_ECU;;;progApp;1;;;-1</Property>
+          <Property Name="TabIndex">0</Property>
+        </Object>
+        <Property Name="Name">GroupBoxControl2</Property>
+        <Property Name="Size">384, 104</Property>
+        <Property Name="Location">8, 18</Property>
+        <Property Name="Text">Application</Property>
+        <Property Name="TabIndex">1</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl5</Property>
+      <Property Name="Size">512, 479</Property>
+      <Property Name="Location">16, 104</Property>
+      <Property Name="Text">1. Select Binary To Program</Property>
+      <Property Name="TabIndex">5</Property>
+      <Property Name="IsVisibleByLoad">False</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl4" Children="Controls" ControlName="grpSimulationStart">
+      <Object Type="Vector.CANalyzer.Panels.Design.StartStopControl, Vector.CANalyzer.Panels.CommonControls, Version=10.0.63.0, Culture=neutral, PublicKeyToken=null" Name="StartStopControl1" Children="Controls" ControlName="sscButton">
+        <Property Name="Name">StartStopControl1</Property>
+        <Property Name="Size">112, 56</Property>
+        <Property Name="Location">152, 16</Property>
+        <Property Name="TabIndex">2</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl4</Property>
+      <Property Name="Size">416, 80</Property>
+      <Property Name="Location">16, 16</Property>
+      <Property Name="Text">Step 0. Start Simulation</Property>
+      <Property Name="TabIndex">4</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">545, 670</Property>
+  </Object>
+</Panel>

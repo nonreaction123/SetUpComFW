@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<testmodule title="HGT_PK-Comms_Firewall" version="">
+
+
+			
+<testgroup title="TSU_PK_HGT_COMS_Firewall_PowerFluctuation">
+
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationLtoH_SingleFrame_InvalidCANID_StandardCAN_AnchorRejectInvalid_210686"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANID_StandardCAN_AnchorRejectInvalid_210687"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANID_StandardCAN_AnchorRejectInvalid_210691"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationLToH_SingleFrame_InvalidCANID_ExtendedCAN_AnchorRejectInvalid_210689"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANID_ExtendedCAN_AnchorRejectInvalid_210692"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANID_ExtendedCAN_AnchorRejectInvalid_211070"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationLtoH_SingleFrame_InvalidCANData_StandardCAN_AnchorRejectInvalid_211071"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANData_StandardCAN_AnchorRejectInvalid_212030"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANData_StandardCAN_AnchorRejectInvalid_212031"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationLToH_SingleFrame_InvalidCANData_ExtendedCAN_AnchorRejectInvalid_228548"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationHToL_SingleFrame_InvalidCANData_ExtendedCAN_AnchorRejectInvalid_228553"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_ControlStageBySignal_SingleFrame_InvalidCANData_ExtendedCAN_AnchorRejectInvalid_228554"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationLToH_MultipleFrame_InvalidCANData_AnchorRejectInvalid_229882"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationHToL_MultipleFrame_InvalidCANData_AnchorRejectInvalid_229883"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_ControlStageBySignal_MultipleFrame_InvalidCANData_AnchorRejectInvalid_229885"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_PowerFluctuationLToH_Sequence_InvalidCANData_AnchorRejectInvalid_229887"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_ControlStageBySignal_Sequence_InvalidCANData_AnchorRejectInvalid_229888"></capltestcase>
+<capltestcase name="TCS_PK_HGT_COMFW_ControlStageBySignal_Sequence_InvalidCANData_AnchorRejectInvalid_229889"></capltestcase>
+
+</testgroup>
+	
+
+</testmodule>

@@ -1,0 +1,93 @@
+/*@!Encoding:1252*/
+
+
+long nf_ucmp_CompareByte(
+    char testID[],          //<! Test identifier
+    char objectID[],        //<! Object id
+    byte expVar,
+    byte actVar,
+    byte isTest
+    )
+{
+    long retVal;
+    char dest[64];
+
+    snprintf(dest, elcount(dest), "Matching %s: Expected = 0x%02X , Actual = 0x%02X", objectID, expVar, actVar);
+    
+    if(expVar == actVar)
+    {
+        if (1 == isTest)
+        {
+            TestStepPass(testID, "Test Pass: %s", dest);
+        }
+        retVal = 1;
+    }
+    else
+    {
+        if (1 == isTest)
+        {
+            TestStepFail(testID, "Test Fail: %s", dest);
+        }
+        retVal = 0;
+    }
+    return retVal;
+}
+
+long nf_ucmp_CompareString(
+    char testID[],          //<! Test identifier
+    char objectID[],        //<! Object id
+    char expString[],
+    char actString[],
+    long compareLen,
+    byte isTest
+    )
+{
+    long retVal;
+    char dest[1000];
+
+    snprintf(dest, elcount(dest), "Matching first %d characters of %s: Expected = %s , Actual = %s", compareLen, objectID, expString, actString);
+    
+    if  (   (compareLen > elcount(expString))
+        ||  (compareLen > elcount(actString))
+        )
+    {
+        if (1 == isTest)
+        {
+            TestStepFail(testID, "Test Fail: Compare Length is exceeds compare strings.");
+        }
+        retVal = 0;
+    }
+    else
+    {
+        byte boEqual;
+        dword ii;
+        
+        boEqual = 1;
+        for(ii < 0; ii < compareLen; ii++)
+        {
+            if (expString[ii] != actString[ii])
+            {
+                boEqual = 0;
+                break;
+            }
+        }
+        
+        if(1 == boEqual)
+        {
+            if (1 == isTest)
+            {
+                TestStepPass(testID, "Test Pass: %s", dest);
+            }
+            retVal = 1;
+        }
+        else
+        {
+            if (1 == isTest)
+            {
+                TestStepFail(testID, "Test Fail: %s", dest);
+            }
+            retVal = 0;
+        }
+    }
+    return retVal;
+}
